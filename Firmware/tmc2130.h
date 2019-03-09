@@ -26,7 +26,7 @@ extern uint8_t tmc2130_sg_homing_axes_mask;
 #define TMC2130_MODE_NORMAL 0
 #define TMC2130_MODE_SILENT 1
 
-#define TMC2130_WAVE_FAC1000_MIN  30
+#define TMC2130_WAVE_FAC1000_MIN  10 //Kuo reduce min limit (prusa min was 30)
 #define TMC2130_WAVE_FAC1000_MAX 200
 #define TMC2130_WAVE_FAC1000_STP   1
 
