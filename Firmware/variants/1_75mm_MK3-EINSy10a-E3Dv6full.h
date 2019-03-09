@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK3"
+#define CUSTOM_MENDEL_NAME "Bunny Mk3b"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
@@ -36,12 +36,19 @@
 // Define to use 0.9 degree stepper on x or y axis
 #define X_AXIS_MOTOR_09 //kuo exper
 #define Y_AXIS_MOTOR_09 //kuo exper
-//#define E_AXIS_MOTOR_09 //kuo exper
+#define E_AXIS_MOTOR_09 //kuo exper
+#define E_AXIS_MOTOR_09_DOUBLE //kuo exper
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
-//#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //double step E. WARNING Also requires sending G92 560 & M500 to printer.
+
+#ifndef E_AXIS_MOTOR_09_DOUBLE //Kuo for e-axis msteps
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} /Prusa default steps/unit
+#else
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //Kuo double step E. WARNING Also requires sending G92 560 & M500 to printer.
+#endif
 
 // Endstop inverting
 #define X_MIN_ENDSTOP_INVERTING 0 // set to 1 to invert the logic of the endstop.
@@ -235,7 +242,11 @@
 #ifndef E_AXIS_MOTOR_09
   #define TMC2130_USTEPS_E   32
 #else
-  #define TMC2130_USTEPS_E   32  // Kuo e-axis runs slow enough to remain at 32 msteps
+  #ifdef E_AXIS_MOTOR_09_DOUBLE
+    #define TMC2130_USTEPS_E   32  // Kuo e-axis runs slow enough to remain at 32 msteps
+  #else
+    #define TMC2130_USTEPS_E   16  // Kuo can also reduce mstesp for e-axis
+  #endif
 #endif
 
 #define TMC2130_USTEPS_Z    16        // microstep resolution for Z axis
@@ -332,6 +343,8 @@
 #endif
 //Kuo end chopper defines
 
+
+
 //#define TMC2130_STEALTH_E // Extruder stealthChop mode
 //#define TMC2130_CNSTOFF_E // Extruder constant-off-time mode (similar to MK2)
 
@@ -373,19 +386,21 @@
   #define TMC2130_SG_THRS_E       7    // Kuo Must be higher with 0.9 degree motors
 #endif
 
+
 #define TMC2130_SG_THRS_Z       4     // stallguard sensitivity for Z axis
 
 
+
 //new settings is possible for vsense = 1, running current value > 31 set vsense to zero and shift both currents by 1 bit right (Z axis only)
-#define TMC2130_CURRENTS_H {16, 20, 35, 30}  // default holding currents for all axes
-#define TMC2130_CURRENTS_R {16, 20, 35, 30}  // default running currents for all axes
-#define TMC2130_UNLOAD_CURRENT_R 12			 // lowe current for M600 to protect filament sensor 
+#define TMC2130_CURRENTS_H {16, 20, 35, 30}
+#define TMC2130_CURRENTS_R {16, 20, 35, 30}
+#define TMC2130_UNLOAD_CURRENT_R 12			 // lower current for M600 to protect filament sensor 
 
 #define TMC2130_STEALTH_Z
 
-//#define TMC2130_SERVICE_CODES_M910_M918
+#define TMC2130_SERVICE_CODES_M910_M918 // kuo exper define for tmc 2130 debugging
+#define TMC2130_DEBUG // kuo exper define for tmc 2130 debugging
 
-//#define TMC2130_DEBUG
 //#define TMC2130_DEBUG_WR
 //#define TMC2130_DEBUG_RD
 
