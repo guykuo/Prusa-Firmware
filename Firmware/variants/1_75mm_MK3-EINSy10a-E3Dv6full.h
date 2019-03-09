@@ -45,7 +45,7 @@
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //double step E. WARNING Also requires sending G92 560 & M500 to printer.
 
 #ifndef E_AXIS_MOTOR_09_DOUBLE //Kuo for e-axis msteps
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} /Prusa default steps/unit
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //Prusa default steps/unit
 #else
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //Kuo double step E. WARNING Also requires sending G92 560 & M500 to printer.
 #endif
