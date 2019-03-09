@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK3S"
+#define CUSTOM_MENDEL_NAME "Bunny XYE9 MK3S"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
@@ -300,7 +300,7 @@
   #define TMC2130_TBL_X 2
   #define TMC2130_RES_X 0
 #else
-  #define TMC2130_TOFF_X 3 // Kuo adjusted for 0.9 degree motors
+  #define TMC2130_TOFF_X 2 // Kuo adjusted for 0.9 degree motors
   #define TMC2130_HSTR_X 0
   #define TMC2130_HEND_X 0
   #define TMC2130_TBL_X 2
@@ -314,7 +314,7 @@
   #define TMC2130_TBL_Y 2
   #define TMC2130_RES_Y 0
 #else
-  #define TMC2130_TOFF_Y 3 // Kuo adjusted for 0.9 degree motors
+  #define TMC2130_TOFF_Y 2 // Kuo adjusted for 0.9 degree motors
   #define TMC2130_HSTR_Y 0
   #define TMC2130_HEND_Y 0
   #define TMC2130_TBL_Y 2
@@ -334,7 +334,7 @@
   #define TMC2130_TBL_E 2
   #define TMC2130_RES_E 0
 #else
-  #define TMC2130_TOFF_E 3 // Kuo adjusted for 0.9 degree motors
+  #define TMC2130_TOFF_E 2 // Kuo adjusted for 0.9 degree motors
   #define TMC2130_HSTR_E 0
   #define TMC2130_HEND_E 0
   #define TMC2130_TBL_E 2
