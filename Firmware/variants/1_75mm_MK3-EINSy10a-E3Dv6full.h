@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Bunny Mk3b"
+#define CUSTOM_MENDEL_NAME "Bunny XYE9 Mk3"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
