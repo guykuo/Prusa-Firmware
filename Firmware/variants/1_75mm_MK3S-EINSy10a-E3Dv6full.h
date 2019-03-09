@@ -37,11 +37,18 @@
 #define X_AXIS_MOTOR_09 //kuo exper
 #define Y_AXIS_MOTOR_09 //kuo exper
 #define E_AXIS_MOTOR_09 //kuo exper
+#define E_AXIS_MOTOR_09_DOUBLE //kuo exper
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
 #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
+
+#ifndef E_AXIS_MOTOR_09_DOUBLE //Kuo for e-axis msteps
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} /Prusa default steps/unit
+#else
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //Kuo double step E. WARNING Also requires sending G92 560 & M500 to printer.
+#endif
 
 // Endstop inverting
 #define X_MIN_ENDSTOP_INVERTING 0 // set to 1 to invert the logic of the endstop.
@@ -234,7 +241,11 @@
 #ifndef E_AXIS_MOTOR_09
   #define TMC2130_USTEPS_E   32
 #else
-  #define TMC2130_USTEPS_E   32  // Kuo e-axis runs slow enough to remain at 32 msteps
+  #ifdef E_AXIS_MOTOR_09_DOUBLE
+    #define TMC2130_USTEPS_E   32  // Kuo e-axis runs slow enough to remain at 32 msteps
+  #else
+    #define TMC2130_USTEPS_E   16  // Kuo can also reduce mstesp for e-axis
+  #endif
 #endif
 
 #define TMC2130_USTEPS_Z    16        // microstep resolution for Z axis
