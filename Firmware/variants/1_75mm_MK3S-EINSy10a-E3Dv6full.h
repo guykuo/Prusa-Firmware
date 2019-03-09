@@ -36,8 +36,8 @@
 // Define to use 0.9 degree stepper on x or y axis
 #define X_AXIS_MOTOR_09 //kuo exper
 #define Y_AXIS_MOTOR_09 //kuo exper
-#define E_AXIS_MOTOR_09 //kuo exper
-#define E_AXIS_MOTOR_09_DOUBLE //kuo exper
+//#define E_AXIS_MOTOR_09 //kuo exper
+//#define E_AXIS_MOTOR_09_DOUBLE //kuo exper
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
