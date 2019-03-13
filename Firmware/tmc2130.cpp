@@ -20,23 +20,7 @@ uint8_t tmc2130_mode = TMC2130_MODE_NORMAL;
 uint8_t tmc2130_current_h[4] = TMC2130_CURRENTS_H;
 //running currents
 uint8_t tmc2130_current_r[4] = TMC2130_CURRENTS_R;
-
-//kuo running currents for homing
-#ifndef X_AXIS_MOTOR_09
-  #define tmc2130_current_r_home_X  8 // prusa std homing current x
-#else
-  #define tmc2130_current_r_home_X  6 //kuo reduced homing for x 0.9 degree motor
-#endif
-
-#ifndef Y_AXIS_MOTOR_09
-  #define tmc2130_current_r_home_Y  10 // prusa std homing current y
-#else
-  #define tmc2130_current_r_home_Y  8 //kuo reduced homing for y 0.9 degree motor
-#endif
-
-uint8_t tmc2130_current_r_home[4] = {tmc2130_current_r_home_X, tmc2130_current_r_home_Y, 20, 18}; //kuo
-
-
+uint8_t tmc2130_current_r_home[4] = {8, 10, 20, 18};
 //pwm_ampl
 uint8_t tmc2130_pwm_ampl[4] = {TMC2130_PWM_AMPL_X, TMC2130_PWM_AMPL_Y, TMC2130_PWM_AMPL_Z, TMC2130_PWM_AMPL_E};
 //pwm_grad
