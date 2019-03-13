@@ -91,13 +91,13 @@
 
 //Kuo set the homing speeds (mm/min)
 #ifdef X_AXIS_MOTOR_09
-  #define HOMING_FEEDRATE_X 3600  // Kuo faster feedrate needed for reliable X 0.9 degree motor stallGuard
+  #define HOMING_FEEDRATE_X 4500  // Kuo faster feedrate needed for reliable X 0.9 degree motor stallGuard
 #else
   #define HOMING_FEEDRATE_X 3000
 #endif
 
 #ifdef Y_AXIS_MOTOR_09
-  #define HOMING_FEEDRATE_Y 3600  // Kuo faster feedrate needed for reliable Y 0.9 degree motor stallGuard
+  #define HOMING_FEEDRATE_Y 3800  // Kuo faster feedrate needed for reliable Y 0.9 degree motor stallGuard
 #else
   #define HOMING_FEEDRATE_Y 3000
 #endif
@@ -284,7 +284,7 @@
 #ifndef E_AXIS_MOTOR_09
   #define TMC2130_PWM_GRAD_E  4       //PWM_GRAD 
 #else
-  #define TMC2130_PWM_GRAD_E  6       //PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
+  #define TMC2130_PWM_GRAD_E  5       //PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
 #endif
 
 #define TMC2130_PWM_AMPL_E  240       // PWMCONF
@@ -304,7 +304,7 @@
   #define TMC2130_RES_X 0
 #else
   #define TMC2130_TOFF_X 2 // Kuo adjusted for 0.9 degree motors
-  #define TMC2130_HSTR_X 0
+  #define TMC2130_HSTR_X 2
   #define TMC2130_HEND_X 0
   #define TMC2130_TBL_X 2
   #define TMC2130_RES_X 0
@@ -318,7 +318,7 @@
   #define TMC2130_RES_Y 0
 #else
   #define TMC2130_TOFF_Y 2 // Kuo adjusted for 0.9 degree motors
-  #define TMC2130_HSTR_Y 0
+  #define TMC2130_HSTR_Y 2
   #define TMC2130_HEND_Y 0
   #define TMC2130_TBL_Y 2
   #define TMC2130_RES_Y 0
@@ -338,7 +338,7 @@
   #define TMC2130_RES_E 0
 #else
   #define TMC2130_TOFF_E 2 // Kuo adjusted for 0.9 degree motors
-  #define TMC2130_HSTR_E 0
+  #define TMC2130_HSTR_E 2
   #define TMC2130_HEND_E 0
   #define TMC2130_TBL_E 2
   #define TMC2130_RES_E 0
@@ -370,7 +370,7 @@
   #define TMC2130_SG_THRS_X       3    // stallguard sensitivity for X axis
   #define TMC2130_SG_THRS_X_HOME  3    // homing stallguard threshold for X axis
 #else
-  #define TMC2130_SG_THRS_X       7    // Kuo Must be higher with 0.9 degree motors
+  #define TMC2130_SG_THRS_X       8    // Kuo Must be higher with 0.9 degree motors
   #define TMC2130_SG_THRS_X_HOME  8
 #endif
 
@@ -378,14 +378,14 @@
   #define TMC2130_SG_THRS_Y       3    // stallguard sensitivity for Y axis
   #define TMC2130_SG_THRS_Y_HOME  3    // homing stallguard threshold for Y axis
 #else
-  #define TMC2130_SG_THRS_Y       7    // Kuo Must be higher with 0.9 degree motors
+  #define TMC2130_SG_THRS_Y       8    // Kuo Must be higher with 0.9 degree motors
   #define TMC2130_SG_THRS_Y_HOME  8
 #endif
 
 #ifndef E_AXIS_MOTOR_09 //Kuo
   #define TMC2130_SG_THRS_E       3    // stallguard sensitivity for E axis
 #else
-  #define TMC2130_SG_THRS_E       7    // Kuo Must be higher with 0.9 degree motors
+  #define TMC2130_SG_THRS_E       8    // Kuo Must be higher with 0.9 degree motors
 #endif
 
 
