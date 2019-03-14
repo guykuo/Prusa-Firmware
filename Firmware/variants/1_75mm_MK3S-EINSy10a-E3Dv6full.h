@@ -33,10 +33,17 @@
 /*------------------------------------
  AXIS SETTINGS
  *------------------------------------*/
-// Define to use 0.9 degree stepper on x or y axis
+//Uncomment the below for 0.9 degree Moons MS17HA2P4100 or OMC 17HM15-0904S stepper motor on x, y, e axis
+//Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealtchop
 #define X_AXIS_MOTOR_09 //kuo exper
 #define Y_AXIS_MOTOR_09 //kuo exper
 //#define E_AXIS_MOTOR_09 //kuo exper
+
+//On X and Y, we must halve microsteps when changing to 0.9 degree motor to remain within EINSY stepping rate limits
+//E-axis runs slow enough to remain at Prusa standard 32 microstep. However, if you elect to run e at 32 microsteps,
+//Warning: In addition to this fimrware setting, you must also send sending M92 560 & M500 to printer to set higher msteps for e-axis.
+
+//Uncomment below to let e-axis run at 32 microstepping.
 //#define E_AXIS_MOTOR_09_DOUBLE //kuo exper
 
 // Steps per unit {X,Y,Z,E}
@@ -47,7 +54,7 @@
 #ifndef E_AXIS_MOTOR_09_DOUBLE //Kuo for e-axis msteps
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //Prusa default steps/unit
 #else
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //Kuo double step E. WARNING Also requires sending G92 560 & M500 to printer.
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //Kuo double step E. 
 #endif
 
 // Endstop inverting
