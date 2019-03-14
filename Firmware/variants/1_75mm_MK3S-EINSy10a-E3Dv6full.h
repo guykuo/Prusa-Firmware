@@ -42,8 +42,9 @@
 //On X and Y, we must halve microsteps when changing to 0.9 degree motor to remain within EINSY stepping rate limits
 //E-axis runs slow enough to remain at Prusa standard 32 microstep. However, if you elect to run e at 32 microsteps,
 //Warning: In addition to this fimrware setting, you must also send sending M92 560 & M500 to printer to set higher msteps for e-axis.
+//Reversion back from E_AXIS_MOTOR_09_DOUBLE to reduced 0.9 stepping rate requires sending M92 E280 & M500 to printer
 
-//Uncomment below to let e-axis run at 32 microstepping.
+//Uncomment below to let e-axis run at 32 microstepping. Use only if E_AXIS_MOTOR_09 is also defined.
 //#define E_AXIS_MOTOR_09_DOUBLE //kuo exper
 
 // Steps per unit {X,Y,Z,E}
@@ -51,10 +52,10 @@
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
 
-#ifndef E_AXIS_MOTOR_09_DOUBLE //Kuo for e-axis msteps
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //Prusa default steps/unit
+#ifdef E_AXIS_MOTOR_09_DOUBLE //Kuo for e-axis msteps
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //double stepping rate 0.9 degree e-axis
 #else
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //Kuo double step E. 
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //usual 0.9 degree, half rate steps/unit e-axis
 #endif
 
 // Endstop inverting
