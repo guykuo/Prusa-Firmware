@@ -20,7 +20,11 @@ uint8_t tmc2130_mode = TMC2130_MODE_NORMAL;
 uint8_t tmc2130_current_h[4] = TMC2130_CURRENTS_H;
 //running currents
 uint8_t tmc2130_current_r[4] = TMC2130_CURRENTS_R;
-uint8_t tmc2130_current_r_home[4] = {8, 10, 20, 18};
+#ifndef X_AXIS_MOTOR_09
+  uint8_t tmc2130_current_r_home[4] = {8, 10, 20, 18};
+#else
+  uint8_t tmc2130_current_r_home[4] = {10, 10, 20, 18}; //Kuo adjust x homing current slightly higher for 0.9 x
+#endif
 //pwm_ampl
 uint8_t tmc2130_pwm_ampl[4] = {TMC2130_PWM_AMPL_X, TMC2130_PWM_AMPL_Y, TMC2130_PWM_AMPL_Z, TMC2130_PWM_AMPL_E};
 //pwm_grad
