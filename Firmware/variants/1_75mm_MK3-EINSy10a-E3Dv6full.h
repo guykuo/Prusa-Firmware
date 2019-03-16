@@ -279,7 +279,7 @@
   #define TMC2130_PWM_GRAD_Y  2       // PWM_GRAD 
   #define TMC2130_PWM_AMPL_Y  235     // PWMCONF
 #else
-  #define TMC2130_PWM_GRAD_Y  4       // PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
+  #define TMC2130_PWM_GRAD_Y  3       // PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
   #define TMC2130_PWM_AMPL_Y  240     // PWMCONF Kuo slightly higher for 0.9
 #endif
 #define TMC2130_PWM_AUTO_Y  1         // PWMCONF
