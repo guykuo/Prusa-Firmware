@@ -97,7 +97,7 @@
 
 //Kuo set the homing speeds (mm/min)
 #ifdef X_AXIS_MOTOR_09
-  #define HOMING_FEEDRATE_X 4500  // Kuo faster feedrate needed for reliable X 0.9 degree motor stallGuard
+  #define HOMING_FEEDRATE_X 4700  // Kuo faster feedrate needed for reliable X 0.9 degree motor stallGuard
 #else
   #define HOMING_FEEDRATE_X 3000
 #endif
@@ -263,14 +263,18 @@
 #define TMC2130_INTPOL_Z    1         // extrapolate 256 for Z axis
 #define TMC2130_INTPOL_E    1         // extrapolate 256 for E axis
 
-//Kuo TMC2130_PWM_GRAD tuned for 09 motor. 12 yields tighter current regulation, but causes layer shifts on y. 
-//Better axis motion control with 2,3,4 but can squeak during fast declerations.
+//Kuo TMC2130_PWM_GRAD & TMC2130_PWM_AMP tuned for 09 motor.
+//Better axis motion control with lower TMC2130_PWM_GRAD 2,3,4 but can squeak during fast declerations.
+//TMC2130_PWM_GRAD too high causes y-layer shifts
+//TMC2130_PWM_GRAD_Y 4 is reasonable choice on Y. 
+//Raised TMC2130_PWM_AMPL_Y to 250 to prevent y-layer shifts on weaker motors
+
 #ifndef X_AXIS_MOTOR_09
   #define TMC2130_PWM_GRAD_X  2       // PWM_GRAD 
   #define TMC2130_PWM_AMPL_X  230     // PWMCONF
 #else
-  #define TMC2130_PWM_GRAD_X  4       // PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD
-  #define TMC2130_PWM_AMPL_X  235     // PWMCONF Kuo slightly higher for 0.9
+  #define TMC2130_PWM_GRAD_X  4       // PWM_GRAD Kuo 0.9 degree motor tuning
+  #define TMC2130_PWM_AMPL_X  235     // PWMCONF Kuo 0.9 degree motor tuning
 #endif
 #define TMC2130_PWM_AUTO_X  1         // PWMCONF
 #define TMC2130_PWM_FREQ_X  2         // PWMCONF
@@ -279,8 +283,8 @@
   #define TMC2130_PWM_GRAD_Y  2       // PWM_GRAD 
   #define TMC2130_PWM_AMPL_Y  235     // PWMCONF
 #else
-  #define TMC2130_PWM_GRAD_Y  3       // PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
-  #define TMC2130_PWM_AMPL_Y  240     // PWMCONF Kuo slightly higher for 0.9
+  #define TMC2130_PWM_GRAD_Y  4       // PWM_GRAD Kuo 0.9 degree motor tuning         
+  #define TMC2130_PWM_AMPL_Y  250     // PWMCONF Kuo 0.9 degree motor tuning
 #endif
 #define TMC2130_PWM_AUTO_Y  1         // PWMCONF
 #define TMC2130_PWM_FREQ_Y  2         // PWMCONF
@@ -291,11 +295,11 @@
 #define TMC2130_PWM_FREQ_Z  2         // PWMCONF
 
 #ifndef E_AXIS_MOTOR_09
-  #define TMC2130_PWM_GRAD_E  4       //PWM_GRAD 
+  #define TMC2130_PWM_GRAD_E  4       // PWM_GRAD 
   #define TMC2130_PWM_AMPL_E  240     // PWMCONF
 #else
-  #define TMC2130_PWM_GRAD_E  5       //PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
-  #define TMC2130_PWM_AMPL_E  240     // PWMCONF
+  #define TMC2130_PWM_GRAD_E  4       // PWM_GRAD Kuo 0.9 degree motor tuning         
+  #define TMC2130_PWM_AMPL_E  245     // PWMCONF Kuo 0.9 degree motor tuning
 #endif
 #define TMC2130_PWM_AUTO_E  1         // PWMCONF
 #define TMC2130_PWM_FREQ_E  2         // PWMCONF
