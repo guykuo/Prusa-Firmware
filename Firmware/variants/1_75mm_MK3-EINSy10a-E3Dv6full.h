@@ -263,22 +263,25 @@
 #define TMC2130_INTPOL_Z    1         // extrapolate 256 for Z axis
 #define TMC2130_INTPOL_E    1         // extrapolate 256 for E axis
 
-//Kuo TMC2130_PWM_GRAD tuned for 09 motor. 12 yields tight regulation, but causes layer shifts on y 2,3,4 squeak during fast declerations.
+//Kuo TMC2130_PWM_GRAD tuned for 09 motor. 12 yields tighter current regulation, but causes layer shifts on y. 
+//Better axis motion control with 2,3,4 but can squeak during fast declerations.
 #ifndef X_AXIS_MOTOR_09
-  #define TMC2130_PWM_GRAD_X  2       //PWM_GRAD 
+  #define TMC2130_PWM_GRAD_X  2       // PWM_GRAD 
+  #define TMC2130_PWM_AMPL_X  230     // PWMCONF
 #else
-  #define TMC2130_PWM_GRAD_X  5       //PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD
+  #define TMC2130_PWM_GRAD_X  4       // PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD
+  #define TMC2130_PWM_AMPL_X  235     // PWMCONF Kuo slightly higher for 0.9
 #endif
-#define TMC2130_PWM_AMPL_X  230       // PWMCONF
 #define TMC2130_PWM_AUTO_X  1         // PWMCONF
 #define TMC2130_PWM_FREQ_X  2         // PWMCONF
 
 #ifndef Y_AXIS_MOTOR_09
-  #define TMC2130_PWM_GRAD_Y  2       //PWM_GRAD 
+  #define TMC2130_PWM_GRAD_Y  2       // PWM_GRAD 
+  #define TMC2130_PWM_AMPL_Y  235     // PWMCONF
 #else
-  #define TMC2130_PWM_GRAD_Y  5       //PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
+  #define TMC2130_PWM_GRAD_Y  4       // PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
+  #define TMC2130_PWM_AMPL_Y  240     // PWMCONF Kuo slightly higher for 0.9
 #endif
-#define TMC2130_PWM_AMPL_Y  235       // PWMCONF
 #define TMC2130_PWM_AUTO_Y  1         // PWMCONF
 #define TMC2130_PWM_FREQ_Y  2         // PWMCONF
 
@@ -289,11 +292,11 @@
 
 #ifndef E_AXIS_MOTOR_09
   #define TMC2130_PWM_GRAD_E  4       //PWM_GRAD 
+  #define TMC2130_PWM_AMPL_E  240     // PWMCONF
 #else
   #define TMC2130_PWM_GRAD_E  5       //PWM_GRAD Kuo 0.9 degree motor needs higher PWM_GRAD         
+  #define TMC2130_PWM_AMPL_E  240     // PWMCONF
 #endif
-
-#define TMC2130_PWM_AMPL_E  240       // PWMCONF
 #define TMC2130_PWM_AUTO_E  1         // PWMCONF
 #define TMC2130_PWM_FREQ_E  2         // PWMCONF
 
