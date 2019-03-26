@@ -2178,13 +2178,13 @@ void homeaxis(int axis, uint8_t cnt)
 			enable_endstops(false);
 			current_position[axis] = 0;
 			plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
-      			destination[axis] = -18.f * axis_home_dir; // Kuo move away from end stop farther to allow 0.9 motors
+      			destination[axis] = -10.f * axis_home_dir;
 			plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate/60, active_extruder);
 			st_synchronize();
 			endstops_hit_on_purpose();
 			// Now move left up to the collision, this time with a repeatable velocity.
 			enable_endstops(true);
-			destination[axis] = 19.f * axis_home_dir; // Kuo this must be farther than prior move away distance to actually hit end stop
+			destination[axis] = 11.f * axis_home_dir;
 
 #ifdef TMC2130
 			feedrate = homing_feedrate[axis];
