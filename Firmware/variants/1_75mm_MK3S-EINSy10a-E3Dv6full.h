@@ -33,29 +33,28 @@
 /*------------------------------------
  AXIS SETTINGS
  *------------------------------------*/
-//Uncomment the below for 0.9 degree Moons MS17HA2P4100 or OMC 17HM15-0904S stepper motor on x, y, e axis
-//Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop
+//Uncomment def(s) below for 0.9 degree stepper motors on x, y, e axis
+//Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
+//My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
 #define X_AXIS_MOTOR_09 //kuo exper
 #define Y_AXIS_MOTOR_09 //kuo exper
-//#define E_AXIS_MOTOR_09 //kuo exper
+#define E_AXIS_MOTOR_09 //kuo exper
 
-//On X and Y, we must halve microsteps when changing to 0.9 degree motor to remain within EINSY stepping rate limits
-//E-axis runs slow enough to remain at Prusa standard 32 microstep. However, if you elect to run e at 32 microsteps,
-//you must also send M92 560 & M500 to printer to set higher msteps for e-axis.
-//Reversion back from E_AXIS_MOTOR_09_DOUBLE to reduced 0.9 stepping rate requires sending M92 E280 & M500 to printer
+//Uncomment below for BMG Extruder
+//#define BMG_EXTRUDER //kuo exper implements changes based on Chris Warkocki BMG firmware mods
 
-//Uncomment below to let e-axis run at 32 microstepping. Use only if E_AXIS_MOTOR_09 is also defined.
-//#define E_AXIS_MOTOR_09_DOUBLE //kuo exper
+//you must also send M92 E830 & M500 to printer to set msteps for BMG extruder
+//Reversion back from BMG_EXTRUDER requires sending M92 E280 & M500 to printer
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
 
-#ifdef E_AXIS_MOTOR_09_DOUBLE //Kuo for e-axis msteps
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560} //double stepping rate 0.9 degree e-axis
+#ifdef BMG_EXTRUDER //Kuo for e-axis msteps
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,830} //BMG 
 #else
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //usual 0.9 degree, half rate steps/unit e-axis
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //usual steps/unit e-axis
 #endif
 
 // Endstop inverting
@@ -403,7 +402,12 @@
 //new settings is possible for vsense = 1, running current value > 31 set vsense to zero and shift both currents by 1 bit right (Z axis only)
 #define TMC2130_CURRENTS_H {16, 20, 35, 30}  // default holding currents for all axes
 #define TMC2130_CURRENTS_R {16, 20, 35, 30}  // default running currents for all axes
-#define TMC2130_UNLOAD_CURRENT_R 12			 // lowe current for M600 to protect filament sensor 
+
+#ifndef BMG_EXTRUDER //Kuo
+  #define TMC2130_UNLOAD_CURRENT_R 12	//lower current for M600 to protect filament sensor 
+#else
+  #define TMC2130_UNLOAD_CURRENT_R 20 //BMG unload current for M600
+#endif
 
 #define TMC2130_STEALTH_Z
 
@@ -476,11 +480,18 @@
 // Load filament commands
 #define LOAD_FILAMENT_0 "M83"
 #define LOAD_FILAMENT_1 "G1 E70 F400"
-#define LOAD_FILAMENT_2 "G1 E40 F100"
-
+#ifndef BMG_EXTRUDER //Kuo BMG load
+  #define LOAD_FILAMENT_2 "G1 E40 F100"
+#else
+  #define LOAD_FILAMENT_2 "G1 E50 F100"
+#endif
 // Unload filament commands
 #define UNLOAD_FILAMENT_0 "M83"
-#define UNLOAD_FILAMENT_1 "G1 E-80 F7000"
+#ifndef BMG_EXTRUDER //Kuo BMG unload
+  #define UNLOAD_FILAMENT_1 "G1 E-80 F7000"
+#else
+  #define UNLOAD_FILAMENT_1 "G1 E-100 F7000"
+#endif
 
 /*------------------------------------
  CHANGE FILAMENT SETTINGS
@@ -496,7 +507,11 @@
 #define FILAMENTCHANGE_FINALRETRACT -80
 
 #define FILAMENTCHANGE_FIRSTFEED 70 //E distance in mm for fast filament loading sequence used used in filament change (M600)
-#define FILAMENTCHANGE_FINALFEED 25 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
+#ifndef BMG_EXTRUDER //Kuo BMG FILAMENTCHANGE_FINALFEED
+  #define FILAMENTCHANGE_FINALFEED 25 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
+#else
+  #define FILAMENTCHANGE_FINALFEED 35
+#endif
 #define FILAMENTCHANGE_RECFEED 5
 
 #define FILAMENTCHANGE_XYFEED 50
