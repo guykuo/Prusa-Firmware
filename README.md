@@ -8,8 +8,123 @@ You will need this 0.9 degree motor firmware (now includes BMG extruder support)
 
 Be able to compile this firmware before doing any hardware changes. Once motors have been changed, the first thing you need to do is update the firmware to this 0.9 motor support version.
 
-You must adjust defines in Configuration_prusa.h to match your actual motor setup for X Y and E axes.
-If you have a BMG extruder, also uncomment to #define BMG_EXTRUDER
+
+### Compiling my firmware for 0.9 degree motor support
+You may wish to refer to the Prusa README.md document for more detailed instructions regarding compilation of the firmware. 
+Warning: You are definitely in experimental firmware territory here.
+
+#### Obtain Arduino IDE
+
+Visit https://www.arduino.cc/en/Main/Software and download the Arduino IDE for your OS. 
+I successfully use Arduino 1.8.8 for OSX. 
+Prusa instructions mention their internally using version 1.8.5
+Install Arduino compiler on your computer
+
+#### Prepare Arduino IDE to handle EINSY board
+As downloaded, the Arduino IDE does not know about the EINSY RAMBO board. You must adjust some IDE settings to download board info from Ultimachine.
+
+1. Launch Arduino.
+
+2. In Preferences -> Settings Tab
+
+Additional Boards Manager URLs textfield enter...
+```
+https://raw.githubusercontent.com/ultimachine/ArduinoAddons/master/package_ultimachine_index.json
+```
+
+3. Accept (OK) new preference setting
+
+4. Tools -> Board -> Boards Manager
+Select the RAMBo board, which is listed something like "RepRap Arduino-compabilty Mother Board (RAMBo) by Ultimachine"
+Board info will download become noted as "Installed." Depending on server load this can take anywhere from seconds to minutes.
+
+You many need to "update" the board to get the latest version. That is 1.0.1 as of this writing.
+
+5. Close Board Manager
+
+6. Tools -> Board, select RAMBo as target board. Do not select any other board.
+
+7. QUIT Arduino IDE
+
+8. Set compiler flags in platform.txt for newly installed RAMBo board
+Use your OS file search function to find platform.txt
+
+Under OSX, it will be in
+```
+~/Library/Arduino15/packages/rambo/hardware/avr/1.0.1
+```
+Open platform.txt
+
+Add "-Wl,-u,vfprintf -lprintf_flt -lm" to "compiler.c.elf.flags=" before existing flag "-Wl,--gc-sections"
+On my system that meant adding the following line in platform.txt
+
+```
+compiler.c.elf.flags=-w -Os -Wl,-u,vfprintf -lprintf_flt -lm -Wl,--gc-sections
+```
+Save your changes to platform.txt
+
+#### Obtain firmware files.
+
+0.9 degree motors require my firmware branch that contains 0.9 degree stepper support (which is here)
+
+https://github.com/guykuo/Prusa-Firmwar ... er-Support
+Verify you are in my 0.9 Degree Stepper Support branch
+
+Click on "Clone or Download" and DOWNLOAD ZIP to your computer
+
+Unzip the newly downloaded Prusa-Firmware-0.9-Degree-Stepper-Support.zip
+
+Inside the unzipped folder "Prusa-Firmware-0.9-Degree-Stepper-Support" you will find a folder named "Firmware"
+That folder contains the firmware files you need. Place the firmware folder where you wish to keep it on your drive.
+
+#### Set Printer Variant
+
+Use the correct variant file for your printer model.
+In Firmware/variants you will find several header (.h) files. Each printer model has one specific file.
+
+Mk3 needs 1_75mm_MK3-EINSy10a-E3Dv6full.h
+Mk3s needs 1_75mm_MK3S-EINSy10a-E3Dv6full.h
+
+Choose the correct variant file for your printer model!!!!!!
+
+Rename the variant file for your printer to be...
+
+Configuration_prusa.h
+
+Move Configuration_prusa.h to the main firmware folder. 
+
+
+#### Set Language Support (already done for you in my branch)
+Normally you would need to set language support in config.h to primary language only.
+I have already done so in my branch. So you do not need to do this. 
+
+However, if you build from a Prusa branch you MUST do this. 
+Otherwise, firmware will not run properly. Instead, your LCD will display random letters and likely boot loop.
+
+The changes needed are near bottom of the file. It should look like this...
+```
+//LANG - Multi-language support
+#define LANG_MODE 0 // primary language only
+//#define LANG_MODE 1 // sec. language support
+#define LANG_SIZE_RESERVED 0x2f00 // reserved space for secondary language (12032 bytes)
+```
+You can make the edit from within Arduino IDE, but again, this has already been done for you in my branch.
+
+
+#### Set Motor Defines, Compile, Upload
+
+My firmware branch includes changes for 0.9 degree motor support. All the important edits have been tagged with a comment.
+Search for Kuo in all sketch tabs to view my changes.
+
+For most users, you only need to specify which motors are 0.9 degree units.
+
+1. Launch Arduino IDE
+
+2. Open the Firmware.ino file which is inside your firmware folder
+
+3. Select the Configuration_prusa.h tab
+
+4. You must adjust defines in Configuration_prusa.h to match your actual motor setup for X Y and E axes. Also, if you have a BMG extruder,  uncomment #define BMG_EXTRUDER
 
 Look for...
 
@@ -28,6 +143,25 @@ Look for...
 //#define BMG_EXTRUDER //kuo exper implements changes based on Chris Warkocki BMG firmware mods
 
 ```
+
+My _AXIS_MOTOR_09 defines are probably all you need to modify. The rest of my firmware changes are controlled by these defines.
+
+Uncomment only the axes that you want to be 0.9 degree motors. In the above example, x and y are set to be 0.9 degree motors, but not the extruder.
+
+Save your changes
+
+5. Test compile with Sketch -> Verify/Compile
+Compiler will complete the job. 
+If you see a warning about a missing bootloader, you probably have an older, RAMBo board 1.0.0 definition installed as your target board.
+
+6. To compile and upload to the printer, connect your computer to the USB port of EINSY. 
+Sketch -> Upload
+The firmware will compile and upload to printer. Do NOT interrupt the update!!!! Let it complete.
+
+You may also need to use Tools --> Port to select the correct USB port of your computer.
+
+
+
 
 
 ## Hardware
