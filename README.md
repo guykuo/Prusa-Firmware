@@ -83,6 +83,7 @@ Use the correct variant file for your printer model.
 In Firmware/variants you will find several header (.h) files. Each printer model has one specific file.
 
 Mk3 needs 1_75mm_MK3-EINSy10a-E3Dv6full.h
+
 Mk3s needs 1_75mm_MK3S-EINSy10a-E3Dv6full.h
 
 Choose the correct variant file for your printer model!!!!!!
