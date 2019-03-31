@@ -146,7 +146,16 @@ Look for...
 
 My _AXIS_MOTOR_09 defines are probably all you need to modify. The rest of my firmware changes are controlled by these defines.
 
-Uncomment only the axes that you want to be 0.9 degree motors. In the above example, x and y are set to be 0.9 degree motors, but not the extruder.
+Uncomment only the axes that you want to be 0.9 degree motors. For example, if you have 0.9 degree motors only on Y & Extruder and also use a BMG extruder it would look like...
+```
+//#define X_AXIS_MOTOR_09 //kuo exper
+#define Y_AXIS_MOTOR_09 //kuo exper
+#define E_AXIS_MOTOR_09 //kuo exper
+
+//Uncomment below for BMG Extruder
+#define BMG_EXTRUDER //kuo exper implements changes based on Chris Warkocki BMG firmware mods
+```
+
 
 Save your changes
 
