@@ -1,4 +1,4 @@
-# VFA fix summary and shopping list
+# VFA fix summary, firmware compilation, and shopping list
 
 VFA's are a solved issue with 0.9 degree stepper motors. This post is a summary of what is needed to use 0.9 degree motors.
 
