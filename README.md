@@ -65,9 +65,8 @@ Save your changes to platform.txt
 
 #### Obtain firmware files.
 
-0.9 degree motors require my firmware branch that contains 0.9 degree stepper support (which is here)
-
-https://github.com/guykuo/Prusa-Firmwar ... er-Support
+0.9 degree motors require my firmware branch that contains 0.9 degree stepper support (which is this page)
+https://github.com/guykuo/Prusa-Firmware/tree/0.9-Degree-Stepper-Support
 Verify you are in my 0.9 Degree Stepper Support branch
 
 Click on "Clone or Download" and DOWNLOAD ZIP to your computer
