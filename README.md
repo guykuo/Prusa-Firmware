@@ -8,6 +8,26 @@ You will need this 0.9 degree motor firmware (now includes BMG extruder support)
 
 Be able to compile this firmware before doing any hardware changes. Once motors have been changed, the first thing you need to do is update the firmware to this 0.9 motor support version.
 
+You must adjust defines in Configuration_prusa.h to match your actual motor setup for X Y and E axes.
+If you have a BMG extruder, also uncomment to #define BMG_EXTRUDER
+
+Look for...
+
+```
+/*------------------------------------
+ AXIS SETTINGS
+ *------------------------------------*/
+//Uncomment def(s) below for 0.9 degree stepper motors on x, y, e axis
+//Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
+//My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
+#define X_AXIS_MOTOR_09 //kuo exper
+#define Y_AXIS_MOTOR_09 //kuo exper
+#define E_AXIS_MOTOR_09 //kuo exper
+
+//Uncomment below for BMG Extruder
+//#define BMG_EXTRUDER //kuo exper implements changes based on Chris Warkocki BMG firmware mods
+
+```
 
 
 ## Hardware
