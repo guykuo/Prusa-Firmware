@@ -37,7 +37,8 @@ Hold Torque	0.39 Nm
 Weight	290 gm
 inductance	11.2 mH
 
--- or ---
+or
+
 [OMC Stepper Motors](https://www.amazon.com/gp/product/B00W98OYE4)	$20 x 2
 STEPPERONLINE 0.9° OMC 17HM15-0904S
 Voltage: 12-24V
@@ -55,7 +56,7 @@ I prefer to add standardized connector because I test multiple motors.
 
 
 
-### Heatsinks for TMC2130's ---
+### Heatsinks for TMC2130's
 Obtain heatsinks for TMZ2130's x all 4 axes. May as well cool Z and E while taking care of X & Y)
 Required to avoid 0.9 motors overheating TMC2130 drivers, especially if run in Stealth mode. Heatsinks attach to NON-COMPONENT side of EINSY PC board. They do NOT attach on the TMC2130 chips themselves, but to thermal vias on empty side of EINSY board. Must also cut holes in back of EINSY case for fitment & adequate ventilation. Clean PC board with IPA to let self-stick thermal tape do its job. Position on the vias!.
 
@@ -63,19 +64,20 @@ Required to avoid 0.9 motors overheating TMC2130 drivers, especially if run in S
 Driver Heatsinks for TMC2130 (12 pcs)
 Use these or similar self-stick, driver heatsinks for stock EINSY enclosure. 
 
---or--
+or
+
 Reverse orientation EINSY case users must use low profile heatsinks because reverse case orients heatsinks towards heatbed. Extruder cable will catch on high profile heatsinks. Use low profile, Pi heatsinks.
 
 [Raspberry Pi Heatsink Kit](https://www.amazon.com/gp/product/B07217N5LS)	$8
 Raspberry Pi Heatsink Kit (lower profile than usual driver heatsinks)
 I use these Pi heatsinks with my reverse EINSY case. Smaller and lower profile but still get the job done.
 
-### Wiring Cable --
+### Motor Cables
 [Stepper Motor Cables](https://www.amazon.com/gp/product/B07CBV8DVZ)	$7
 YOTINO Bipolar Stepper Motor Cables, 4 x 100cm Long NEMA 17 Extended Connector Cable (XH2.54 4Pin-6Pin)
 
 
-### Drive Pulleys (optional but recommended) --
+### Drive Pulleys (optional but recommended)
 [10mm Drive Pulley for GT2](https://www.amazon.com/gp/product/B07BH26P2D) $8.90 for 4
 BALITENSEN GT2 Timing Pulley 16 Teeth 5mm Bore, Width 10mm for GT2 Belt 
 (optional) Replace X and Y motor pulleys with these to reduce 2mm, vertical GT2 tooth artifact. This particular drive pulley yielded lower tooth engagement 2mm artifact during 1st phase testing.
