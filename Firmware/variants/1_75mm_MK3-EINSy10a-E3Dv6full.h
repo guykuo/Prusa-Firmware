@@ -96,13 +96,13 @@
 
 //Kuo set the homing speeds (mm/min)
 #ifdef X_AXIS_MOTOR_09
-  #define HOMING_FEEDRATE_X 2400  // Kuo slower feedrate needed for reliable X 0.9 degree motor stallGuard
+  #define HOMING_FEEDRATE_X 2000  // Kuo slower feedrate needed for reliable X 0.9 degree motor stallGuard
 #else
   #define HOMING_FEEDRATE_X 3000
 #endif
 
 #ifdef Y_AXIS_MOTOR_09
-  #define HOMING_FEEDRATE_Y 2400  // Kuo slower feedrate needed for reliable Y 0.9 degree motor stallGuard
+  #define HOMING_FEEDRATE_Y 2000  // Kuo slower feedrate needed for reliable Y 0.9 degree motor stallGuard
 #else
   #define HOMING_FEEDRATE_Y 3000
 #endif
@@ -378,8 +378,8 @@
   #define TMC2130_SG_THRS_X       3    // stallguard sensitivity for X axis
   #define TMC2130_SG_THRS_X_HOME  3    // homing stallguard threshold for X axis
 #else
-  #define TMC2130_SG_THRS_X       3    // Kuo in case different needed for 0.9 degree motors
-  #define TMC2130_SG_THRS_X_HOME  3
+  #define TMC2130_SG_THRS_X       4    // Kuo in case different needed for 0.9 degree motors
+  #define TMC2130_SG_THRS_X_HOME  4
 #endif
 
 #ifndef Y_AXIS_MOTOR_09 //Kuo
