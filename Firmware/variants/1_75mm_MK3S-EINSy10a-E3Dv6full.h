@@ -42,7 +42,7 @@
 
 //Uncomment ONLY ONE or NONE of below geared extruders
 //#define BMG_EXTRUDER //Kuo Uncomment for BMG Extruder
-#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for Extruder with gear ratio 3.5
+//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for Extruder with gear ratio 3.5
 //#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for Extruder with gear ratio 3.0
 
 //you must also send M92 E830 & M500 to printer to set msteps for 3:1 BMG extruder
