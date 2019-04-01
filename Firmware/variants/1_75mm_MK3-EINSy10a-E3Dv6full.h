@@ -40,10 +40,13 @@
 #define Y_AXIS_MOTOR_09 //kuo exper
 #define E_AXIS_MOTOR_09 //kuo exper
 
-//Uncomment below for BMG Extruder
-//#define BMG_EXTRUDER //kuo exper implements changes based on Chris Warkocki BMG firmware mods
+//Uncomment ONLY ONE or NONE of below geared extruders
+//#define BMG_EXTRUDER //Kuo Uncomment for BMG Extruder
+#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for Extruder with gear ratio 3.5
+//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for Extruder with gear ratio 3.0
 
-//you must also send M92 E830 & M500 to printer to set msteps for BMG extruder
+//you must also send M92 E830 & M500 to printer to set msteps for 3:1 BMG extruder
+//you must also send M92 E980 & M500 to printer to set msteps for 3.5:1 extruder
 //Reversion back from BMG_EXTRUDER requires sending M92 E280 & M500 to printer
 
 // Steps per unit {X,Y,Z,E}
@@ -51,11 +54,36 @@
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
 
-#ifdef BMG_EXTRUDER //Kuo for e-axis msteps
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,830} //BMG 
-#else
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //usual steps/unit e-axis
+#ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
+#ifdef BMG_EXTRUDER 
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,830} //BMG approx 3:1 geared extruder
+  #define TMC2130_UNLOAD_CURRENT_R 20 //BMG unload current for M600
+  #define EXTRUDER_DEFS_SET 1
 #endif
+#endif
+
+#ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
+#ifdef EXTRUDER_GEARRATIO_30
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,840} //3.0 geared extruder 
+  #define TMC2130_UNLOAD_CURRENT_R 16  //slightly higher unload current thans stock for M600
+  #define EXTRUDER_DEFS_SET 1
+#endif
+#endif
+
+#ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
+#ifdef EXTRUDER_GEARRATIO_35
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,980} //3.5 geared extruder 
+  #define TMC2130_UNLOAD_CURRENT_R 16  //slightly higher unload current thans stock for M600 
+  #define EXTRUDER_DEFS_SET 1
+#endif
+#endif
+
+#ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //default steps/unit e-axis
+  #define TMC2130_UNLOAD_CURRENT_R 12  //lower current for M600 to protect filament sensor with stock extruder
+  #define EXTRUDER_DEFS_SET 1
+#endif
+
 
 // Endstop inverting
 #define X_MIN_ENDSTOP_INVERTING 0 // set to 1 to invert the logic of the endstop.
@@ -404,12 +432,6 @@
 //new settings is possible for vsense = 1, running current value > 31 set vsense to zero and shift both currents by 1 bit right (Z axis only)
 #define TMC2130_CURRENTS_H {16, 20, 35, 30}
 #define TMC2130_CURRENTS_R {16, 20, 35, 30}
-
-#ifndef BMG_EXTRUDER //Kuo
-  #define TMC2130_UNLOAD_CURRENT_R 12	//lower current for M600 to protect filament sensor 
-#else
-  #define TMC2130_UNLOAD_CURRENT_R 20 //BMG unload current for M600
-#endif
 
 #define TMC2130_STEALTH_Z
 
