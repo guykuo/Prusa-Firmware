@@ -40,14 +40,13 @@
 #define Y_AXIS_MOTOR_09 //kuo exper
 #define E_AXIS_MOTOR_09 //kuo exper
 
-//Uncomment ONLY ONE or NONE of below geared extruders
-//#define BMG_EXTRUDER //Kuo Uncomment for BMG Extruder
-//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for Extruder with gear ratio 3.5
-//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for Extruder with gear ratio 3.0
-
-//you must also send M92 E830 & M500 to printer to set msteps for 3:1 BMG extruder
-//you must also send M92 E980 & M500 to printer to set msteps for 3.5:1 extruder
+//Uncomment ONLY ONE or NONE of below for geared extruders
+//Don't forget to also send gcode to set e-steps 
 //Reversion back from BMG_EXTRUDER requires sending M92 E280 & M500 to printer
+//
+//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. MUST also send M92 E830 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E840 & M500  to set esteps
+//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5. MUST also send M92 E980 & M500 to set esteps
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
