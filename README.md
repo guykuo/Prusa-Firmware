@@ -1,3 +1,7 @@
+# Prusa-Firmware for OLED and 0.9 deg motors
+
+Combined work by others: Mike Grozdanovic (OLED: lcd.cpp), Gerd Jentz (OLED: ultralcd.cpp) and Guy Kuo (0.9 deg motor)
+
 # Table of contents
 
 <!--ts-->
