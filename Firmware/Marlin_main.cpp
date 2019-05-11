@@ -1288,7 +1288,8 @@ void setup()
 	tmc2130_mres[Y_AXIS] = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_Y_MRES);
 	tmc2130_mres[Z_AXIS] = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_Z_MRES);
 	tmc2130_mres[E_AXIS] = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_E_MRES);
-	if (tmc2130_mres[Y_AXIS] == 0xff) tmc2130_mres[Y_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_XY);
+	if (tmc2130_mres[X_AXIS] == 0xff) tmc2130_mres[X_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_X); //kuo
+	if (tmc2130_mres[Y_AXIS] == 0xff) tmc2130_mres[Y_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_Y); //kuo
 	if (tmc2130_mres[Z_AXIS] == 0xff) tmc2130_mres[Z_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_Z);
 	if (tmc2130_mres[E_AXIS] == 0xff) tmc2130_mres[E_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_E);
 	eeprom_update_byte((uint8_t*)EEPROM_TMC2130_X_MRES, tmc2130_mres[X_AXIS]);
@@ -1296,8 +1297,8 @@ void setup()
 	eeprom_update_byte((uint8_t*)EEPROM_TMC2130_Z_MRES, tmc2130_mres[Z_AXIS]);
 	eeprom_update_byte((uint8_t*)EEPROM_TMC2130_E_MRES, tmc2130_mres[E_AXIS]);
 #else //TMC2130_VARIABLE_RESOLUTION
-	tmc2130_mres[X_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_XY);
-	tmc2130_mres[Y_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_XY);
+	tmc2130_mres[X_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_X); //kuo
+	tmc2130_mres[Y_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_Y); //kuo
 	tmc2130_mres[Z_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_Z);
 	tmc2130_mres[E_AXIS] = tmc2130_usteps2mres(TMC2130_USTEPS_E);
 #endif //TMC2130_VARIABLE_RESOLUTION
