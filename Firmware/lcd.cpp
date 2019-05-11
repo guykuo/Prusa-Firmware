@@ -174,51 +174,32 @@ static void lcd_begin(uint8_t lines, uint8_t dotsize, uint8_t clear)
 	if (lcd_rw_pin != 255)
 		digitalWrite(lcd_rw_pin, LOW);
 	//put the LCD into 4 bit or 8 bit mode
-	if (!(lcd_displayfunction & LCD_8BITMODE))
-	{
-		// this is according to the hitachi HD44780 datasheet
-		// figure 24, pg 46
-		// we start in 8bit mode, try to set 4 bit mode
-		lcd_write4bits(0x03);
-		_delay_us(4500); // wait min 4.1ms
-		// second try
-		lcd_write4bits(0x03);
-		_delay_us(4500); // wait min 4.1ms
-		// third go!
-		lcd_write4bits(0x03); 
-		_delay_us(150);
-		// finally, set to 4-bit interface
-		lcd_write4bits(0x02); 
-	}
-	else
-	{
-		// this is according to the hitachi HD44780 datasheet
-		// page 45 figure 23
-		// Send function set command sequence
-		lcd_command(LCD_FUNCTIONSET | lcd_displayfunction);
-		_delay_us(4500);  // wait more than 4.1ms
-		// second try
-		lcd_command(LCD_FUNCTIONSET | lcd_displayfunction);
-		_delay_us(150);
-		// third go
-		lcd_command(LCD_FUNCTIONSET | lcd_displayfunction);
-	}
-	// finally, set # lines, font size, etc.
-	lcd_command(LCD_FUNCTIONSET | lcd_displayfunction);  
-	_delay_us(60);
-	// turn the display on with no cursor or blinking default
-	lcd_displaycontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF;  
-	lcd_display();
-	_delay_us(60);
-	// clear it off
-	if (clear) lcd_clear();
-	_delay_us(3000);
-	// Initialize to default text direction (for romance languages)
-	lcd_displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
-	// set the entry mode
-	lcd_command(LCD_ENTRYMODESET | lcd_displaymode);
-	_delay_us(60);
-	lcd_escape[0] = 0;
+	
+	// 4-Bit initialization sequence from Technobly
+	  lcd_write4bits(0x03);         // Put back into 8-bit mode
+	  _delay_us(5000);
+
+	  lcd_write4bits(0x08);         // Comment this out for V1 OLED
+	  _delay_us(5000);  // Comment this out for V1 OLED
+	  
+	  lcd_write4bits(0x02);         // Put into 4-bit mode
+	  _delay_us(5000);
+	  lcd_write4bits(0x02);
+	  _delay_us(5000);
+	  lcd_write4bits(0x08);
+	  _delay_us(5000);
+	  
+	  lcd_command(LCD_DISPLAYCONTROL);                  // Turn Off
+	  _delay_us(5000);
+	  lcd_command(LCD_FUNCTIONSET | lcd_displayfunction);  // Set # lines, font size, etc.
+	  _delay_us(5000);
+	  lcd_clear();                                      // Clear Display
+	  lcd_command(LCD_ENTRYMODESET | LCD_ENTRYLEFT);    // Set Entry Mode
+	  _delay_us(5000);
+	  lcd_home();                                       // Home Cursor
+	  _delay_us(5000);
+	  lcd_command(LCD_DISPLAYCONTROL | LCD_DISPLAYON);  // Turn On - enable cursor & blink
+	  _delay_us(5000);
 }
 
 int lcd_putchar(char c, FILE *)
@@ -269,13 +250,13 @@ void lcd_refresh_noclear(void)
 void lcd_clear(void)
 {
 	lcd_command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
-	_delay_us(1600);  // this command takes a long time
+	_delay_us(5000);  // this command takes a long time
 }
 
 void lcd_home(void)
 {
 	lcd_command(LCD_RETURNHOME);  // set cursor position to zero
-	_delay_us(1600);  // this command takes a long time!
+	_delay_us(5000);  // this command takes a long time!
 }
 
 // Turn the display on/off (quickly)
