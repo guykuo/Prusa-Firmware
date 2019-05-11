@@ -103,9 +103,6 @@
 // New XYZ calibration
 #define NEW_XYZCAL
 
-// Watchdog support
-#define WATCHDOG
-
 // Fan check
 #define FANCHECK
 

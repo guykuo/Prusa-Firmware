@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK3S"
+#define CUSTOM_MENDEL_NAME "Bunny XYE9 MK3S"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
@@ -33,11 +33,55 @@
 /*------------------------------------
  AXIS SETTINGS
  *------------------------------------*/
+//Uncomment def(s) below for 0.9 degree stepper motors on x, y, e axis
+//Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
+//My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
+#define X_AXIS_MOTOR_09 //kuo exper
+#define Y_AXIS_MOTOR_09 //kuo exper
+#define E_AXIS_MOTOR_09 //kuo exper
+
+//Uncomment ONLY ONE or NONE of below for geared extruders
+//Don't forget to also send gcode to set e-steps 
+//Reversion back from BMG_EXTRUDER requires sending M92 E280 & M500 to printer
+//
+//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. MUST also send M92 E830 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E840 & M500  to set esteps
+//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5. MUST also send M92 E980 & M500 to set esteps
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
+
+#ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
+#ifdef BMG_EXTRUDER 
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,830} //BMG approx 3:1 geared extruder
+  #define TMC2130_UNLOAD_CURRENT_R 20 //BMG unload current for M600
+  #define EXTRUDER_DEFS_SET 1
+#endif
+#endif
+
+#ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
+#ifdef EXTRUDER_GEARRATIO_30
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,840} //3.0 geared extruder 
+  #define TMC2130_UNLOAD_CURRENT_R 16  //slightly higher unload current thans stock for M600
+  #define EXTRUDER_DEFS_SET 1
+#endif
+#endif
+
+#ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
+#ifdef EXTRUDER_GEARRATIO_35
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,980} //3.5 geared extruder 
+  #define TMC2130_UNLOAD_CURRENT_R 16  //slightly higher unload current thans stock for M600 
+  #define EXTRUDER_DEFS_SET 1
+#endif
+#endif
+
+#ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //default steps/unit e-axis
+  #define TMC2130_UNLOAD_CURRENT_R 12  //lower current for M600 to protect filament sensor with stock extruder
+  #define EXTRUDER_DEFS_SET 1
+#endif
 
 // Endstop inverting
 #define X_MIN_ENDSTOP_INVERTING 0 // set to 1 to invert the logic of the endstop.
@@ -75,7 +119,21 @@
 #define Z_PAUSE_LIFT 20
 
 #define NUM_AXIS 4 // The axis order in all axis related arrays is X, Y, Z, E
-#define HOMING_FEEDRATE {3000, 3000, 800, 0}  // set the homing speeds (mm/min) // 3000 is also valid for stallGuard homing. Valid range: 2200 - 3000
+
+//Kuo set the homing speeds (mm/min)
+#ifdef X_AXIS_MOTOR_09
+  #define HOMING_FEEDRATE_X 2000  // Kuo slower feedrate needed for reliable X 0.9 degree motor stallGuard
+#else
+  #define HOMING_FEEDRATE_X 3000
+#endif
+
+#ifdef Y_AXIS_MOTOR_09
+  #define HOMING_FEEDRATE_Y 2000  // Kuo slower feedrate needed for reliable X 0.9 degree motor stallGuard
+#else
+  #define HOMING_FEEDRATE_Y 3000
+#endif
+
+#define HOMING_FEEDRATE {HOMING_FEEDRATE_X, HOMING_FEEDRATE_Y, 800, 0}  // use feedrates needed for reliable X AND Y 0.9 degree motor stallGuard
 
 //#define DEFAULT_Y_OFFSET    4.f // Default distance of Y_MIN_POS point from endstop, when the printer is not calibrated.
 /**
@@ -200,20 +258,58 @@
 
 #define TMC2130_FCLK 12000000       // fclk = 12MHz
 
-#define TMC2130_USTEPS_XY   16        // microstep resolution for XY axes
+// Kuo independently define x y and e microsteps for stepper type
+#ifndef X_AXIS_MOTOR_09
+  #define TMC2130_USTEPS_X   16
+#else
+  #define TMC2130_USTEPS_X   8  // Kuo reduce X microsteps to 8 because EINSY cannot keep up with 16 on 0.9 degree motor
+#endif
+
+#ifndef Y_AXIS_MOTOR_09
+  #define TMC2130_USTEPS_Y   16
+#else
+  #define TMC2130_USTEPS_Y   8  // Kuo reduce Y microsteps to 8 because EINSY cannot keep up with 16 on 0.9 degree motor
+#endif
+
+#ifndef E_AXIS_MOTOR_09
+  #define TMC2130_USTEPS_E   32
+#else
+  #ifdef E_AXIS_MOTOR_09_DOUBLE
+    #define TMC2130_USTEPS_E   32  // Kuo e-axis runs slow enough to remain at 32 msteps
+  #else
+    #define TMC2130_USTEPS_E   16  // Kuo can also reduce mstesp for e-axis
+  #endif
+#endif
+
 #define TMC2130_USTEPS_Z    16        // microstep resolution for Z axis
-#define TMC2130_USTEPS_E    32        // microstep resolution for E axis
+
 #define TMC2130_INTPOL_XY   1         // extrapolate 256 for XY axes
 #define TMC2130_INTPOL_Z    1         // extrapolate 256 for Z axis
 #define TMC2130_INTPOL_E    1         // extrapolate 256 for E axis
 
-#define TMC2130_PWM_GRAD_X  2         // PWMCONF
-#define TMC2130_PWM_AMPL_X  230       // PWMCONF
+///Kuo TMC2130_PWM_GRAD & TMC2130_PWM_AMP tuned for 09 motor.
+//Better axis motion control with lower TMC2130_PWM_GRAD 2,3,4 but can squeak during fast declerations.
+//TMC2130_PWM_GRAD too high causes y-layer shifts
+//TMC2130_PWM_GRAD_Y 4 is reasonable choice on Y. 
+//Raised TMC2130_PWM_AMPL_Y to 250 to prevent y-layer shifts on weaker motors
+
+#ifndef X_AXIS_MOTOR_09
+  #define TMC2130_PWM_GRAD_X  2       // PWM_GRAD 
+  #define TMC2130_PWM_AMPL_X  230     // PWMCONF
+#else
+  #define TMC2130_PWM_GRAD_X  4       // PWM_GRAD Kuo 0.9 degree motor tuning
+  #define TMC2130_PWM_AMPL_X  235     // PWMCONF Kuo 0.9 degree motor tuning
+#endif
 #define TMC2130_PWM_AUTO_X  1         // PWMCONF
 #define TMC2130_PWM_FREQ_X  2         // PWMCONF
 
-#define TMC2130_PWM_GRAD_Y  2         // PWMCONF
-#define TMC2130_PWM_AMPL_Y  235       // PWMCONF
+#ifndef Y_AXIS_MOTOR_09
+  #define TMC2130_PWM_GRAD_Y  2       // PWM_GRAD 
+  #define TMC2130_PWM_AMPL_Y  235     // PWMCONF
+#else
+  #define TMC2130_PWM_GRAD_Y  4       // PWM_GRAD Kuo 0.9 degree motor tuning         
+  #define TMC2130_PWM_AMPL_Y  250     // PWMCONF Kuo 0.9 degree motor tuning
+#endif
 #define TMC2130_PWM_AUTO_Y  1         // PWMCONF
 #define TMC2130_PWM_FREQ_Y  2         // PWMCONF
 
@@ -222,15 +318,69 @@
 #define TMC2130_PWM_AUTO_Z  1         // PWMCONF
 #define TMC2130_PWM_FREQ_Z  2         // PWMCONF
 
-#define TMC2130_PWM_GRAD_E  4         // PWMCONF
-#define TMC2130_PWM_AMPL_E  240       // PWMCONF
+#ifndef E_AXIS_MOTOR_09
+  #define TMC2130_PWM_GRAD_E  4       // PWM_GRAD 
+  #define TMC2130_PWM_AMPL_E  240     // PWMCONF
+#else
+  #define TMC2130_PWM_GRAD_E  4       // PWM_GRAD Kuo 0.9 degree motor tuning         
+  #define TMC2130_PWM_AMPL_E  245     // PWMCONF Kuo 0.9 degree motor tuning
+#endif
 #define TMC2130_PWM_AUTO_E  1         // PWMCONF
 #define TMC2130_PWM_FREQ_E  2         // PWMCONF
 
-#define TMC2130_TOFF_XYZ    3         // CHOPCONF // fchop = 27.778kHz
-#define TMC2130_TOFF_E      3         // CHOPCONF // fchop = 27.778kHz
+//Kuo begin chopper defines with adjustments for 0.9 motors on x y e
+//#define TMC2130_TOFF_E      3         // CHOPCONF // fchop = 27.778kHz
 //#define TMC2130_TOFF_E      4         // CHOPCONF // fchop = 21.429kHz
 //#define TMC2130_TOFF_E      5         // CHOPCONF // fchop = 17.442kHz
+
+#ifndef X_AXIS_MOTOR_09
+  #define TMC2130_TOFF_X 3 // Prusa defaults X
+  #define TMC2130_HSTR_X 5
+  #define TMC2130_HEND_X 1
+  #define TMC2130_TBL_X 2
+  #define TMC2130_RES_X 0
+#else
+  #define TMC2130_TOFF_X 2 // Kuo adjusted for 0.9 degree motors
+  #define TMC2130_HSTR_X 2
+  #define TMC2130_HEND_X 0
+  #define TMC2130_TBL_X 2
+  #define TMC2130_RES_X 0
+#endif
+
+#ifndef Y_AXIS_MOTOR_09 
+  #define TMC2130_TOFF_Y 3 // Prusa defaults Y
+  #define TMC2130_HSTR_Y 5
+  #define TMC2130_HEND_Y 1
+  #define TMC2130_TBL_Y 2
+  #define TMC2130_RES_Y 0
+#else
+  #define TMC2130_TOFF_Y 2 // Kuo adjusted for 0.9 degree motors
+  #define TMC2130_HSTR_Y 2
+  #define TMC2130_HEND_Y 0
+  #define TMC2130_TBL_Y 2
+  #define TMC2130_RES_Y 0
+#endif
+
+#define TMC2130_TOFF_Z 3 // Prusa defaults Z. No 0.9 motors on Z
+#define TMC2130_HSTR_Z 5
+#define TMC2130_HEND_Z 1
+#define TMC2130_TBL_Z 2
+#define TMC2130_RES_Z 0
+
+#ifndef E_AXIS_MOTOR_09 
+  #define TMC2130_TOFF_E 3 // Prusa defaults E
+  #define TMC2130_HSTR_E 5
+  #define TMC2130_HEND_E 1
+  #define TMC2130_TBL_E 2
+  #define TMC2130_RES_E 0
+#else
+  #define TMC2130_TOFF_E 2 // Kuo adjusted for 0.9 degree motors
+  #define TMC2130_HSTR_E 2
+  #define TMC2130_HEND_E 0
+  #define TMC2130_TBL_E 2
+  #define TMC2130_RES_E 0
+#endif
+//Kuo end chopper defines
 
 //#define TMC2130_STEALTH_E // Extruder stealthChop mode
 //#define TMC2130_CNSTOFF_E // Extruder constant-off-time mode (similar to MK2)
@@ -250,15 +400,34 @@
 #define TMC2130_TCOOLTHRS_E 500       // TCOOLTHRS - coolstep treshold
 
 #define TMC2130_SG_HOMING       1     // stallguard homing
-#define TMC2130_SG_THRS_X       3     // stallguard sensitivity for X axis
-#define TMC2130_SG_THRS_Y       3     // stallguard sensitivity for Y axis
+
+#ifndef X_AXIS_MOTOR_09 //Kuo
+  #define TMC2130_SG_THRS_X       3    // stallguard sensitivity for X axis
+  #define TMC2130_SG_THRS_X_HOME  3    // homing stallguard threshold for X axis
+#else
+  #define TMC2130_SG_THRS_X       4    // Kuo in case different needed for 0.9 degree motors
+  #define TMC2130_SG_THRS_X_HOME  4
+#endif
+
+#ifndef Y_AXIS_MOTOR_09 //Kuo
+  #define TMC2130_SG_THRS_Y       3    // stallguard sensitivity for Y axis
+  #define TMC2130_SG_THRS_Y_HOME  3    // homing stallguard threshold for Y axis
+#else
+  #define TMC2130_SG_THRS_Y       3    // Kuo in case different needed for 0.9 degree motors
+  #define TMC2130_SG_THRS_Y_HOME  3
+#endif
+
+#ifndef E_AXIS_MOTOR_09 //Kuo
+  #define TMC2130_SG_THRS_E       3    // stallguard sensitivity for E axis
+#else
+  #define TMC2130_SG_THRS_E       3    // Kuo in case different needed for 0.9 degree motors
+#endif
+
 #define TMC2130_SG_THRS_Z       4     // stallguard sensitivity for Z axis
-#define TMC2130_SG_THRS_E       3     // stallguard sensitivity for E axis
 
 //new settings is possible for vsense = 1, running current value > 31 set vsense to zero and shift both currents by 1 bit right (Z axis only)
 #define TMC2130_CURRENTS_H {16, 20, 35, 30}  // default holding currents for all axes
 #define TMC2130_CURRENTS_R {16, 20, 35, 30}  // default running currents for all axes
-#define TMC2130_UNLOAD_CURRENT_R 12			 // lowe current for M600 to protect filament sensor 
 
 #define TMC2130_STEALTH_Z
 
@@ -331,11 +500,18 @@
 // Load filament commands
 #define LOAD_FILAMENT_0 "M83"
 #define LOAD_FILAMENT_1 "G1 E70 F400"
-#define LOAD_FILAMENT_2 "G1 E40 F100"
-
+#ifndef BMG_EXTRUDER //Kuo BMG load
+  #define LOAD_FILAMENT_2 "G1 E40 F100"
+#else
+  #define LOAD_FILAMENT_2 "G1 E50 F100"
+#endif
 // Unload filament commands
 #define UNLOAD_FILAMENT_0 "M83"
-#define UNLOAD_FILAMENT_1 "G1 E-80 F7000"
+#ifndef BMG_EXTRUDER //Kuo BMG unload
+  #define UNLOAD_FILAMENT_1 "G1 E-80 F7000"
+#else
+  #define UNLOAD_FILAMENT_1 "G1 E-100 F7000"
+#endif
 
 /*------------------------------------
  CHANGE FILAMENT SETTINGS
@@ -351,7 +527,11 @@
 #define FILAMENTCHANGE_FINALRETRACT -80
 
 #define FILAMENTCHANGE_FIRSTFEED 70 //E distance in mm for fast filament loading sequence used used in filament change (M600)
-#define FILAMENTCHANGE_FINALFEED 25 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
+#ifndef BMG_EXTRUDER //Kuo BMG FILAMENTCHANGE_FINALFEED
+  #define FILAMENTCHANGE_FINALFEED 25 //E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
+#else
+  #define FILAMENTCHANGE_FINALFEED 35
+#endif
 #define FILAMENTCHANGE_RECFEED 5
 
 #define FILAMENTCHANGE_XYFEED 50
