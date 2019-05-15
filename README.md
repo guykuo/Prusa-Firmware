@@ -94,12 +94,9 @@ Configuration_prusa.h
 Move Configuration_prusa.h to the main firmware folder. 
 
 
-#### Set Language Support (already done for you in my branch)
-Normally you would need to set language support in config.h to primary language only.
-I have already done so in my branch. So you do not need to do this. 
-
-However, if you build from a Prusa branch you MUST do this. 
-Otherwise, firmware will not run properly. Instead, your LCD will display random letters and likely boot loop.
+#### Set Language Support
+Set language support in config.h to primary language only.
+You MUST do this. Otherwise, firmware will not run properly. Instead, your LCD will display random letters and likely boot loop.
 
 The changes needed are near bottom of the file. It should look like this...
 ```
@@ -108,7 +105,7 @@ The changes needed are near bottom of the file. It should look like this...
 //#define LANG_MODE 1 // sec. language support
 #define LANG_SIZE_RESERVED 0x2f00 // reserved space for secondary language (12032 bytes)
 ```
-You can make the edit from within Arduino IDE, but again, this has already been done for you in my branch.
+You can make the edit from within Arduino IDE.
 
 
 #### Set Motor Defines, Compile, Upload
