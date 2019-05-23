@@ -2144,23 +2144,12 @@ bool calibrate_z_auto()
 	plan_buffer_line(destination[X_AXIS], destination[Y_AXIS], destination[Z_AXIS], destination[E_AXIS], feedrate / 60, active_extruder);
 	st_synchronize();
 	enable_endstops(endstops_enabled);
-
-	
-#ifndef BMG_EXTRUDER //Kuo non-BMG z-axis calibration length 
-  	if (PRINTER_TYPE == PRINTER_MK3) {
+	if (PRINTER_TYPE == PRINTER_MK3) {
 		current_position[Z_AXIS] = Z_MAX_POS + 2.0;
  	}
  	else {
    		current_position[Z_AXIS] = Z_MAX_POS + 9.0;
   	}
-#else //Kuo BMG z-axis calibration length also shorter for MK3S
-  	if (PRINTER_TYPE == PRINTER_MK3 || PRINTER_TYPE == PRINTER_MK3S) {
- 		current_position[Z_AXIS] = Z_MAX_POS + 2.0;
-	}
-	else {
-		current_position[Z_AXIS] = Z_MAX_POS + 9.0;
-	}
-#endif
 
     plan_set_position(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS]);
 	return true;
