@@ -867,6 +867,7 @@ void show_fw_version_warnings() {
 //! @brief try to check if firmware is on right type of printer
 static void check_if_fw_is_on_right_printer(){
 #ifdef FILAMENT_SENSOR
+  if((PRINTER_TYPE == PRINTER_MK3) || (PRINTER_TYPE == PRINTER_MK3S)){
     #ifdef IR_SENSOR
     swi2c_init();
     const uint8_t pat9125_detected = swi2c_readByte_A8(PAT9125_I2C_ADDR,0x00,NULL);
@@ -880,6 +881,7 @@ static void check_if_fw_is_on_right_printer(){
       if (ir_detected){
         lcd_show_fullscreen_message_and_wait_P(_i("MK3 firmware detected on MK3S printer"));}
     #endif //PAT9125
+  }
 #endif //FILAMENT_SENSOR
 }
 
@@ -1008,6 +1010,10 @@ void setup()
 {
 	mmu_init();
 	
+  #ifdef UVLO_SUPPORT
+    setup_uvlo_interrupt();
+  #endif //UVLO_SUPPORT
+
 	ultralcd_init();
 
 #if (LCD_BL_PIN != -1) && defined (LCD_BL_PIN)
@@ -1296,9 +1302,8 @@ void setup()
 
 #endif //TMC2130
 
-
 	st_init();    // Initialize stepper, this enables interrupts!
-
+  
 #ifdef TMC2130
 	tmc2130_mode = silentMode?TMC2130_MODE_SILENT:TMC2130_MODE_NORMAL;
 	update_mode_profile();
@@ -1499,10 +1504,6 @@ void setup()
 		eeprom_write_byte((uint8_t*)EEPROM_MMU_STEALTH, SilentModeMenu_MMU);
 	}
 	check_babystep(); //checking if Z babystep is in allowed range
-
-#ifdef UVLO_SUPPORT
-	setup_uvlo_interrupt();
-#endif //UVLO_SUPPORT
 
 #if !defined(DEBUG_DISABLE_FANCHECK) && defined(FANCHECK) && defined(TACH_1) && TACH_1 >-1
 	setup_fan_interrupt();
@@ -3553,6 +3554,10 @@ void process_commands()
                enquecommand_P(PSTR("M24")); 
 		}	
 #ifdef FILAMENT_SENSOR
+		else if (code_seen("fsensor_recover_IR")) //! PRUSA fsensor_recover_IR
+		{
+			fsensor_restore_print_and_continue_IR();
+		}
 		else if (code_seen("fsensor_recover")) //! PRUSA fsensor_recover
 		{
                fsensor_restore_print_and_continue();
@@ -8837,9 +8842,7 @@ void serialecho_temperatures() {
 	SERIAL_PROTOCOL_F(degBed(), 1);
 	SERIAL_PROTOCOLLN("");
 }
-
 extern uint32_t sdpos_atomic;
-
 #ifdef UVLO_SUPPORT
 
 void uvlo_() 
@@ -8910,26 +8913,15 @@ void uvlo_()
         st_synchronize();
         disable_e0();
     
-		plan_buffer_line(
-      current_position[X_AXIS], 
-      current_position[Y_AXIS], 
-      current_position[Z_AXIS] + UVLO_Z_AXIS_SHIFT + float((1024 - z_microsteps + 7) >> 4) / cs.axis_steps_per_unit[Z_AXIS], 
+    plan_buffer_line(
+      current_position[X_AXIS],
+      current_position[Y_AXIS],
+      current_position[Z_AXIS] + UVLO_Z_AXIS_SHIFT + float((1024 - z_microsteps + 7) >> 4) / cs.axis_steps_per_unit[Z_AXIS],
       current_position[E_AXIS] - default_retraction,
       40, active_extruder);
-    
-    st_synchronize();
-    disable_e0();
-    
-    plan_buffer_line(
-                     current_position[X_AXIS],
-                     current_position[Y_AXIS],
-                     current_position[Z_AXIS] + UVLO_Z_AXIS_SHIFT + float((1024 - z_microsteps + 7) >> 4) / cs.axis_steps_per_unit[Z_AXIS],
-                     current_position[E_AXIS] - default_retraction,
-                     40, active_extruder);
     st_synchronize();
     disable_e0();
     disable_z();
-    
     // Move Z up to the next 0th full step.
     // Write the file position.
     eeprom_update_dword((uint32_t*)(EEPROM_FILE_POSITION), sd_position);
@@ -8973,9 +8965,8 @@ void uvlo_()
     // Increment power failure counter
 	eeprom_update_byte((uint8_t*)EEPROM_POWER_COUNT, eeprom_read_byte((uint8_t*)EEPROM_POWER_COUNT) + 1);
 	eeprom_update_word((uint16_t*)EEPROM_POWER_COUNT_TOT, eeprom_read_word((uint16_t*)EEPROM_POWER_COUNT_TOT) + 1);
-    
-		printf_P(_N("UVLO - end %d\n"), _millis() - time_start);
-    
+      printf_P(_N("UVLO - end %d\n"), _millis() - time_start);
+
 #if 0
     // Move the print head to the side of the print until all the power stored in the power supply capacitors is depleted.
     current_position[X_AXIS] = (current_position[X_AXIS] < 0.5f * (X_MIN_POS + X_MAX_POS)) ? X_MIN_POS : X_MAX_POS;
@@ -9010,23 +9001,15 @@ z_microsteps=tmc2130_rd_MSCNT(Z_TMC2130_CS);
 #endif //TMC2130
 
 planner_abort_hard();
-sei();
-plan_buffer_line(
-     current_position[X_AXIS], 
-     current_position[Y_AXIS], 
-//     current_position[Z_AXIS]+float((1024-z_microsteps+7)>>4)/axis_steps_per_unit[Z_AXIS], 
-     current_position[Z_AXIS]+UVLO_Z_AXIS_SHIFT+float((1024-z_microsteps+7)>>4)/cs.axis_steps_per_unit[Z_AXIS], 
-     current_position[E_AXIS],
-     40, active_extruder);
-st_synchronize();
 disable_z();
 
 // Finaly store the "power outage" flag.
 //if(sd_print)
-     eeprom_update_byte((uint8_t*)EEPROM_UVLO,2);
-
-eeprom_update_word((uint16_t*)(EEPROM_UVLO_TINY_Z_MICROSTEPS),z_microsteps);
-eeprom_update_float((float*)(EEPROM_UVLO_TINY_CURRENT_POSITION_Z), current_position[Z_AXIS]);
+if(eeprom_read_byte((uint8_t*)EEPROM_UVLO)==1){
+  eeprom_update_float((float*)(EEPROM_UVLO_TINY_CURRENT_POSITION_Z), current_position[Z_AXIS]);
+  eeprom_update_word((uint16_t*)(EEPROM_UVLO_Z_MICROSTEPS),z_microsteps);
+}
+eeprom_update_byte((uint8_t*)EEPROM_UVLO,2);
 
 // Increment power failure counter
 eeprom_update_byte((uint8_t*)EEPROM_POWER_COUNT, eeprom_read_byte((uint8_t*)EEPROM_POWER_COUNT) + 1);
@@ -9101,11 +9084,9 @@ void recover_print(uint8_t automatic) {
 	char cmd[30];
 	lcd_update_enable(true);
 	lcd_update(2);
-	lcd_setstatuspgm(_i("Recovering print    "));////MSG_RECOVERING_PRINT c=20 r=1
-
+  lcd_setstatuspgm(_i("Recovering print    "));////MSG_RECOVERING_PRINT c=20 r=1
      bool bTiny=(eeprom_read_byte((uint8_t*)EEPROM_UVLO)==2);
      recover_machine_state_after_power_panic(bTiny); //recover position, temperatures and extrude_multipliers
-
   // Lift the print head, so one may remove the excess priming material.
      if(!bTiny&&(current_position[Z_AXIS]<25))
           enquecommand_P(PSTR("G1 Z25 F800"));
@@ -9128,8 +9109,7 @@ void recover_print(uint8_t automatic) {
 
   // Restart the print.
 	restore_print_from_eeprom();
-
-	printf_P(_N("Current pos Z_AXIS:%.3f\nCurrent pos E_AXIS:%.3f\n"), current_position[Z_AXIS], current_position[E_AXIS]);
+  printf_P(_N("Current pos Z_AXIS:%.3f\nCurrent pos E_AXIS:%.3f\n"), current_position[Z_AXIS], current_position[E_AXIS]);
 }
 
 void recover_machine_state_after_power_panic(bool bTiny)
@@ -9141,12 +9121,13 @@ void recover_machine_state_after_power_panic(bool bTiny)
   current_position[Y_AXIS] = eeprom_read_float((float*)(EEPROM_UVLO_CURRENT_POSITION + 4));
   // Recover the logical coordinate of the Z axis at the time of the power panic.
   // The current position after power panic is moved to the next closest 0th full step.
-  if(bTiny)
-    current_position[Z_AXIS] = eeprom_read_float((float*)(EEPROM_UVLO_TINY_CURRENT_POSITION_Z)) + 
-    UVLO_Z_AXIS_SHIFT + float((1024 - eeprom_read_word((uint16_t*)(EEPROM_UVLO_TINY_Z_MICROSTEPS)) + 7) >> 4) / cs.axis_steps_per_unit[Z_AXIS];
-  else
+  if(bTiny){
+    current_position[Z_AXIS] = eeprom_read_float((float*)(EEPROM_UVLO_TINY_CURRENT_POSITION_Z)) + float((1024 - eeprom_read_word((uint16_t*)(EEPROM_UVLO_Z_MICROSTEPS)) + 7) >> 4) / cs.axis_steps_per_unit[Z_AXIS];
+  }
+  else{
     current_position[Z_AXIS] = eeprom_read_float((float*)(EEPROM_UVLO_CURRENT_POSITION_Z)) + 
     UVLO_Z_AXIS_SHIFT + float((1024 - eeprom_read_word((uint16_t*)(EEPROM_UVLO_Z_MICROSTEPS)) + 7) >> 4) / cs.axis_steps_per_unit[Z_AXIS];
+  }
   if (eeprom_read_byte((uint8_t*)EEPROM_UVLO_E_ABS)) {
 	  current_position[E_AXIS] = eeprom_read_float((float*)(EEPROM_UVLO_CURRENT_POSITION_E));
 	  sprintf_P(cmd, PSTR("G92 E"));
@@ -9189,7 +9170,7 @@ void recover_machine_state_after_power_panic(bool bTiny)
   axis_known_position[X_AXIS] = true; enable_x();
   axis_known_position[Y_AXIS] = true; enable_y();
   axis_known_position[Z_AXIS] = true; enable_z();
-
+  
   SERIAL_ECHOPGM("recover_machine_state_after_power_panic, initial ");
   print_physical_coordinates();
 
@@ -9254,7 +9235,8 @@ void restore_print_from_eeprom() {
 	strcat_P(cmd, PSTR(" F2000"));
 	enquecommand(cmd);
   // Move the Z axis down to the print, in logical coordinates.
-	strcpy_P(cmd, PSTR("G1 Z")); strcat(cmd, ftostr32(eeprom_read_float((float*)(EEPROM_UVLO_CURRENT_POSITION_Z))));
+	strcpy_P(cmd, PSTR("G1 Z")); strcat(cmd, ftostr32( eeprom_read_float((float*)(EEPROM_UVLO_CURRENT_POSITION_Z)) - (UVLO_Z_AXIS_SHIFT + 
+  float((1024 - eeprom_read_word((uint16_t*)(EEPROM_UVLO_Z_MICROSTEPS)) + 7) >> 4) / cs.axis_steps_per_unit[Z_AXIS])));
 	enquecommand(cmd);
   // Unretract.
 	enquecommand_P(PSTR("G1 E"  STRINGIFY(2*default_retraction)" F480"));
