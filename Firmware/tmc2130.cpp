@@ -20,6 +20,8 @@ uint8_t tmc2130_mode = TMC2130_MODE_NORMAL;
 uint8_t tmc2130_current_h[4] = TMC2130_CURRENTS_H;
 //running currents
 uint8_t tmc2130_current_r[4] = TMC2130_CURRENTS_R;
+
+//running currents for homing
 #ifndef X_AXIS_MOTOR_09
   uint8_t tmc2130_current_r_home[4] = {8, 10, 20, 18};
 #else
