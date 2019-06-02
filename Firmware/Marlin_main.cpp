@@ -1302,8 +1302,9 @@ void setup()
 
 #endif //TMC2130
 
+
 	st_init();    // Initialize stepper, this enables interrupts!
-  
+
 #ifdef TMC2130
 	tmc2130_mode = silentMode?TMC2130_MODE_SILENT:TMC2130_MODE_NORMAL;
 	update_mode_profile();
@@ -2072,35 +2073,23 @@ static float probe_pt(float x, float y, float z_before) {
 
 #ifdef LIN_ADVANCE
    /**
-    * M900: Set and/or Get advance K factor and WH/D ratio
+    * M900: Set and/or Get advance K factor
     *
     *  K<factor>                  Set advance K factor
-    *  R<ratio>                   Set ratio directly (overrides WH/D)
-    *  W<width> H<height> D<diam> Set ratio from WH/D
     */
 inline void gcode_M900() {
     st_synchronize();
     
     const float newK = code_seen('K') ? code_value_float() : -1;
-    if (newK >= 0) extruder_advance_k = newK;
-    
-    float newR = code_seen('R') ? code_value_float() : -1;
-    if (newR < 0) {
-        const float newD = code_seen('D') ? code_value_float() : -1,
-        newW = code_seen('W') ? code_value_float() : -1,
-        newH = code_seen('H') ? code_value_float() : -1;
-        if (newD >= 0 && newW >= 0 && newH >= 0)
-            newR = newD ? (newW * newH) / (sq(newD * 0.5) * M_PI) : 0;
-    }
-    if (newR >= 0) advance_ed_ratio = newR;
-    
+    if (newK >= 0 && newK < 10)
+      extruder_advance_K = newK;
+    else
+      SERIAL_ECHOLNPGM("K out of allowed range!");
+
     SERIAL_ECHO_START;
     SERIAL_ECHOPGM("Advance K=");
-    SERIAL_ECHOLN(extruder_advance_k);
-    SERIAL_ECHOPGM(" E/D=");
-    const float ratio = advance_ed_ratio;
-    if (ratio) SERIAL_ECHOLN(ratio); else SERIAL_ECHOLNPGM("Auto");
-    }
+    SERIAL_ECHOLN(extruder_advance_K);
+}
 #endif // LIN_ADVANCE
 
 bool check_commands() {
@@ -3553,10 +3542,6 @@ void process_commands()
                enquecommand_P(PSTR("M24")); 
 		}	
 #ifdef FILAMENT_SENSOR
-		else if (code_seen("fsensor_recover_IR")) //! PRUSA fsensor_recover_IR
-		{
-			fsensor_restore_print_and_continue_IR();
-		}
 		else if (code_seen("fsensor_recover")) //! PRUSA fsensor_recover
 		{
                fsensor_restore_print_and_continue();
@@ -7247,6 +7232,7 @@ case 919: //! M919 - Set TMC2130 toff Kuo
                   }
 #endif //defined(MMU_HAS_CUTTER) && defined(MMU_ALWAYS_CUT)
 				  mmu_command(MmuCmd::T0 + tmp_extruder);
+
 				  manage_response(true, true, MMU_TCODE_MOVE);
 		          mmu_continue_loading(is_usb_printing);
 
@@ -8847,7 +8833,9 @@ void serialecho_temperatures() {
 	SERIAL_PROTOCOL_F(degBed(), 1);
 	SERIAL_PROTOCOLLN("");
 }
+
 extern uint32_t sdpos_atomic;
+
 #ifdef UVLO_SUPPORT
 
 void uvlo_() 
@@ -8927,6 +8915,7 @@ void uvlo_()
     st_synchronize();
     disable_e0();
     disable_z();
+    
     // Move Z up to the next 0th full step.
     // Write the file position.
     eeprom_update_dword((uint32_t*)(EEPROM_FILE_POSITION), sd_position);
@@ -9092,6 +9081,7 @@ void recover_print(uint8_t automatic) {
   lcd_setstatuspgm(_i("Recovering print    "));////MSG_RECOVERING_PRINT c=20 r=1
      bool bTiny=(eeprom_read_byte((uint8_t*)EEPROM_UVLO)==2);
      recover_machine_state_after_power_panic(bTiny); //recover position, temperatures and extrude_multipliers
+
   // Lift the print head, so one may remove the excess priming material.
      if(!bTiny&&(current_position[Z_AXIS]<25))
           enquecommand_P(PSTR("G1 Z25 F800"));
@@ -9114,7 +9104,7 @@ void recover_print(uint8_t automatic) {
 
   // Restart the print.
 	restore_print_from_eeprom();
-  printf_P(_N("Current pos Z_AXIS:%.3f\nCurrent pos E_AXIS:%.3f\n"), current_position[Z_AXIS], current_position[E_AXIS]);
+	printf_P(_N("Current pos Z_AXIS:%.3f\nCurrent pos E_AXIS:%.3f\n"), current_position[Z_AXIS], current_position[E_AXIS]);
 }
 
 void recover_machine_state_after_power_panic(bool bTiny)
@@ -9175,7 +9165,7 @@ void recover_machine_state_after_power_panic(bool bTiny)
   axis_known_position[X_AXIS] = true; enable_x();
   axis_known_position[Y_AXIS] = true; enable_y();
   axis_known_position[Z_AXIS] = true; enable_z();
-  
+
   SERIAL_ECHOPGM("recover_machine_state_after_power_panic, initial ");
   print_physical_coordinates();
 

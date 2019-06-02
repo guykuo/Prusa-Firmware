@@ -18,9 +18,6 @@ extern bool fsensor_oq_meassure_enabled;
 //! @name save restore printing
 //! @{
 extern void fsensor_stop_and_save_print(void);
-//! special handling for the IR sensor (no restore position and heating, since this is already correctly handled in the M600 itself)
-extern void fsensor_restore_print_and_continue_IR(void);
-//! legacy restore print - restore position and heatup to original temperature - for the MMU and the optical fsensor
 extern void fsensor_restore_print_and_continue(void);
 //! @}
 
@@ -63,8 +60,8 @@ extern bool fsensor_oq_result(void);
 #include "planner.h"
 //! @name callbacks from stepper
 //! @{
-extern void fsensor_st_block_begin(block_t* bl);
-extern void fsensor_st_block_chunk(block_t* bl, int cnt);
+extern void fsensor_st_block_begin(bool rev);
+extern void fsensor_st_block_chunk(int cnt);
 //! @}
 
 #endif //FSENSOR_H
