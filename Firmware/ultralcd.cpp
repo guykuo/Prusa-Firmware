@@ -961,19 +961,16 @@ static void lcd_status_screen()
 
 	if (lcd_draw_update)
 	{
-#if 0 // Disable for OLED!
 		ReInitLCD++;
 		if (ReInitLCD == 30)
 		{
-			lcd_refresh(); // to maybe revive the LCD if static electricity killed it.
 			ReInitLCD = 0 ;
 		}
 		else
 		{
 			if ((ReInitLCD % 10) == 0)
-				lcd_refresh_noclear(); //to maybe revive the LCD if static electricity killed it.
+				;
 		}
-#endif
 
 		lcdui_print_status_screen();
 
@@ -3012,6 +3009,7 @@ void lcd_menu_statistics()
 
 		lcd_printf_P(_N(
 		  ESC_2J
+		  ESC_H(0, 0)				  
 		  "%S:"
 		  ESC_H(6,1) "%8.2fm \n"
 		  "%S :"
@@ -3039,6 +3037,7 @@ void lcd_menu_statistics()
 
 		lcd_printf_P(_N(
 		  ESC_2J
+		  ESC_H(0, 0)				  
 		  "%S :"
 		  ESC_H(9,1) "%8.2f m\n"
 		  "%S :\n"
