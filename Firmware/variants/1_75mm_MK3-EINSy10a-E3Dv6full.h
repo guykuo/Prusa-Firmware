@@ -33,20 +33,20 @@
 /*------------------------------------
  AXIS SETTINGS
  *------------------------------------*/
-//Uncomment def(s) below for 0.9 degree stepper motors on x, y, e axis
+//Uncommented def(s) below specify 0.9 degree stepper motors on x, y, e axis
 //Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
 //My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
-#define X_AXIS_MOTOR_09 //kuo exper
-#define Y_AXIS_MOTOR_09 //kuo exper
-#define E_AXIS_MOTOR_09 //kuo exper
+#define X_AXIS_MOTOR_09 //kuo exper X axis
+#define Y_AXIS_MOTOR_09 //kuo exper Y axis
+#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
 
 //Uncomment ONLY ONE or NONE of below for geared extruders
 //Don't forget to also send gcode to set e-steps 
-//Reversion back from BMG_EXTRUDER requires sending M92 E280 & M500 to printer
+//Reversion back from geared extruder requires sending M92 E280 & M500 to printer
 //
-//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. MUST also send M92 E830 & M500 to set esteps
+//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This also sets BMG height for you. MUST also send M92 E830 & M500 to set esteps
 //#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E840 & M500  to set esteps
-//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5. MUST also send M92 E980 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like Bunny and Bear Short Ears or Skelestruder. MUST also send M92 E980 & M500 to set esteps
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
@@ -107,7 +107,11 @@
 #define X_MIN_POS 0
 #define Y_MAX_POS 212.5
 #define Y_MIN_POS -4 //orig -4
-#define Z_MAX_POS 210
+#ifdef BMG_EXTRUDER
+  #define Z_MAX_POS 205 //kuo BMG height
+#else
+  #define Z_MAX_POS 210 //default height
+#endif
 #define Z_MIN_POS 0.15
 
 // Canceled home position
