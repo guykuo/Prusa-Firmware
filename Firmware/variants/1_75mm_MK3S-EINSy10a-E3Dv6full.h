@@ -33,7 +33,7 @@
 /*------------------------------------
  AXIS SETTINGS
  *------------------------------------*/
-//Uncomment def(s) below for 0.9 degree stepper motors on x, y, e axis
+//Uncommented def(s) below specify 0.9 degree stepper motors on x, y, e axis
 //Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
 //My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
 #define X_AXIS_MOTOR_09 //kuo exper X Axis
@@ -44,7 +44,7 @@
 //Don't forget to also send gcode to set e-steps 
 //Reversion back from geared extruder requires sending M92 E280 & M500 to printer
 //
-//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This also sets BMB height for you. MUST also send M92 E830 & M500 to set esteps
+//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This also sets BMG height for you. MUST also send M92 E830 & M500 to set esteps
 //#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E840 & M500  to set esteps
 //#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like Bunny and Bear Short Ears or Skelestruder. MUST also send M92 E980 & M500 to set esteps
 
