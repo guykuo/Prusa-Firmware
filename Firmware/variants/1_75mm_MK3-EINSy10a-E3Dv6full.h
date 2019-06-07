@@ -44,7 +44,7 @@
 //Don't forget to also send gcode to set e-steps 
 //Reversion back from geared extruder requires sending M92 E280 & M500 to printer
 //
-//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This also sets BMG height for you. MUST also send M92 E830 & M500 to set esteps
+//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This auto sets BMG height for you. MUST also send M92 E830 & M500 to set esteps
 //#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E840 & M500  to set esteps
 //#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like Bunny and Bear Short Ears or Skelestruder. MUST also send M92 E980 & M500 to set esteps
 
