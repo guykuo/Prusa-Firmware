@@ -964,11 +964,13 @@ static void lcd_status_screen()
 		ReInitLCD++;
 		if (ReInitLCD == 30)
 		{
+//			lcd_refresh(); // JTa: Disabled for OLED! // to maybe revive the LCD if static electricity killed it.
 			ReInitLCD = 0 ;
 		}
 		else
 		{
 			if ((ReInitLCD % 10) == 0)
+//				lcd_refresh_noclear(); // JTa: Disabled for OLED! // to maybe revive the LCD if static electricity killed it.
 				;
 		}
 
@@ -3009,7 +3011,7 @@ void lcd_menu_statistics()
 
 		lcd_printf_P(_N(
 		  ESC_2J
-		  ESC_H(0, 0)				  
+		  ESC_H(0, 0) // JTa: For OLED				  
 		  "%S:"
 		  ESC_H(6,1) "%8.2fm \n"
 		  "%S :"
@@ -3037,7 +3039,7 @@ void lcd_menu_statistics()
 
 		lcd_printf_P(_N(
 		  ESC_2J
-		  ESC_H(0, 0)				  
+		  ESC_H(0, 0) // JTa: For OLED				  
 		  "%S :"
 		  ESC_H(9,1) "%8.2f m\n"
 		  "%S :\n"
