@@ -239,9 +239,9 @@ I use these Pi heatsinks with my reverse EINSY case. Smaller and lower profile b
 [Stepper Motor Cables](https://www.amazon.com/gp/product/B07CBV8DVZ)	$7
 YOTINO Bipolar Stepper Motor Cables, 4 x 100cm Long NEMA 17 Extended Connector Cable (XH2.54 4Pin-6Pin)
 
-Wiring is as in pictures. Note order of wires at both EINSY and motor end
-(Note: if using retrograde motor extruder like BNBSX Short Ears, plug EINSY end in 180 degrees rotated)
-
+Wiring is as in pictures. Pay attention to wire order and pin positions at both EINSY and motor ends
+NB: if using retrograde motor extruder like BNBSX Short Ears, plug EINSY end in 180 degrees rotated
+NB2: LDO's use different pinout not detailed here.
 
 ![EINSY end of cable](https://github.com/guykuo/Prusa-Firmware/blob/0.9-Degree-Stepper-Support/einsy-end-of-cable.jpg)
 
