@@ -120,8 +120,6 @@ volatile signed char count_direction[NUM_AXIS] = { 1, 1, 1, 1};
   static const uint8_t  ADV_INIT       = 0b01;
   static const uint8_t  ADV_DECELERATE = 0b10;
 
-  static bool use_advance_lead;
-
   static uint16_t nextMainISR;
   static uint16_t nextAdvanceISR;
 
@@ -354,7 +352,7 @@ FORCE_INLINE void stepper_next_block()
     acceleration_time = calc_timer(acc_step_rate, step_loops);
 
 #ifdef LIN_ADVANCE
-    if ((use_advance_lead = current_block->use_advance_lead)) {
+    if (current_block->use_advance_lead) {
         LA_decelerate_after = current_block->decelerate_after;
         final_adv_steps = current_block->final_adv_steps;
         max_adv_steps = current_block->max_adv_steps;
@@ -426,6 +424,17 @@ FORCE_INLINE void stepper_next_block()
   }
   else {
       _NEXT_ISR(2000); // 1kHz.
+
+#ifdef LIN_ADVANCE
+      // reset LA state when there's no block
+      nextAdvanceISR = ADV_NEVER;
+      e_steps = 0;
+
+      // incrementally lose pressure to give a chance for
+      // a new LA block to be scheduled and recover
+      if(current_adv_steps)
+          --current_adv_steps;
+#endif
   }
   //WRITE_NC(LOGIC_ANALYZER_CH2, false);
 }
@@ -965,7 +974,7 @@ FORCE_INLINE void advance_isr_scheduler() {
         while(--max_ticks);
 
 #ifdef FILAMENT_SENSOR
-        if (!current_block || (abs(fsensor_counter) >= fsensor_chunk_len))
+        if (abs(fsensor_counter) >= fsensor_chunk_len)
         {
             fsensor_st_block_chunk(fsensor_counter);
             fsensor_counter = 0;
@@ -980,11 +989,6 @@ FORCE_INLINE void advance_isr_scheduler() {
     else
         OCR1A = nextMainISR;
 }
-
-void clear_current_adv_vars() {
-    current_adv_steps = 0;
-}
-
 #endif // LIN_ADVANCE
 
 void st_init()
@@ -1218,7 +1222,6 @@ void st_init()
 #endif
 
   // Initialize state for the linear advance scheduler
-  use_advance_lead = false;
   nextMainISR = 0;
   nextAdvanceISR = ADV_NEVER;
   main_Rate = ADV_NEVER;
@@ -1336,6 +1339,10 @@ void quickStop()
   DISABLE_STEPPER_DRIVER_INTERRUPT();
   while (blocks_queued()) plan_discard_current_block(); 
   current_block = NULL;
+#ifdef LIN_ADVANCE
+  nextAdvanceISR = ADV_NEVER;
+  current_adv_steps = 0;
+#endif
   st_reset_timer();
   ENABLE_STEPPER_DRIVER_INTERRUPT();
 }
