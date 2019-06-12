@@ -38,7 +38,7 @@
 //My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
 #define X_AXIS_MOTOR_09 //kuo exper X axis
 #define Y_AXIS_MOTOR_09 //kuo exper Y axis
-#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
+//#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
 
 //Uncomment ONLY ONE or NONE of below for geared extruders
 //Don't forget to also send gcode to set e-steps 
