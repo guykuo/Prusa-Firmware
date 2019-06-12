@@ -97,7 +97,7 @@ extern void lcd_diag_show_end_stops();
 #define LCD_COMMAND_PID_EXTRUDER 7 
 #define LCD_COMMAND_V2_CAL 8
 
-extern int lcd_commands_type;
+extern uint8_t lcd_commands_type;
 extern int8_t FSensorStateMenu;
 
 #define CUSTOM_MSG_TYPE_STATUS 0 // status message from lcd_status_message variable
@@ -147,14 +147,14 @@ void extr_unload();
 
 typedef enum
 {
-    e_FILAMENT_ACTION_none, //!< 'none' state is used as flag for (filament) autoLoad (i.e. opposite for 'autoLoad' state)
+    e_FILAMENT_ACTION_none,                       //!< 'none' state is used as flag for (filament) autoLoad (i.e. opposite for 'autoLoad' state)
     e_FILAMENT_ACTION_Load,
     e_FILAMENT_ACTION_autoLoad,
     e_FILAMENT_ACTION_unLoad,
     e_FILAMENT_ACTION_mmuLoad,
     e_FILAMENT_ACTION_mmuUnLoad,
     e_FILAMENT_ACTION_mmuEject,
-    e_FILAMENT_ACTION_mmuCut,
+    e_FILAMENT_ACTION_mmuCut
 } eFILAMENT_ACTION;
 extern eFILAMENT_ACTION eFilamentAction;
 extern bool bFilamentFirstRun;
