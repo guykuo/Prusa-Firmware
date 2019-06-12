@@ -40,6 +40,7 @@
 
 #include "static_assert.h"
 #include "io_atmega2560.h"
+#include "first_lay_cal.h"
 
 
 int scrollstuff = 0;
@@ -73,8 +74,8 @@ extern void crashdet_disable();
 bool presort_flag = false;
 #endif
 
-int lcd_commands_type = LCD_COMMAND_IDLE;
-int lcd_commands_step = 0;
+uint8_t lcd_commands_type = LCD_COMMAND_IDLE;
+static uint8_t lcd_commands_step = 0;
 
 unsigned int custom_message_type = CUSTOM_MSG_TYPE_STATUS;
 unsigned int custom_message_state = 0;
@@ -130,6 +131,7 @@ static void lcd_control_volumetric_menu();
 static void lcd_settings_linearity_correction_menu_save();
 static void prusa_stat_printerstatus(int _status);
 static void prusa_stat_farm_number();
+static void prusa_stat_diameter();
 static void prusa_stat_temperatures();
 static void prusa_stat_printinfo();
 static void lcd_farm_no();
@@ -245,7 +247,6 @@ static char snmm_stop_print_menu();
 #ifdef SDCARD_SORT_ALPHA
  static void lcd_sort_type_set();
 #endif
-static float count_e(float layer_heigth, float extrusion_width, float extrusion_length);
 static void lcd_babystep_z();
 static void lcd_send_status();
 #ifdef FARM_CONNECT_MESSAGE
@@ -317,7 +318,7 @@ static void lcd_implementation_drawmenu_sdfile_selected(uint8_t row, char* longF
     char c;
     int enc_dif = lcd_encoder_diff;
     uint8_t n = LCD_WIDTH - 1;
-    for(int g = 0; g<4;g++){
+    for(uint_least8_t g = 0; g<4;g++){
       lcd_set_cursor(0, g);
     lcd_print(' ');
     }
@@ -1061,7 +1062,6 @@ static void lcd_status_screen()
 		feedmultiply = 999;
 }
 
-
 void lcd_commands()
 {	
 	if (lcd_commands_type == LCD_COMMAND_LONG_PAUSE)
@@ -1349,291 +1349,106 @@ void lcd_commands()
 	{
 		char cmd1[30];
 		static uint8_t filament = 0;
-		float width = 0.4;
-		float length = 20 - width;
-		float extr = count_e(0.2, width, length);
-		float extr_short_segment = count_e(0.2, width, width);
+
 		if(lcd_commands_step>1) lcd_timeoutToStatus.start(); //if user dont confirm live adjust Z value by pressing the knob, we are saving last value by timeout to status screen
 
-		if (lcd_commands_step == 0 && !blocks_queued() && cmd_buffer_empty())
-		{
-			lcd_commands_step = 10;
-		}
-		if (lcd_commands_step == 20 && !blocks_queued() && cmd_buffer_empty())
-		{
-            filament = 0;
-            lcd_commands_step = 10;
-		}
-        if (lcd_commands_step == 21 && !blocks_queued() && cmd_buffer_empty())
+        if (!blocks_queued() && cmd_buffer_empty())
         {
-            filament = 1;
-            lcd_commands_step = 10;
-        }
-        if (lcd_commands_step == 22 && !blocks_queued() && cmd_buffer_empty())
-        {
-            filament = 2;
-            lcd_commands_step = 10;
-        }
-        if (lcd_commands_step == 23 && !blocks_queued() && cmd_buffer_empty())
-        {
-            filament = 3;
-            lcd_commands_step = 10;
-        }
-        if (lcd_commands_step == 24 && !blocks_queued() && cmd_buffer_empty())
-        {
-            filament = 4;
-            lcd_commands_step = 10;
-        }
-
-		if (lcd_commands_step == 10)
-		{
-			enquecommand_P(PSTR("M107"));
-			enquecommand_P(PSTR("M104 S" STRINGIFY(PLA_PREHEAT_HOTEND_TEMP)));
-			enquecommand_P(PSTR("M140 S" STRINGIFY(PLA_PREHEAT_HPB_TEMP)));
-			enquecommand_P(PSTR("M190 S" STRINGIFY(PLA_PREHEAT_HPB_TEMP)));
-            enquecommand_P(PSTR("M109 S" STRINGIFY(PLA_PREHEAT_HOTEND_TEMP)));
-			enquecommand_P(_T(MSG_M117_V2_CALIBRATION));
-			enquecommand_P(PSTR("G28"));
-			enquecommand_P(PSTR("G92 E0.0"));
-
-            lcd_commands_step = 9;
-		}
-        if (lcd_commands_step == 9 && !blocks_queued() && cmd_buffer_empty())
-        {
-            lcd_clear();
-            menu_depth = 0;
-            menu_submenu(lcd_babystep_z);
-
-            if (mmu_enabled)
+            switch(lcd_commands_step)
             {
-                enquecommand_P(PSTR("M83")); //intro line
-                enquecommand_P(PSTR("G1 Y-3.0 F1000.0")); //intro line
-                enquecommand_P(PSTR("G1 Z0.4 F1000.0")); //intro line
-                strcpy(cmd1, "T");
-                strcat(cmd1, itostr3left(filament));
-                enquecommand(cmd1);
-                enquecommand_P(PSTR("G1 X55.0 E32.0 F1073.0")); //intro line
-                enquecommand_P(PSTR("G1 X5.0 E32.0 F1800.0")); //intro line
-                enquecommand_P(PSTR("G1 X55.0 E8.0 F2000.0")); //intro line
-                enquecommand_P(PSTR("G1 Z0.3 F1000.0")); //intro line
-                enquecommand_P(PSTR("G92 E0.0")); //intro line
-                enquecommand_P(PSTR("G1 X240.0 E25.0  F2200.0")); //intro line
-                enquecommand_P(PSTR("G1 Y-2.0 F1000.0")); //intro line
-                enquecommand_P(PSTR("G1 X55.0 E25 F1400.0")); //intro line
-                enquecommand_P(PSTR("G1 Z0.20 F1000.0")); //intro line
-                enquecommand_P(PSTR("G1 X5.0 E4.0 F1000.0")); //intro line
-
-            } else
-            {
-                enquecommand_P(PSTR("G1 X60.0 E9.0 F1000.0")); //intro line
-                enquecommand_P(PSTR("G1 X100.0 E12.5 F1000.0")); //intro line
+            case 0:
+                lcd_commands_step = 10;
+                break;
+            case 20:
+                filament = 0;
+                lcd_commands_step = 10;
+                break;
+            case 21:
+                filament = 1;
+                lcd_commands_step = 10;
+                break;
+            case 22:
+                filament = 2;
+                lcd_commands_step = 10;
+                break;
+            case 23:
+                filament = 3;
+                lcd_commands_step = 10;
+                break;
+            case 24:
+                filament = 4;
+                lcd_commands_step = 10;
+                break;
+            case 10:
+                lay1cal_preheat();
+                lcd_commands_step = 9;
+                break;
+            case 9:
+                lcd_clear();
+                menu_depth = 0;
+                menu_submenu(lcd_babystep_z);
+                lay1cal_intro_line(cmd1, filament);
+                lcd_commands_step = 8;
+                break;
+            case 8:
+                lay1cal_before_meander();
+                lcd_commands_step = 7;
+                break;
+            case 7:
+                lay1cal_meander(cmd1);
+                lcd_commands_step = 6;
+                break;
+            case 6:
+                for (uint8_t i = 0; i < 4; i++)
+                {
+                    lay1cal_square(cmd1, i);
+                }
+                lcd_commands_step = 5;
+                break;
+            case 5:
+                for (uint8_t i = 4; i < 8; i++)
+                {
+                    lay1cal_square(cmd1, i);
+                }
+                lcd_commands_step = 4;
+                break;
+            case 4:
+                for (uint8_t i = 8; i < 12; i++)
+                {
+                    lay1cal_square(cmd1, i);
+                }
+                lcd_commands_step = 3;
+                break;
+            case 3:
+                for (uint8_t i = 12; i < 16; i++)
+                {
+                    lay1cal_square(cmd1, i);
+                }
+                lcd_commands_step = 2;
+                break;
+            case 2:
+                enquecommand_P(PSTR("M107")); //turn off printer fan
+                enquecommand_P(PSTR("G1 E-0.07500 F2100.00000")); //retract
+                enquecommand_P(PSTR("M104 S0")); // turn off temperature
+                enquecommand_P(PSTR("M140 S0")); // turn off heatbed
+                enquecommand_P(PSTR("G1 Z10 F1300.000")); //lift Z
+                enquecommand_P(PSTR("G1 X10 Y180 F4000")); //Go to parking position
+                if (mmu_enabled) enquecommand_P(PSTR("M702 C")); //unload from nozzle
+                enquecommand_P(PSTR("M84"));// disable motors
+                forceMenuExpire = true; //if user dont confirm live adjust Z value by pressing the knob, we are saving last value by timeout to status screen
+                lcd_commands_step = 1;
+                break;
+            case 1:
+                lcd_setstatuspgm(_T(WELCOME_MSG));
+                lcd_commands_step = 0;
+                lcd_commands_type = 0;
+                if (eeprom_read_byte((uint8_t*)EEPROM_WIZARD_ACTIVE) == 1)
+                {
+                    lcd_wizard(WizState::RepeatLay1Cal);
+                }
+                break;
             }
-
-            lcd_commands_step = 8;
         }
-		if (lcd_commands_step == 8 && !blocks_queued() && cmd_buffer_empty())
-		{
-
-			enquecommand_P(PSTR("G92 E0.0"));
-			enquecommand_P(PSTR("G21")); //set units to millimeters
-			enquecommand_P(PSTR("G90")); //use absolute coordinates
-			enquecommand_P(PSTR("M83")); //use relative distances for extrusion
-			enquecommand_P(PSTR("G1 E-1.50000 F2100.00000"));
-			enquecommand_P(PSTR("G1 Z5 F7200.000"));
-			enquecommand_P(PSTR("M204 S1000")); //set acceleration
-			enquecommand_P(PSTR("G1 F4000"));
-			lcd_commands_step = 7;
-		}
-		if (lcd_commands_step == 7 && !blocks_queued() && cmd_buffer_empty()) //draw meander
-		{
-			lcd_timeoutToStatus.start();
-
-
-			//just opposite direction
-			/*enquecommand_P(PSTR("G1 X50 Y55"));
-			enquecommand_P(PSTR("G1 F1080"));
-			enquecommand_P(PSTR("G1 X200 Y55 E3.62773"));
-			enquecommand_P(PSTR("G1 X200 Y75 E0.49386"));
-			enquecommand_P(PSTR("G1 X50 Y75 E3.62773"));
-			enquecommand_P(PSTR("G1 X50 Y95 E0.49386"));
-			enquecommand_P(PSTR("G1 X200 Y95 E3.62773"));
-			enquecommand_P(PSTR("G1 X200 Y115 E0.49386"));
-			enquecommand_P(PSTR("G1 X50 Y115 E3.62773"));
-			enquecommand_P(PSTR("G1 X50 Y135 E0.49386"));
-			enquecommand_P(PSTR("G1 X200 Y135 E3.62773"));
-			enquecommand_P(PSTR("G1 X200 Y155 E0.66174"));
-			enquecommand_P(PSTR("G1 X100 Y155 E2.62773"));
-			enquecommand_P(PSTR("G1 X75 Y155 E2"));
-			enquecommand_P(PSTR("G1 X50 Y155 E2.5"));
-			enquecommand_P(PSTR("G1 E - 0.07500 F2100.00000"));*/
-
-
-			enquecommand_P(PSTR("G1 X50 Y155"));
-			enquecommand_P(PSTR("G1 Z0.150 F7200.000"));
-			enquecommand_P(PSTR("G1 F1080"));
-			enquecommand_P(PSTR("G1 X75 Y155 E2.5"));
-			enquecommand_P(PSTR("G1 X100 Y155 E2"));
-			enquecommand_P(PSTR("G1 X200 Y155 E2.62773"));
-			enquecommand_P(PSTR("G1 X200 Y135 E0.66174"));
-			enquecommand_P(PSTR("G1 X50 Y135 E3.62773"));
-			enquecommand_P(PSTR("G1 X50 Y115 E0.49386"));
-			enquecommand_P(PSTR("G1 X200 Y115 E3.62773"));
-			enquecommand_P(PSTR("G1 X200 Y95 E0.49386"));
-			enquecommand_P(PSTR("G1 X50 Y95 E3.62773"));
-			enquecommand_P(PSTR("G1 X50 Y75 E0.49386"));
-			enquecommand_P(PSTR("G1 X200 Y75 E3.62773"));
-			enquecommand_P(PSTR("G1 X200 Y55 E0.49386"));
-			enquecommand_P(PSTR("G1 X50 Y55 E3.62773"));
-
-			strcpy(cmd1, "G1 X50 Y35 E");
-			strcat(cmd1, ftostr43(extr));
-			enquecommand(cmd1);
-
-			lcd_commands_step = 6;
-		}
-
-		if (lcd_commands_step == 6 && !blocks_queued() && cmd_buffer_empty())
-		{
-
-			lcd_timeoutToStatus.start();
-
-			for (int i = 0; i < 4; i++) {
-				strcpy(cmd1, "G1 X70 Y");
-				strcat(cmd1, ftostr32(35 - i*width * 2));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 Y");
-				strcat(cmd1, ftostr32(35 - (2 * i + 1)*width));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr_short_segment));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 X50 Y");
-				strcat(cmd1, ftostr32(35 - (2 * i + 1)*width));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 Y");
-				strcat(cmd1, ftostr32(35 - (i + 1)*width * 2));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr_short_segment));
-				enquecommand(cmd1);
-			}
-
-			lcd_commands_step = 5;
-		}
-
-		if (lcd_commands_step == 5 && !blocks_queued() && cmd_buffer_empty())
-		{
-			lcd_timeoutToStatus.start();
-			for (int i = 4; i < 8; i++) {
-				strcpy(cmd1, "G1 X70 Y");
-				strcat(cmd1, ftostr32(35 - i*width * 2));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 Y");
-				strcat(cmd1, ftostr32(35 - (2 * i + 1)*width));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr_short_segment));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 X50 Y");
-				strcat(cmd1, ftostr32(35 - (2 * i + 1)*width));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 Y");
-				strcat(cmd1, ftostr32(35 - (i + 1)*width * 2));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr_short_segment));
-				enquecommand(cmd1);
-			}
-
-			lcd_commands_step = 4;
-		}
-
-		if (lcd_commands_step == 4 && !blocks_queued() && cmd_buffer_empty())
-		{
-			lcd_timeoutToStatus.start();
-			for (int i = 8; i < 12; i++) {
-				strcpy(cmd1, "G1 X70 Y");
-				strcat(cmd1, ftostr32(35 - i*width * 2));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 Y");
-				strcat(cmd1, ftostr32(35 - (2 * i + 1)*width));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr_short_segment));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 X50 Y");
-				strcat(cmd1, ftostr32(35 - (2 * i + 1)*width));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 Y");
-				strcat(cmd1, ftostr32(35 - (i + 1)*width * 2));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr_short_segment));
-				enquecommand(cmd1);
-			}
-
-			lcd_commands_step = 3;
-		}
-
-		if (lcd_commands_step == 3 && !blocks_queued() && cmd_buffer_empty())
-		{
-			lcd_timeoutToStatus.start();
-			for (int i = 12; i < 16; i++) {
-				strcpy(cmd1, "G1 X70 Y");
-				strcat(cmd1, ftostr32(35 - i*width * 2));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 Y");
-				strcat(cmd1, ftostr32(35 - (2 * i + 1)*width));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr_short_segment));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 X50 Y");
-				strcat(cmd1, ftostr32(35 - (2 * i + 1)*width));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr));
-				enquecommand(cmd1);
-				strcpy(cmd1, "G1 Y");
-				strcat(cmd1, ftostr32(35 - (i + 1)*width * 2));
-				strcat(cmd1, " E");
-				strcat(cmd1, ftostr43(extr_short_segment));
-				enquecommand(cmd1);
-			}
-
-			lcd_commands_step = 2;
-		}
-
-		if (lcd_commands_step == 2 && !blocks_queued() && cmd_buffer_empty())
-		{
-			lcd_timeoutToStatus.start();
-			enquecommand_P(PSTR("M107")); //turn off printer fan			
-			enquecommand_P(PSTR("G1 E-0.07500 F2100.00000")); //retract
-			enquecommand_P(PSTR("M104 S0")); // turn off temperature
-			enquecommand_P(PSTR("M140 S0")); // turn off heatbed
-			enquecommand_P(PSTR("G1 Z10 F1300.000")); //lift Z
-			enquecommand_P(PSTR("G1 X10 Y180 F4000")); //Go to parking position
-			if (mmu_enabled) enquecommand_P(PSTR("M702 C")); //unload from nozzle
-			enquecommand_P(PSTR("M84"));// disable motors
-			forceMenuExpire = true; //if user dont confirm live adjust Z value by pressing the knob, we are saving last value by timeout to status screen
-			lcd_commands_step = 1;
-		}
-		if (lcd_commands_step == 1 && !blocks_queued() && cmd_buffer_empty())
-		{
-			lcd_setstatuspgm(_T(WELCOME_MSG));
-			lcd_commands_step = 0;
-			lcd_commands_type = 0;			
-			if (eeprom_read_byte((uint8_t*)EEPROM_WIZARD_ACTIVE) == 1) {
-				lcd_wizard(WizState::RepeatLay1Cal);
-			}
-		}
-
 	}
 
 #endif // not SNMM
@@ -1825,12 +1640,6 @@ void lcd_commands()
 	}
 
 
-}
-
-static float count_e(float layer_heigth, float extrusion_width, float extrusion_length) {
-	//returns filament length in mm which needs to be extrude to form line with extrusion_length * extrusion_width * layer heigth dimensions
-	float extr = extrusion_length * layer_heigth * extrusion_width / (M_PI * pow(1.75, 2) / 4);
-	return extr;
 }
 
 void lcd_return_to_status()
@@ -2216,7 +2025,6 @@ static void lcd_preheat_menu()
 	  MENU_ITEM_FUNCTION_P(PSTR("farm   -  " STRINGIFY(FARM_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(FARM_PREHEAT_HPB_TEMP)), lcd_preheat_farm);
 	  MENU_ITEM_FUNCTION_P(PSTR("nozzle -  " STRINGIFY(FARM_PREHEAT_HOTEND_TEMP) "/0"), lcd_preheat_farm_nozzle);
 	  MENU_ITEM_FUNCTION_P(_T(MSG_COOLDOWN), lcd_cooldown);
-	  MENU_ITEM_FUNCTION_P(PSTR("ABS    -  " STRINGIFY(ABS_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(ABS_PREHEAT_HPB_TEMP)), lcd_preheat_abs);
   } else {
 	  MENU_ITEM_FUNCTION_P(PSTR("PLA  -  " STRINGIFY(PLA_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PLA_PREHEAT_HPB_TEMP)), lcd_preheat_pla);
 	  MENU_ITEM_FUNCTION_P(PSTR("PET  -  " STRINGIFY(PET_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PET_PREHEAT_HPB_TEMP)), lcd_preheat_pet);
@@ -2771,11 +2579,11 @@ void lcd_change_success() {
 
 static void lcd_loading_progress_bar(uint16_t loading_time_ms) { 
 	
-	for (int i = 0; i < 20; i++) {
+	for (uint_least8_t i = 0; i < 20; i++) {
 		lcd_set_cursor(i, 3);
 		lcd_print(".");
 		//loading_time_ms/20 delay
-		for (int j = 0; j < 5; j++) {
+		for (uint_least8_t j = 0; j < 5; j++) {
 			delay_keep_alive(loading_time_ms / 100);
 		}
 	}
@@ -3219,7 +3027,7 @@ static void lcd_menu_xyz_offset()
     float cntr[2];
     world2machine_read_valid(vec_x, vec_y, cntr);
 
-    for (int i = 0; i < 2; i++)
+    for (uint_least8_t i = 0; i < 2; i++)
     {
         lcd_puts_at_P(11, i + 2, PSTR(""));
         lcd_print(cntr[i]);
@@ -4175,6 +3983,7 @@ void prusa_statistics(int _message, uint8_t _fil_nr) {
 			SERIAL_ECHO("{");
 			prusa_stat_printerstatus(1);
 			prusa_stat_farm_number();
+			prusa_stat_diameter();
 			SERIAL_ECHOLN("}");
 			status_number = 1;
 		}
@@ -4329,6 +4138,12 @@ static void prusa_stat_farm_number() {
 	SERIAL_ECHO("]");
 }
 
+static void prusa_stat_diameter() {
+	SERIAL_ECHO("[DIA:");
+	SERIAL_ECHO(eeprom_read_word((uint16_t*)EEPROM_NOZZLE_DIAMETER_uM));
+	SERIAL_ECHO("]");
+}
+
 static void prusa_stat_temperatures()
 {
 	SERIAL_ECHO("[ST0:");
@@ -4364,6 +4179,7 @@ static void prusa_stat_printinfo()
 	SERIAL_ECHO("][FWR:");
 	SERIAL_ECHO(FW_VERSION);
 	SERIAL_ECHO("]");
+     prusa_stat_diameter();
 }
 
 /*
@@ -4887,7 +4703,7 @@ void lcd_v2_calibration()
 		else {
 			lcd_display_message_fullscreen_P(_i("Please load PLA filament first."));////MSG_PLEASE_LOAD_PLA c=20 r=4
 			lcd_consume_click();
-			for (int i = 0; i < 20; i++) { //wait max. 2s
+			for (uint_least8_t i = 0; i < 20; i++) { //wait max. 2s
 				delay_keep_alive(100);
 				if (lcd_clicked()) {
 					break;
@@ -5472,6 +5288,101 @@ do\
 }\
 while (0)
 
+//-//
+static void lcd_check_mode_set(void)
+{
+switch(eCheckMode)
+     {
+     case e_CHECK_MODE_none:
+          eCheckMode=e_CHECK_MODE_warn;
+          break;
+     case e_CHECK_MODE_warn:
+          eCheckMode=e_CHECK_MODE_strict;
+          break;
+     case e_CHECK_MODE_strict:
+          eCheckMode=e_CHECK_MODE_none;
+          break;
+     default:
+          eCheckMode=e_CHECK_MODE_none;
+     }
+eeprom_update_byte((uint8_t*)EEPROM_CHECK_MODE,(uint8_t)eCheckMode);
+}
+
+static void lcd_nozzle_diameter_set(void)
+{
+uint16_t nDiameter;
+
+switch(eNozzleDiameter)
+     {
+     case e_NOZZLE_DIAMETER_250:
+          eNozzleDiameter=e_NOZZLE_DIAMETER_400;
+          nDiameter=400;
+          break;
+     case e_NOZZLE_DIAMETER_400:
+          eNozzleDiameter=e_NOZZLE_DIAMETER_600;
+          nDiameter=600;
+          break;
+     case e_NOZZLE_DIAMETER_600:
+          eNozzleDiameter=e_NOZZLE_DIAMETER_250;
+          nDiameter=250;
+          break;
+     default:
+          eNozzleDiameter=e_NOZZLE_DIAMETER_400;
+          nDiameter=400;
+     }
+eeprom_update_byte((uint8_t*)EEPROM_NOZZLE_DIAMETER,(uint8_t)eNozzleDiameter);
+eeprom_update_word((uint16_t*)EEPROM_NOZZLE_DIAMETER_uM,nDiameter);
+}
+
+#define SETTINGS_MODE \
+do\
+{\
+    switch(eCheckMode)\
+         {\
+         case e_CHECK_MODE_none:\
+              MENU_ITEM_FUNCTION_P(_i("Action     [none]"),lcd_check_mode_set);\
+              break;\
+         case e_CHECK_MODE_warn:\
+              MENU_ITEM_FUNCTION_P(_i("Action     [warn]"),lcd_check_mode_set);\
+              break;\
+         case e_CHECK_MODE_strict:\
+              MENU_ITEM_FUNCTION_P(_i("Action   [strict]"),lcd_check_mode_set);\
+              break;\
+         default:\
+              MENU_ITEM_FUNCTION_P(_i("Action     [none]"),lcd_check_mode_set);\
+         }\
+}\
+while (0)
+
+#define SETTINGS_NOZZLE \
+do\
+{\
+    switch(eNozzleDiameter)\
+         {\
+         case e_NOZZLE_DIAMETER_250:\
+              MENU_ITEM_FUNCTION_P(_i("Nozzle     [0.25]"),lcd_nozzle_diameter_set);\
+              break;\
+         case e_NOZZLE_DIAMETER_400:\
+              MENU_ITEM_FUNCTION_P(_i("Nozzle     [0.40]"),lcd_nozzle_diameter_set);\
+              break;\
+         case e_NOZZLE_DIAMETER_600:\
+              MENU_ITEM_FUNCTION_P(_i("Nozzle     [0.60]"),lcd_nozzle_diameter_set);\
+              break;\
+         default:\
+              MENU_ITEM_FUNCTION_P(_i("Nozzle     [0.40]"),lcd_nozzle_diameter_set);\
+         }\
+}\
+while (0)
+
+static void lcd_checking_menu()
+{
+MENU_BEGIN();
+MENU_ITEM_BACK_P(_T(MSG_SETTINGS));
+SETTINGS_MODE;
+SETTINGS_NOZZLE;
+MENU_END();
+}
+
 static void lcd_settings_menu()
 {
 	EEPROM_read(EEPROM_SILENT, (uint8_t*)&SilentModeMenu, sizeof(SilentModeMenu));
@@ -5522,6 +5433,9 @@ static void lcd_settings_menu()
 #if (LANG_MODE != 0)
 	MENU_ITEM_SUBMENU_P(_i("Select language"), lcd_language_menu);////MSG_LANGUAGE_SELECT
 #endif //(LANG_MODE != 0)
+
+	if (!farm_mode)
+          MENU_ITEM_SUBMENU_P(_i("Print checking"), lcd_checking_menu);
 
 	SETTINGS_SD;
 	SETTINGS_SOUND;
@@ -5614,7 +5528,7 @@ void bowden_menu() {
 	lcd_clear();
 	lcd_set_cursor(0, 0);
 	lcd_print(">");
-	for (int i = 0; i < 4; i++) {
+	for (uint_least8_t i = 0; i < 4; i++) {
 		lcd_set_cursor(1, i);
 		lcd_print("Extruder ");
 		lcd_print(i);
@@ -5702,7 +5616,7 @@ void bowden_menu() {
 						enc_dif = lcd_encoder_diff;
 						lcd_set_cursor(0, cursor_pos);
 						lcd_print(">");
-						for (int i = 0; i < 4; i++) {
+						for (uint_least8_t i = 0; i < 4; i++) {
 							lcd_set_cursor(1, i);
 							lcd_print("Extruder ");
 							lcd_print(i);
@@ -5829,14 +5743,14 @@ uint8_t choose_menu_P(const char *header, const char *item, const char *last_ite
         if (header) lcd_puts_at_P(0,0,header);
 
         const bool last_visible = (first == items_no - 3);
-        const int8_t ordinary_items = (last_item&&last_visible)?2:3;
+        const uint_least8_t ordinary_items = (last_item&&last_visible)?2:3;
 
-        for (int i = 0; i < ordinary_items; i++)
+        for (uint_least8_t i = 0; i < ordinary_items; i++)
         {
             if (item) lcd_puts_at_P(1, i + 1, item);
         }
 
-        for (int i = 0; i < ordinary_items; i++)
+        for (uint_least8_t i = 0; i < ordinary_items; i++)
         {
             lcd_set_cursor(2 + item_len, i+1);
             lcd_print(first + i + 1);
@@ -5890,7 +5804,7 @@ char reset_menu() {
 	lcd_consume_click();
 	while (1) {		
 
-		for (int i = 0; i < 4; i++) {
+		for (uint_least8_t i = 0; i < 4; i++) {
 			lcd_set_cursor(1, i);
 			lcd_print(item[first + i]);
 		}
@@ -5975,7 +5889,7 @@ static void fil_load_menu()
 
     if (mmu_enabled)
     {
-        MENU_ITEM_FUNCTION_NR_P(_T(MSG_LOAD_FILAMENT), '5', extr_adj, 3);
+        MENU_ITEM_FUNCTION_NR_P(_T(MSG_LOAD_FILAMENT), '5', extr_adj, 4);
     }
     MENU_END();
 }
@@ -6216,7 +6130,7 @@ unsigned char lcd_choose_color() {
 	item[0] = "Orange";
 	item[1] = "Black";
 	//-----------------------------------------------------
-	unsigned char active_rows;
+	uint_least8_t active_rows;
 	static int first = 0;
 	int enc_dif = 0;
 	unsigned char cursor_pos = 1;
@@ -6229,7 +6143,7 @@ unsigned char lcd_choose_color() {
 	lcd_consume_click();
 	while (1) {
 		lcd_puts_at_P(0, 0, PSTR("Choose color:"));
-		for (int i = 0; i < active_rows; i++) {
+		for (uint_least8_t i = 0; i < active_rows; i++) {
 			lcd_set_cursor(1, i+1);
 			lcd_print(item[first + i]);
 		}
@@ -6335,10 +6249,11 @@ void lcd_confirm_print()
 		}
 		if (lcd_clicked())
 		{
+               filament_type = FARM_FILAMENT_COLOR_NONE;
 			if (cursor_pos == 1)
 			{
 				_ret = 1;
-				filament_type = lcd_choose_color();
+//				filament_type = lcd_choose_color();
 				prusa_statistics(4, filament_type);
 				no_response = true; //we need confirmation by recieving PRUSA thx
 				important_status = 4;
@@ -6348,7 +6263,7 @@ void lcd_confirm_print()
 			if (cursor_pos == 2)
 			{
 				_ret = 2;
-				filament_type = lcd_choose_color();
+//				filament_type = lcd_choose_color();
 				prusa_statistics(5, filament_type);
 				no_response = true; //we need confirmation by recieving PRUSA thx
 				important_status = 5;				
@@ -6753,6 +6668,14 @@ static void lcd_tune_menu()
 
 	SETTINGS_CUTTER;
 
+     if(farm_mode)
+     {
+          if (fans_check_enabled == true)
+               MENU_ITEM_FUNCTION_P(_i("Fans check   [on]"), lcd_set_fan_check);////MSG_FANS_CHECK_ON c=17 r=1
+          else
+               MENU_ITEM_FUNCTION_P(_i("Fans check  [off]"), lcd_set_fan_check);////MSG_FANS_CHECK_OFF c=17 r=1
+     }
+
 #ifdef TMC2130
      if(!farm_mode)
      {
@@ -6896,6 +6819,12 @@ static void lcd_sd_updir()
 
 void lcd_print_stop()
 {
+//-//
+     if(!card.sdprinting)
+          {
+          SERIAL_ECHOLNPGM("// action:cancel");   // for Octoprint
+          return;
+          }
 	saved_printing = false;
 	cancel_heatup = true;
 #ifdef MESH_BED_LEVELING
@@ -7336,7 +7265,7 @@ static bool lcd_selfcheck_axis_sg(unsigned char axis) {
 
 //end of second measurement, now check for possible errors:
 
-	for(int i = 0; i < 2; i++){ //check if measured axis length corresponds to expected length
+	for(uint_least8_t i = 0; i < 2; i++){ //check if measured axis length corresponds to expected length
 		printf_P(_N("Measured axis length:%.3f\n"), measured_axis_length[i]);
 		if (abs(measured_axis_length[i] - axis_length) > max_error_mm) {
 			enable_endstops(false);
@@ -8200,7 +8129,7 @@ static void menu_action_sdfile(const char* filename)
   const char end[5] = ".gco";
 
   //we are storing just first 8 characters of 8.3 filename assuming that extension is always ".gco"
-  for (int i = 0; i < 8; i++) {
+  for (uint_least8_t i = 0; i < 8; i++) {
 	  if (strcmp((cmd + i + 4), end) == 0) { 
 		  //filename is shorter then 8.3, store '\0' character on position where ".gco" string was found to terminate stored string properly
  		  eeprom_write_byte((uint8_t*)EEPROM_FILENAME + i, '\0');
@@ -8214,8 +8143,8 @@ static void menu_action_sdfile(const char* filename)
   uint8_t depth = (uint8_t)card.getWorkDirDepth();
   eeprom_write_byte((uint8_t*)EEPROM_DIR_DEPTH, depth);
 
-  for (uint8_t i = 0; i < depth; i++) {
-	  for (int j = 0; j < 8; j++) {
+  for (uint_least8_t i = 0; i < depth; i++) {
+	  for (uint_least8_t j = 0; j < 8; j++) {
 		  eeprom_write_byte((uint8_t*)EEPROM_DIRS + j + 8 * i, dir_names[i][j]);
 	  }
   }
