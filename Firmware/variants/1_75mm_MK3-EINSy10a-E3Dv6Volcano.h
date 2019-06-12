@@ -69,7 +69,7 @@
 
 #ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
 #ifdef EXTRUDER_GEARRATIO_35
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,980} //3.5 geared extruder 
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,990} //3.5 geared extruder JTA: tested esteps here for volcano!
   #define TMC2130_UNLOAD_CURRENT_R 16  //slightly higher unload current thans stock for M600 
   #define EXTRUDER_DEFS_SET 1
 #endif
@@ -121,7 +121,7 @@
 
 //Kuo set the homing speeds (mm/min)
 #ifdef X_AXIS_MOTOR_09
-  #define HOMING_FEEDRATE_X 2000  // Kuo slower feedrate needed for reliable X 0.9 degree motor stallGuard
+  #define HOMING_FEEDRATE_X 3500  // Kuo slower feedrate needed for reliable X 0.9 degree motor stallGuard
 #else
   #define HOMING_FEEDRATE_X 3000
 #endif
@@ -148,7 +148,7 @@
 #define DEFAULT_MAX_FEEDRATE                {200, 200, 12, 120}      // (mm/sec)   max feedrate (M203)
 #define DEFAULT_MAX_FEEDRATE_SILENT         {100, 100, 12, 120}      // (mm/sec)   max feedrate (M203), silent mode
 
-#define DEFAULT_MAX_ACCELERATION            {1000, 1000, 200, 5000}  // (mm/sec^2) max acceleration (M201)
+#define DEFAULT_MAX_ACCELERATION            {1500, 1000, 200, 5000}  // (mm/sec^2) max acceleration (M201)
 #define DEFAULT_MAX_ACCELERATION_SILENT     {960, 960, 200, 5000}    // (mm/sec^2) max acceleration (M201), silent mode
 
 
@@ -231,7 +231,7 @@
 //#define DEBUG_DISABLE_LCD_STATUS_LINE  //empty four lcd line
 //#define DEBUG_DISABLE_PREVENT_EXTRUDER //cold extrusion and long extrusion allowed
 //#define DEBUG_DISABLE_PRUSA_STATISTICS //disable prusa_statistics() mesages
-//#define DEBUG_DISABLE_FORCE_SELFTEST //disable force selftest
+#define DEBUG_DISABLE_FORCE_SELFTEST //disable force selftest
 //#define DEBUG_XSTEP_DUP_PIN 21   //duplicate x-step output to pin 21 (SCL on P3)
 //#define DEBUG_YSTEP_DUP_PIN 21   //duplicate y-step output to pin 21 (SCL on P3)
 //#define DEBUG_DISABLE_FANCHECK     //disable fan check (no ISR INT7, check disabled)
@@ -294,7 +294,7 @@
   #define TMC2130_PWM_AMPL_X  230     // PWMCONF
 #else
   #define TMC2130_PWM_GRAD_X  4       // PWM_GRAD Kuo 0.9 degree motor tuning
-  #define TMC2130_PWM_AMPL_X  235     // PWMCONF Kuo 0.9 degree motor tuning
+  #define TMC2130_PWM_AMPL_X  240     // PWMCONF Kuo 0.9 degree motor tuning
 #endif
 #define TMC2130_PWM_AUTO_X  1         // PWMCONF
 #define TMC2130_PWM_FREQ_X  2         // PWMCONF
@@ -411,8 +411,8 @@
   #define TMC2130_SG_THRS_Y       3    // stallguard sensitivity for Y axis
   #define TMC2130_SG_THRS_Y_HOME  3    // homing stallguard threshold for Y axis
 #else
-  #define TMC2130_SG_THRS_Y       3    // Kuo in case different needed for 0.9 degree motors
-  #define TMC2130_SG_THRS_Y_HOME  3
+  #define TMC2130_SG_THRS_Y       4    // Kuo in case different needed for 0.9 degree motors
+  #define TMC2130_SG_THRS_Y_HOME  4
 #endif
 
 #ifndef E_AXIS_MOTOR_09 //Kuo
@@ -427,8 +427,8 @@
 
 
 //new settings is possible for vsense = 1, running current value > 31 set vsense to zero and shift both currents by 1 bit right (Z axis only)
-#define TMC2130_CURRENTS_H {16, 20, 35, 30}  // default holding currents for all axes
-#define TMC2130_CURRENTS_R {16, 20, 35, 30}  // default running currents for all axes 
+#define TMC2130_CURRENTS_H {20, 20, 35, 30}  // default holding currents for all axes
+#define TMC2130_CURRENTS_R {20, 20, 35, 30}  // default running currents for all axes 
 
 #define TMC2130_STEALTH_Z
 
