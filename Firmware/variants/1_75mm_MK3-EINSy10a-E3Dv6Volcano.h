@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Darth Bear Mk3"
+#define CUSTOM_MENDEL_NAME "Darth Teddy"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
