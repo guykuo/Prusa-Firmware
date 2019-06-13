@@ -337,7 +337,7 @@ FORCE_INLINE void stepper_next_block()
 
 #ifdef FILAMENT_SENSOR
 	fsensor_counter = 0;
-	fsensor_st_block_begin(count_direction[E_AXIS] < 0);
+	fsensor_st_block_begin(current_block);
 #endif //FILAMENT_SENSOR
     // The busy flag is set by the plan_get_current_block() call.
     // current_block->busy = true;
@@ -867,7 +867,7 @@ FORCE_INLINE void isr() {
     // If current block is finished, reset pointer
     if (step_events_completed.wide >= current_block->step_event_count.wide) {
 #if !defined(LIN_ADVANCE) && defined(FILAMENT_SENSOR)
-		fsensor_st_block_chunk(fsensor_counter);
+		fsensor_st_block_chunk(current_block, fsensor_counter);
 		fsensor_counter = 0;
 #endif //FILAMENT_SENSOR
 
@@ -877,7 +877,7 @@ FORCE_INLINE void isr() {
 #if !defined(LIN_ADVANCE) && defined(FILAMENT_SENSOR)
 	else if ((abs(fsensor_counter) >= fsensor_chunk_len))
   	{
-      fsensor_st_block_chunk(fsensor_counter);
+      fsensor_st_block_chunk(current_block, fsensor_counter);
   	  fsensor_counter = 0;
   	}
 #endif //FILAMENT_SENSOR
@@ -976,7 +976,7 @@ FORCE_INLINE void advance_isr_scheduler() {
 #ifdef FILAMENT_SENSOR
         if (abs(fsensor_counter) >= fsensor_chunk_len)
         {
-            fsensor_st_block_chunk(fsensor_counter);
+            fsensor_st_block_chunk(current_block, fsensor_counter);
             fsensor_counter = 0;
         }
 #endif

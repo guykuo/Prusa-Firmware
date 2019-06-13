@@ -69,7 +69,7 @@
 
 #ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
 #ifdef EXTRUDER_GEARRATIO_35
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,990} //3.5 geared extruder JTA: tested esteps here for volcano!
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,495} //3.5 geared extruder JTA: tested esteps here for volcano!
   #define TMC2130_UNLOAD_CURRENT_R 16  //slightly higher unload current thans stock for M600 
   #define EXTRUDER_DEFS_SET 1
 #endif
@@ -121,7 +121,7 @@
 
 //Kuo set the homing speeds (mm/min)
 #ifdef X_AXIS_MOTOR_09
-  #define HOMING_FEEDRATE_X 3500  // Kuo slower feedrate needed for reliable X 0.9 degree motor stallGuard
+  #define HOMING_FEEDRATE_X 2000  // Kuo slower feedrate needed for reliable X 0.9 degree motor stallGuard
 #else
   #define HOMING_FEEDRATE_X 3000
 #endif
@@ -148,7 +148,7 @@
 #define DEFAULT_MAX_FEEDRATE                {200, 200, 12, 120}      // (mm/sec)   max feedrate (M203)
 #define DEFAULT_MAX_FEEDRATE_SILENT         {100, 100, 12, 120}      // (mm/sec)   max feedrate (M203), silent mode
 
-#define DEFAULT_MAX_ACCELERATION            {1500, 1000, 200, 5000}  // (mm/sec^2) max acceleration (M201)
+#define DEFAULT_MAX_ACCELERATION            {1000, 1000, 200, 5000}  // (mm/sec^2) max acceleration (M201)
 #define DEFAULT_MAX_ACCELERATION_SILENT     {960, 960, 200, 5000}    // (mm/sec^2) max acceleration (M201), silent mode
 
 
@@ -189,6 +189,7 @@
 // Safety timer
 #define SAFETYTIMER
 #define DEFAULT_SAFETYTIMER_TIME_MINS 30
+#define FARM_DEFAULT_SAFETYTIMER_TIME_ms (45*60*1000ul)
 
 // Filament sensor
 #define FILAMENT_SENSOR
@@ -274,7 +275,7 @@
 #ifndef E_AXIS_MOTOR_09
   #define TMC2130_USTEPS_E   32
 #else
-  #define TMC2130_USTEPS_E   16  // Kuo reduce mstesp for 0.9 motor on e-axis
+  #define TMC2130_USTEPS_E   8  // Kuo reduce mstesp for 0.9 motor on e-axis // JTa For skele (with 3.5 ratio) even 16 is too much.
 #endif
 
 #define TMC2130_USTEPS_Z    16        // microstep resolution for Z axis
@@ -661,7 +662,7 @@
  *------------------------------------*/
 
 #define FARM_PREHEAT_HOTEND_TEMP 250
-#define FARM_PREHEAT_HPB_TEMP 60
+#define FARM_PREHEAT_HPB_TEMP 80
 #define FARM_PREHEAT_FAN_SPEED 0
 
 #define PLA_PREHEAT_HOTEND_TEMP 215
@@ -712,7 +713,7 @@
 // 10 is 100k RS thermistor 198-961 (4.7k pullup)
 // 11 is 100k beta 3950 1% thermistor (4.7k pullup)
 // 12 is 100k 0603 SMD Vishay NTCS0603E3104FXT (4.7k pullup) (calibrated for Makibox hot bed)
-// 13 is 100k Hisens 3950  1% up to 300Â°C for hotend "Simple ONE " & "Hotend "All In ONE"
+// 13 is 100k Hisens 3950  1% up to 300°C for hotend "Simple ONE " & "Hotend "All In ONE"
 // 20 is the PT100 circuit found in the Ultimainboard V2.x
 // 60 is 100k Maker's Tool Works Kapton Bed Thermistor beta=3950
 //
