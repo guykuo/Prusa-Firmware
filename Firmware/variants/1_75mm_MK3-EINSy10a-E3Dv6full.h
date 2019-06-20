@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "BnB XYE9 Mk3"
+#define CUSTOM_MENDEL_NAME "JTa Mk3"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
@@ -36,9 +36,9 @@
 //Uncommented def(s) below specify 0.9 degree stepper motors on x, y, e axis
 //Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
 //My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
-#define X_AXIS_MOTOR_09 //kuo exper X axis
-#define Y_AXIS_MOTOR_09 //kuo exper Y axis
-#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
+//#define X_AXIS_MOTOR_09 //kuo exper X axis
+//#define Y_AXIS_MOTOR_09 //kuo exper Y axis
+//#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
 
 //Uncomment ONLY ONE or NONE of below for geared extruders
 //Don't forget to also send gcode to set e-steps 
