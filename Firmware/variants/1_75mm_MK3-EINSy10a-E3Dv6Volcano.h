@@ -1,4 +1,4 @@
-#ifndef CONFIGURATION_PRUSA_H
+﻿#ifndef CONFIGURATION_PRUSA_H
 #define CONFIGURATION_PRUSA_H
 
 #include <limits.h>
@@ -33,23 +33,25 @@
 /*------------------------------------
  AXIS SETTINGS
  *------------------------------------*/
-//Uncomment def(s) below for 0.9 degree stepper motors on x, y, e axis
+//Uncommented def(s) below specify 0.9 degree stepper motors on x, y, e axis
 //Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
 //My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
-#define X_AXIS_MOTOR_09 //kuo exper
-#define Y_AXIS_MOTOR_09 //kuo exper
-#define E_AXIS_MOTOR_09 //kuo exper
+#define X_AXIS_MOTOR_09 //kuo exper X axis
+#define Y_AXIS_MOTOR_09 //kuo exper Y axis
+#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
 
 //Uncomment ONLY ONE or NONE of below for geared extruders
 //Don't forget to also send gcode to set e-steps 
-//Reversion back from BMG_EXTRUDER requires sending M92 E280 & M500 to printer
+//Reversion back from geared extruder requires sending M92 E280 & M500 to printer
 //
-//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. MUST also send M92 E830 & M500 to set esteps
+//#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This auto sets BMG height for you. MUST also send M92 E830 & M500 to set esteps
 //#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E840 & M500  to set esteps
+#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like Bunny and Bear Short Ears or Skelestruder. MUST also send M92 E980 & M500 to set esteps
 
-// Enabled for SKELESTRUDER // JTa
-#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5. MUST also send M92 E980 & M500 to set esteps
-
+// Steps per unit {X,Y,Z,E}
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
 
 #ifndef EXTRUDER_DEFS_SET //Kuo for e-axis msteps
 #ifdef BMG_EXTRUDER 
@@ -101,11 +103,11 @@
 #define MANUAL_Z_HOME_POS 0.2
 
 // Travel limits after homing
-#define X_MAX_POS 252
+#define X_MAX_POS 253 // JTa: Bear X shorter?
 #define X_MIN_POS 0
 #define Y_MAX_POS 212.5
 #define Y_MIN_POS -4 //orig -4
-#define Z_MAX_POS 205
+#define Z_MAX_POS 205 // JTa: Volcano height
 #define Z_MIN_POS 0.15
 
 // Canceled home position
@@ -275,7 +277,7 @@
 #ifndef E_AXIS_MOTOR_09
   #define TMC2130_USTEPS_E   32
 #else
-  #define TMC2130_USTEPS_E   8  // Kuo reduce mstesp for 0.9 motor on e-axis // JTa For skele (with 3.5 ratio) even 16 is too much.
+  #define TMC2130_USTEPS_E   8  // JTa For skele (with 3.5 ratio) even 16 is too much.
 #endif
 
 #define TMC2130_USTEPS_Z    16        // microstep resolution for Z axis
@@ -295,7 +297,7 @@
   #define TMC2130_PWM_AMPL_X  230     // PWMCONF
 #else
   #define TMC2130_PWM_GRAD_X  4       // PWM_GRAD Kuo 0.9 degree motor tuning
-  #define TMC2130_PWM_AMPL_X  240     // PWMCONF Kuo 0.9 degree motor tuning
+  #define TMC2130_PWM_AMPL_X  235     // PWMCONF Kuo 0.9 degree motor tuning
 #endif
 #define TMC2130_PWM_AUTO_X  1         // PWMCONF
 #define TMC2130_PWM_FREQ_X  2         // PWMCONF
@@ -428,8 +430,8 @@
 
 
 //new settings is possible for vsense = 1, running current value > 31 set vsense to zero and shift both currents by 1 bit right (Z axis only)
-#define TMC2130_CURRENTS_H {20, 20, 35, 30}  // default holding currents for all axes
-#define TMC2130_CURRENTS_R {20, 20, 35, 30}  // default running currents for all axes 
+#define TMC2130_CURRENTS_H {16, 20, 35, 30}
+#define TMC2130_CURRENTS_R {16, 20, 35, 30}
 
 #define TMC2130_STEALTH_Z
 
@@ -713,7 +715,7 @@
 // 10 is 100k RS thermistor 198-961 (4.7k pullup)
 // 11 is 100k beta 3950 1% thermistor (4.7k pullup)
 // 12 is 100k 0603 SMD Vishay NTCS0603E3104FXT (4.7k pullup) (calibrated for Makibox hot bed)
-// 13 is 100k Hisens 3950  1% up to 300�C for hotend "Simple ONE " & "Hotend "All In ONE"
+// 13 is 100k Hisens 3950  1% up to 300°C for hotend "Simple ONE " & "Hotend "All In ONE"
 // 20 is the PT100 circuit found in the Ultimainboard V2.x
 // 60 is 100k Maker's Tool Works Kapton Bed Thermistor beta=3950
 //
