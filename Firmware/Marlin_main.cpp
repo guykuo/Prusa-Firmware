@@ -9060,6 +9060,7 @@ disable_z();
 if(eeprom_read_byte((uint8_t*)EEPROM_UVLO)!=2){
   eeprom_update_float((float*)(EEPROM_UVLO_TINY_CURRENT_POSITION_Z), current_position[Z_AXIS]);
   eeprom_update_word((uint16_t*)(EEPROM_UVLO_TINY_Z_MICROSTEPS),z_microsteps);
+}
 
 //after multiple power panics current Z axis is unknow
 //in this case we set EEPROM_UVLO_TINY_CURRENT_POSITION_Z to last know position which is EEPROM_UVLO_CURRENT_POSITION_Z 
