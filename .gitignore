@@ -51,4 +51,4 @@ Firmware/Doc
 /build-env/
 /Firmware/Firmware.vcxproj
 /Firmware/Configuration_prusa_bckp.h
-*.hex
+Firmware/Firmware.ino.rambo.hex
