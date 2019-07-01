@@ -15,7 +15,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "BnB XYE9 Mk3"
+#define CUSTOM_MENDEL_NAME "BnB XY9 Mk3"
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
@@ -279,9 +279,9 @@
 #endif
 
 #ifndef E_AXIS_MOTOR_09
-  #define TMC2130_USTEPS_E   32
+  #define TMC2130_USTEPS_E 32
 #else
-  #define TMC2130_USTEPS_E   16  // Kuo reduce mstesp for 0.9 motor on e-axis
+  #define TMC2130_USTEPS_E 16 // Kuo reduce Y microsteps to e-axis
 #endif
 
 #define TMC2130_USTEPS_Z    16        // microstep resolution for Z axis
