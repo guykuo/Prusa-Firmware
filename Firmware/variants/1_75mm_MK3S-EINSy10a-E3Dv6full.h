@@ -277,13 +277,9 @@
 #endif
 
 #ifndef E_AXIS_MOTOR_09
-  #define TMC2130_USTEPS_E   32
+  #define TMC2130_USTEPS_E 32
 #else
-  #ifdef E_AXIS_MOTOR_09_DOUBLE
-    #define TMC2130_USTEPS_E   32  // Kuo e-axis runs slow enough to remain at 32 msteps
-  #else
-    #define TMC2130_USTEPS_E   16  // Kuo can also reduce mstesp for e-axis
-  #endif
+  #define TMC2130_USTEPS_E 16 // Kuo reduce Y microsteps to e-axis
 #endif
 
 #define TMC2130_USTEPS_Z    16        // microstep resolution for Z axis
