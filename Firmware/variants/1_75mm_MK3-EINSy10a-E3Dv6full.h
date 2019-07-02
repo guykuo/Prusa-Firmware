@@ -49,8 +49,9 @@
 //Don't forget to also send gcode to set e-steps 
 //Reversion back from geared extruder requires sending M92 E280 & M500 to printer
 //#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This also sets BMG height for you. MUST also send M92 E415 & M500 to set esteps
-//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E420 & M500  to set esteps
-//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like Bunny and Bear Short Ears or Skelestruder. MUST also send M92 E490 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E420 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_3375 //Kuo Uncomment for extruder with gear ratio 3.375 like 54:16 BNBSX. MUST also send M92 E473 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like 56:16 Bunny and Bear Short Ears or Skelestruder. MUST also send M92 E490 & M500 to set esteps
 
 // Steps per unit {X,Y,Z,E}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,140}
@@ -74,8 +75,16 @@
 #endif
 
 #ifndef EXTRUDER_GEARED //Kuo for e-axis msteps
+#ifdef EXTRUDER_GEARRATIO_3375
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,473} //3.375 geared extruder like 54:16 BNBSX
+  #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600 
+  #define EXTRUDER_GEARED 1
+#endif
+#endif
+
+#ifndef EXTRUDER_GEARED //Kuo for e-axis msteps
 #ifdef EXTRUDER_GEARRATIO_35
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,490} //3.5 geared extruder 
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,490} //3.5 geared extruder like 56:16 BNBSX
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600 
   #define EXTRUDER_GEARED 1
 #endif
