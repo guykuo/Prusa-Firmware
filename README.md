@@ -8,8 +8,12 @@ You will need this 0.9 degree motor firmware (now includes BMG extruder support)
 
 Be able to compile this firmware before doing any hardware changes. Once motors have been changed, the first thing you need to do is update the firmware to this 0.9 motor support version.
 
+NEW on July 1 2019-
+Extruder microstep rate has been reduced to avoid overrunning EINSY. E-steps are now 1/2 of what was needed for prior BNB firmware
+Please set e-steps via terminal to new values.
+-
 PLEASE DO A FACTORY RESET WITH DATA ERASURE after installing this firmware. Failure to clear out old EEPROM setttings can produce odd printer behavior.
-
+-
 
 ### Compiling my firmware for 0.9 degree motor support
 You may wish to refer to the Prusa README.md document for more detailed instructions regarding compilation of the firmware. 
