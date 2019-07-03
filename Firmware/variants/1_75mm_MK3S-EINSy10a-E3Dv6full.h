@@ -58,7 +58,7 @@
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280}
 //#define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,560}
 
-#ifndef EXTRUDER_GEARED //Kuo for e-axis msteps
+#ifndef EXTRUDER_GEARED //Kuo for e-axis steps
 #ifdef BMG_EXTRUDER 
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,415} //BMG approx 3:1 geared extruder
   #define TMC2130_UNLOAD_CURRENT_R 20 //BMG unload current for M600
@@ -66,7 +66,7 @@
 #endif
 #endif
 
-#ifndef EXTRUDER_GEARED //Kuo for e-axis msteps
+#ifndef EXTRUDER_GEARED //Kuo for e-axis steps
 #ifdef EXTRUDER_GEARRATIO_30
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,420} //3.0 geared extruder 
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600
@@ -74,7 +74,7 @@
 #endif
 #endif
 
-#ifndef EXTRUDER_GEARED //Kuo for e-axis msteps
+#ifndef EXTRUDER_GEARED //Kuo for e-axis steps
 #ifdef EXTRUDER_GEARRATIO_3375
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,473} //3.375 geared extruder like 54:16 BNBSX
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600 
@@ -82,15 +82,15 @@
 #endif
 #endif
 
-#ifndef EXTRUDER_GEARED //Kuo for e-axis msteps
+#ifndef EXTRUDER_GEARED //Kuo for e-axis steps
 #ifdef EXTRUDER_GEARRATIO_35
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,490} //3.5 geared extruder like 56:16 BNBSX
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,490} //3.5 geared extruder like 56:16 Bunny Science Short Ears
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600 
   #define EXTRUDER_GEARED 1
 #endif
 #endif
 
-#ifndef EXTRUDER_GEARED //Kuo for e-axis msteps
+#ifndef EXTRUDER_GEARED //Kuo for e-axis steps
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //default steps/unit e-axis
   #define TMC2130_UNLOAD_CURRENT_R 12  //lower current for M600 to protect filament sensor with stock extruder
   //Don't set EXTRUDER_GEARED because extruder is NOT geared.
