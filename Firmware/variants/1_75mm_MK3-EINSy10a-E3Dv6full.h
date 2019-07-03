@@ -307,7 +307,7 @@
     #ifndef E_AXIS_MOTOR_09
     #define TMC2130_USTEPS_E 16 // Kuo 1.8 motor, geared extruder
   #else
-    #define TMC2130_USTEPS_E 8 // Kuo 9.9 motor, geared extruder
+    #define TMC2130_USTEPS_E 8 // Kuo 0.9 motor, geared extruder
   #endif
 #endif
 
