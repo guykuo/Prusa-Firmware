@@ -962,18 +962,19 @@ static void lcd_status_screen()
 
 	if (lcd_draw_update)
 	{
+#ifndef HAS_OLED_SCREEN	// JTa: Disabled for OLED!
 		ReInitLCD++;
 		if (ReInitLCD == 30)
 		{
-//			lcd_refresh(); // JTa: Disabled for OLED! // to maybe revive the LCD if static electricity killed it.
+			lcd_refresh(); // to maybe revive the LCD if static electricity killed it.
 			ReInitLCD = 0 ;
 		}
 		else
 		{
 			if ((ReInitLCD % 10) == 0)
-//				lcd_refresh_noclear(); // JTa: Disabled for OLED! // to maybe revive the LCD if static electricity killed it.
-				;
+				lcd_refresh_noclear(); //to maybe revive the LCD if static electricity killed it.
 		}
+#endif
 
 		lcdui_print_status_screen();
 
@@ -2816,7 +2817,9 @@ void lcd_menu_statistics()
 
 		lcd_printf_P(_N(
 		  ESC_2J
-		  ESC_H(0, 0) // JTa: For OLED				  
+#ifdef HAS_OLED_SCREEN
+		  ESC_H(0, 0)			  
+#endif
 		  "%S:"
 		  ESC_H(6,1) "%8.2fm \n"
 		  "%S :"
@@ -2844,7 +2847,9 @@ void lcd_menu_statistics()
 
 		lcd_printf_P(_N(
 		  ESC_2J
-		  ESC_H(0, 0) // JTa: For OLED				  
+#ifdef HAS_OLED_SCREEN
+		  ESC_H(0, 0) 				  
+#endif
 		  "%S :"
 		  ESC_H(9,1) "%8.2f m\n"
 		  "%S :\n"
@@ -4341,7 +4346,7 @@ static void lcd_crash_mode_info()
 	static uint32_t tim = 0;
 	if ((tim + 1000) < _millis())
 	{
-		fputs_P(_i("\x1b[2J\x1b[0;0HCrash detection can\x1b[1;0Hbe turned on only in\x1b[2;0HNormal mode"), lcdout);////MSG_CRASH_DET_ONLY_IN_NORMAL c=20 r=4
+		fputs_P(_i("\x1b[2JCrash detection can\x1b[1;0Hbe turned on only in\x1b[2;0HNormal mode"), lcdout);////MSG_CRASH_DET_ONLY_IN_NORMAL c=20 r=4
 		tim = _millis();
 	}
     menu_back_if_clicked();
@@ -4353,7 +4358,7 @@ static void lcd_crash_mode_info2()
 	static uint32_t tim = 0;
 	if ((tim + 1000) < _millis())
 	{
-		fputs_P(_i("\x1b[2J\x1b[0;0HWARNING:\x1b[1;0HCrash detection\x1b[2;0Hdisabled in\x1b[3;0HStealth mode"), lcdout);////MSG_CRASH_DET_STEALTH_FORCE_OFF c=20 r=4
+		fputs_P(_i("\x1b[2JWARNING:\x1b[1;0HCrash detection\x1b[2;0Hdisabled in\x1b[3;0HStealth mode"), lcdout);////MSG_CRASH_DET_STEALTH_FORCE_OFF c=20 r=4
 		tim = _millis();
 	}
     menu_back_if_clicked();
