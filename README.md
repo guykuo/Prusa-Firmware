@@ -135,32 +135,35 @@ Look for...
 /*------------------------------------
  AXIS SETTINGS
  *------------------------------------*/
-//Uncomment def(s) below for 0.9 degree stepper motors on x, y, e axis
+//Uncommented def(s) below specify 0.9 degree stepper motors on x, y, z, e axis
+//Z is newly added and has not been tested with 0.9 motors
+//Geared extruders now set for lower microstepping to avoid overruning EINSY during fast retracts or MMU2S filament moves. 
+//Geared e-steps are consequently different from prior BNB 0.9 degree support firmware.
+
 //Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
 //My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
-#define X_AXIS_MOTOR_09 //kuo exper
-#define Y_AXIS_MOTOR_09 //kuo exper
-#define E_AXIS_MOTOR_09 //kuo exper
-
-//Uncomment ONLY ONE or NONE of below geared extruders
-//#define BMG_EXTRUDER //Kuo Uncomment for BMG Extruder
-//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for Extruder with gear ratio 3.5
-//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for Extruder with gear ratio 3.0
+#define X_AXIS_MOTOR_09 //kuo exper X axis
+#define Y_AXIS_MOTOR_09 //kuo exper Y axis
+//#define Z_AXIS_MOTOR_09 //kuo exper Z axis
+//#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
 ```
 
 My _AXIS_MOTOR_09 defines are probably all you need to modify. The rest of my firmware changes are controlled by these defines.
 
 Uncomment only the axes that you want to be 0.9 degree motors. For example, if you have 0.9 degree motors only on Y & Extruder and also use a BMG extruder it would look like...
 ```
-//#define X_AXIS_MOTOR_09 //kuo exper
-#define Y_AXIS_MOTOR_09 //kuo exper
-#define E_AXIS_MOTOR_09 //kuo exper
+//#define X_AXIS_MOTOR_09 //kuo exper X axis
+#define Y_AXIS_MOTOR_09 //kuo exper Y axis
+//#define Z_AXIS_MOTOR_09 //kuo exper Z axis
+#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
 
-//Uncomment ONLY ONE or NONE of below geared extruders
-#define BMG_EXTRUDER //Kuo Uncomment for BMG Extruder
-//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for Extruder with gear ratio 3.5
-//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for Extruder with gear ratio 3.0
+#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This also sets BMG height for you. MUST also send M92 E415 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E420 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_3375 //Kuo Uncomment for extruder with gear ratio 3.375 like 54:16 BNBSX. MUST also send M92 E473 & M500 to set esteps
+//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like 56:16 Bunny and Bear Short Ears or Skelestruder. MUST also send M92 E490 & M500 to set esteps
+
 ```
+
 
 
 Save your changes
@@ -261,6 +264,9 @@ NB2: LDO's use different pinout not detailed here.
 [10mm Drive Pulley for GT2](https://www.amazon.com/gp/product/B07BH26P2D) $8.90 for 4
 BALITENSEN GT2 Timing Pulley 16 Teeth 5mm Bore, Width 10mm for GT2 Belt 
 (optional) Replace X and Y motor pulleys with these to reduce 2mm, vertical GT2 tooth artifact. This particular drive pulley yielded lower tooth engagement 2mm artifact during 1st phase testing.
+
+### E-Steps
+If you are using a geared extruder, don't forget to set e-steps to match your extruder.
 
 END OF KUO MATERIAL
 ---
