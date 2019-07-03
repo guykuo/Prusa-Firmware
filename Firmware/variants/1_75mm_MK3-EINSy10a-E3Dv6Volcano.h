@@ -61,7 +61,6 @@
 #ifndef EXTRUDER_GEARED //Kuo for e-axis steps
 #ifdef BMG_EXTRUDER 
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,415} //BMG approx 3:1 geared extruder
-  #define TMC2130_UNLOAD_CURRENT_R 20 //BMG unload current for M600
   #define EXTRUDER_GEARED 1
 #endif
 #endif
@@ -69,7 +68,6 @@
 #ifndef EXTRUDER_GEARED //Kuo for e-axis steps
 #ifdef EXTRUDER_GEARRATIO_30
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,420} //3.0 geared extruder 
-  #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600
   #define EXTRUDER_GEARED 1
 #endif
 #endif
@@ -77,7 +75,6 @@
 #ifndef EXTRUDER_GEARED //Kuo for e-axis steps
 #ifdef EXTRUDER_GEARRATIO_3375
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,473} //3.375 geared extruder like BNBSX with 54 tooth puley
-  #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600 
   #define EXTRUDER_GEARED 1
 #endif
 #endif
@@ -85,14 +82,12 @@
 #ifndef EXTRUDER_GEARED //Kuo for e-axis steps
 #ifdef EXTRUDER_GEARRATIO_35
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,495} //3.5 geared extruder like 56:16 Short Ears (JTa: Volcano + Skele, tested IRL)
-  #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600 
   #define EXTRUDER_GEARED 1
 #endif
 #endif
 
 #ifndef EXTRUDER_GEARED //Kuo for e-axis steps
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //default steps/unit e-axis
-  #define TMC2130_UNLOAD_CURRENT_R 12  //lower current for M600 to protect filament sensor with stock extruder
   //Don't set EXTRUDER_GEARED because extruder is NOT geared.
 #endif
 
@@ -478,7 +473,6 @@
 //new settings is possible for vsense = 1, running current value > 31 set vsense to zero and shift both currents by 1 bit right (Z axis only)
 #define TMC2130_CURRENTS_H {16, 20, 35, 30}  // default holding currents for all axes
 #define TMC2130_CURRENTS_R {16, 20, 35, 30}  // default running currents for all axes
-#define TMC2130_UNLOAD_CURRENT_R 12			 // lowe current for M600 to protect filament sensor 
 
 #define TMC2130_STEALTH_Z
 
