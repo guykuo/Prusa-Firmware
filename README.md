@@ -12,7 +12,7 @@ NEW on July 1 2019-
 Extruder microstep rate has been reduced to avoid overrunning EINSY. E-steps are now 1/2 of what was needed for prior BNB firmware
 Set e-steps to new values via terminal window.
 -
-PLEASE DO A FACTORY RESET WITH DATA ERASURE after installing this firmware. Failure to clear out old EEPROM setttings can produce odd printer behavior.
+YOU MUST DO A FACTORY RESET WITH DATA ERASURE after installing this firmware. Failure to clear out old EEPROM setttings can produce odd printer behavior. Unless you perform a factory reset with data erase, important microstepping values may not take effect.
 -
 
 ### Compiling my firmware for 0.9 degree motor support
