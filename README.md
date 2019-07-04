@@ -1,6 +1,6 @@
-# Prusa-Firmware for OLED and 0.9 deg motors
+# Prusa-Firmware with support for OLED display / 0.9 deg motors / LA 1.5
 
-Combined work by others: Mike Grozdanovic (OLED: lcd.cpp), Gerd Jentz (OLED: ultralcd.cpp) and Guy Kuo (0.9 deg motor)
+Combined work by others: Mike Grozdanovic (OLED: lcd.cpp), Gerd Jentz (OLED: ultralcd.cpp), Guy Kuo (0.9 deg motor), Yuri D'Elia (LA 1.5)
 
 
 # VFA fix summary, firmware compilation, and shopping list
