@@ -457,8 +457,8 @@
   #define TMC2130_SG_THRS_Y       3    // stallguard sensitivity for Y axis
   #define TMC2130_SG_THRS_Y_HOME  3    // homing stallguard threshold for Y axis
 #else
-  #define TMC2130_SG_THRS_Y       3    // Kuo in case different needed for 0.9 degree motors
-  #define TMC2130_SG_THRS_Y_HOME  3
+  #define TMC2130_SG_THRS_Y       4    // Kuo in case different needed for 0.9 degree motors
+  #define TMC2130_SG_THRS_Y_HOME  4
 #endif
 
 #ifndef Z_AXIS_MOTOR_09 //Kuo
