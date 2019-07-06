@@ -3443,6 +3443,10 @@ calibrated:
 	if ((PRINTER_TYPE == PRINTER_MK25) || (PRINTER_TYPE == PRINTER_MK2) || (PRINTER_TYPE == PRINTER_MK2_SNMM)) {
 		current_position[Z_AXIS] = Z_MAX_POS-3.f;
 	}
+	else if ((PRINTER_TYPE == PRINTER_MK25S) && (Z_MAX_POS_XYZ_CALIBRATION_CORRECTION == 2.0))
+	{
+		current_position[Z_AXIS] = Z_MAX_POS-3.f;
+	}
 	else {
 		current_position[Z_AXIS] = Z_MAX_POS+4.f;
 	}
@@ -6297,6 +6301,7 @@ static void lcd_test_menu()
 void lcd_resume_print()
 {
     lcd_return_to_status();
+		lcd_reset_alert_level();
     lcd_setstatuspgm(_T(MSG_RESUMING_PRINT));
     lcd_reset_alert_level(); //for fan speed error
     restore_print_from_ram_and_continue(0.0);
@@ -6444,7 +6449,14 @@ static void lcd_main_menu()
 			}
 			else
 			{
-			    MENU_ITEM_SUBMENU_P(_i("Resume print"), lcd_resume_print);////MSG_RESUME_PRINT
+				#ifdef FANCHECK
+					checkFanSpeed(); //Check manually to get most recent fan speed status
+					if(fan_check_error == EFCE_OK)
+							MENU_ITEM_SUBMENU_P(_i("Resume print"), lcd_resume_print);////MSG_RESUME_PRINT
+				#else
+					MENU_ITEM_SUBMENU_P(_i("Resume print"), lcd_resume_print);////MSG_RESUME_PRINT
+				#endif
+
 			}
 			MENU_ITEM_SUBMENU_P(_T(MSG_STOP_PRINT), lcd_sdcard_stop);
 		}

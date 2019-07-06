@@ -7,18 +7,18 @@
  *------------------------------------*/
 
 // Printer revision
-#define PRINTER_TYPE PRINTER_MK25
-#define FILAMENT_SIZE "1_75mm_MK25"
+#define PRINTER_TYPE PRINTER_MK25S
+#define FILAMENT_SIZE "1_75mm_MK25S"
 #define NOZZLE_TYPE "E3Dv6full"
 
 // Developer flag
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5"
+#define CUSTOM_MENDEL_NAME "Prusa i3 MK2.5S BEAR"
 
 // Electronics
-#define MOTHERBOARD BOARD_RAMBO_MINI_1_3
+#define MOTHERBOARD BOARD_RAMBO_MINI_1_0
 
 #define HEATBED_V2
 #define STEEL_SHEET
@@ -73,7 +73,7 @@
 //                                                The correct value for a MK3S extruder is 9.0, for all other printers choose 2.0.
 
 // This is only relevant for "S" firmware and an extruder like the Bondtech BMG or Bear extruders.
-#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for a non MK3S extruder 
+#define Z_MAX_POS_XYZ_CALIBRATION_CORRECTION 2.0 // This represents the correction as needed for MK2.5, Bear and BMG (not MK2.5S) extruder 
 
 // Canceled home position
 #define X_CANCEL_POS 50
@@ -101,7 +101,6 @@
 #define DEFAULT_MAX_ACCELERATION      {1000, 1000, 200, 5000}  // (mm/sec^2) max acceleration (M201)
 #define DEFAULT_MAX_ACCELERATION_SILENT     {960, 960, 200, 5000}    // (mm/sec^2) max acceleration (M201), silent mode
 
-
 #define DEFAULT_ACCELERATION          1250   // X, Y, Z and E max acceleration in mm/s^2 for printing moves (M204S)
 #define DEFAULT_RETRACT_ACCELERATION  1250   // X, Y, Z and E max acceleration in mm/s^2 for retracts (M204T)
 
@@ -124,11 +123,10 @@
 // Safety timer
 #define SAFETYTIMER
 #define DEFAULT_SAFETYTIMER_TIME_MINS 30
-#define FARM_DEFAULT_SAFETYTIMER_TIME_ms (45*60*1000ul)
 
 // Filament sensor
 #define FILAMENT_SENSOR
-#define PAT9125
+#define IR_SENSOR
 
 
 #define DEBUG_DCODE3
@@ -384,7 +382,7 @@
  *------------------------------------*/
 
 #define FARM_PREHEAT_HOTEND_TEMP 250
-#define FARM_PREHEAT_HPB_TEMP 80
+#define FARM_PREHEAT_HPB_TEMP 40
 #define FARM_PREHEAT_FAN_SPEED 0
 
 #define PLA_PREHEAT_HOTEND_TEMP 215
@@ -519,8 +517,5 @@
 //#define MMU_HAS_CUTTER
 
 #define MMU_IDLER_SENSOR_ATTEMPTS_NR 21 //max. number of attempts to load filament if first load failed; value for max bowden length and case when loading fails right at the beginning
-
-//#define HEATBED_ANALYSIS //for meash bed leveling and heatbed analysis D-codes D80 and D81
-//#define MICROMETER_LOGGING //related to D-codes D80 and D81, currently works on MK2.5 only (MK3 board pin definitions missing)
 
 #endif //__CONFIGURATION_PRUSA_H
