@@ -7,9 +7,13 @@ This branch adds support for...
 
 0.9 degree motors on XYZ
 
+Geared Extruders
+
 Slice thermistor
 
 Slice Magnum Mosquito
+
+E3D Volcano
 
 Linear Advance 1.5
 
