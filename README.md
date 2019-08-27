@@ -155,16 +155,44 @@ For most users, you only need to specify which motors are 0.9 degree units.
 Look for...
 
 ```
-/*------------------------------------
- AXIS SETTINGS
- *------------------------------------*/
-//Uncommented def(s) below specify 0.9 degree stepper motors on x, y, z, e axis
-//Z is newly added and has not been tested with 0.9 motors
 //Geared extruders now set for lower microstepping to avoid overruning EINSY during fast retracts or MMU2S filament moves. 
-//Geared e-steps are consequently different from prior BNB 0.9 degree support firmware.
+//Factory reset and delete all data after installing this firmware. Otherwise EEPROM settings override settings in this firmware.
+//After installing this firmware, send M350 and M92 commands to force correct micro-stepping and e-step rates. M350 must be first
+//because M350 command will sometimes alter existing M92 setting
+//
+//e-steps values for M92 depend on your extruder gearing.
+//xxx = 280 for non-geared extruder
+//xxx = 415 for BMG extruder (special Bondtech compensated value)
+//xxx = 420 for 3:1 extruder
+//xxx = 473 for BNBSX with 54:16 gearing
+//xxx = 490 for BNBSX, Short Ears, Skelestruder with 56:16 gearing
+//
+//non-geared extruder, 1.8 degree motor
+//M350 E32
+//M92 E280
+//M500
+//
+//non-geared extruder, 0.9 degree motor
+//M350 E16
+//M92 E280
+//M500
+//
+//geared extruder, 1.8 degree motor
+//M350 E16
+//M92 Exxx
+//M500
+//
+//geared extruder, 0.9 degree motor
+//M350 E8
+//M92 Exxx
+//M500
+//
+//Follow with power off/on and M503 to verify settings are correct.
 
+//====== Kuo Uncommented def(s) below specify 0.9 degree stepper motors on x, y, z, e axis
 //Motors used should be 1 amp or lower current rating to avoid overheating TMC2130 drivers in Stealthchop.
-//My recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
+//Kuo recommended 0.9 degree motors for X, Y, or direct drive E are Moons MS17HA2P4100 or OMC 17HM15-0904S 
+//
 #define X_AXIS_MOTOR_09 //kuo exper X axis
 #define Y_AXIS_MOTOR_09 //kuo exper Y axis
 //#define Z_AXIS_MOTOR_09 //kuo exper Z axis
@@ -173,18 +201,31 @@ Look for...
 
 My _AXIS_MOTOR_09 defines are probably all you need to modify. The rest of my firmware changes are controlled by these defines.
 
-Uncomment only the axes that you want to be 0.9 degree motors. For example, if you have 0.9 degree motors only on Y & Extruder and also use a BMG extruder it would look like...
+Uncomment only the axes that you want to be 0.9 degree motors and any other extruder options you are using. For example, if you have 0.9 degree motors only on X & Y, a BNBSX Extruder and Slice thermistor it would look like...
 ```
-//#define X_AXIS_MOTOR_09 //kuo exper X axis
+#define X_AXIS_MOTOR_09 //kuo exper X axis
 #define Y_AXIS_MOTOR_09 //kuo exper Y axis
 //#define Z_AXIS_MOTOR_09 //kuo exper Z axis
-#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
+//#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
 
-#define BMG_EXTRUDER //Kuo Uncomment for BMG 3:1 extruder. This also sets BMG height for you. MUST also send M92 E415 & M500 to set esteps
-//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. MUST also send M92 E420 & M500 to set esteps
-//#define EXTRUDER_GEARRATIO_3375 //Kuo Uncomment for extruder with gear ratio 3.375 like 54:16 BNBSX. MUST also send M92 E473 & M500 to set esteps
-//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like 56:16 Bunny and Bear Short Ears or Skelestruder. MUST also send M92 E490 & M500 to set esteps
+//====== Kuo Uncomment ONLY ONE or NONE of below for geared extruders
+//Don't forget to also send gcode to set e-steps as detailed earlier
+//Reversion back from geared extruder requires sending M92 E280 & M500 to printer
+//
+//#define SKELESTRUDER // Uncomment if you have a skelestruder. Applies the patches for load distances and Z height.
+//#define BONDTECH_PRUSA_UPGRADE_MK3 //Kuo Uncomment for Bondtech MK3 extruder upgrade. 3:1 extruder. This also sets Z_MAX_POS 205.
+//#define BONDTECH_PRUSA_UPGRADE_MK3S //Kuo Uncomment for Bondtech MK3S extruder upgrade. (Note the S!!!!) 3:1 extruder. This also sets Z_MAX_POS 205.
+//#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. 
+#define EXTRUDER_GEARRATIO_3375 //Kuo Uncomment for extruder with gear ratio 3.375 like 54:16 BNBSX.
+//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like 56:16 Bunny and Bear Short Ears or Skelestruder.
 
+//====== Kuo E3D Volcano Support
+//#define E3D_VOLCANO //uncomment to adjust Z_MAX_POS to accomodate 8.5 mm greater Volcano extruder height
+//====== Kuo Slice Support
+#define SLICETHERMISTOR //uncomment for Slice Thermistor
+//#define SLICEMAGNUM //uncomment to adjust MMU2S filament laod/unload distances for Slice Magnum
+
+//====== Kuo End of defines one normally needs to change ======
 ```
 
 
@@ -338,75 +379,73 @@ END OF KUO MATERIAL
 
 # Build
 ## Linux
-Run shell script build.sh to build for MK3 and flash with Slic3er.  
-If you have a different printer model, follow step [2.b](#2b) from Windows build first.  
-If you wish to flash from Arduino, follow step [2.c](#2c) from Windows build first.  
 
-The script downloads Arduino with our modifications and Rambo board support installed, unpacks it into folder PF-build-env-\<version\> on the same level, as your Prusa-Firmware folder is located, builds firmware for MK3 using that Arduino in Prusa-Firmware-build folder on the same level as Prusa-Firmware, runs secondary language support scripts. Firmware with secondary language support is generated in lang subfolder. Use firmware.hex for MK3 variant. Use firmware_\<lang\>.hex for other printers. Don't forget to follow step [2.b](#2b) first for non-MK3 printers.
+1. Clone this repository and checkout the correct branch for your desired release version.
+
+2. Set your printer model. 
+   - For MK3 --> skip to step 3. 
+   - If you have a different printer model, follow step [2.b](#2b) from Windows build
+   
+3. Run `sudo ./build.sh`
+   - Output hex file is at `"PrusaFirmware/lang/firmware.hex"` . In the same folder you can hex files for other languages as well.
+
+4. Connect your printer and flash with PrusaSlicer ( Configuration --> Flash printer firmware ) or Slic3r PE.
+   - If you wish to flash from Arduino, follow step [2.c](#2c) from Windows build first.
+
+
+_Notes:_
+
+The script downloads Arduino with our modifications and Rambo board support installed, unpacks it into folder `PF-build-env-\<version\>` on the same level, as your Prusa-Firmware folder is located, builds firmware for MK3 using that Arduino in Prusa-Firmware-build folder on the same level as Prusa-Firmware, runs secondary language support scripts. Firmware with secondary language support is generated in lang subfolder. Use firmware.hex for MK3 variant. Use `firmware_\<lang\>.hex` for other printers. Don't forget to follow step [2.b](#2b) first for non-MK3 printers.
+
 ## Windows
 ### Using Arduino
-note: Multi language build is not supported.
+_Note: Multi language build is not supported._
+
 #### 1. Development environment preparation
 
-   a. install `"Arduino Software IDE"` for your preferred operating system  
-`https://www.arduino.cc -> Software->Downloads`  
-it is recommended to use version `"1.8.5"`, as it is used on out build server to produce official builds.  
-_note: in the case of persistent compilation problems, check the version of the currently used C/C++ compiler (GCC) - should be `4.8.1`; version can be verified by entering the command  
-`avr-gcc --version`  
-if you are not sure where the file is placed (depends on how `"Arduino Software IDE"` was installed), you can use the search feature within the file system_  
-_note: name collision for `"LiquidCrystal"` library known from previous versions is now obsolete (so there is no need to delete or rename original file/-s)_
+**a.** Install `"Arduino Software IDE"` from the official website `https://www.arduino.cc -> Software->Downloads` 
+   
+   _It is recommended to use version `"1.8.5"`, as it is used on out build server to produce official builds._
 
-   b. add (`UltiMachine`) `RAMBo` board into the list of Arduino target boards  
-`File->Preferences->Settings`  
-into text field `"Additional Boards Manager URLs"`  
-type location  
-`"https://raw.githubusercontent.com/ultimachine/ArduinoAddons/master/package_ultimachine_index.json"`  
-or you can 'manually' modify the item  
-`"boardsmanager.additional.urls=....."`  
-at the file `"preferences.txt"` (this parameter allows you to write a comma-separated list of addresses)  
-_note: you can find location of this file on your disk by doing the following:  
-`File->Preferences->Settings`  (`"More preferences can be edited in file ..."`)_  
-then choose 
-`Tools->Board->BoardsManager`  
-from viewed list and select the item labeled `"RAMBo"` (will probably be labeled as `"RepRap Arduino-compatible Mother Board (RAMBo) by UltiMachine"`  
-_note: select this item for any variant of board used in printers `'Prusa i3 MKx'`, that is for `RAMBo-mini x.y` and `EINSy x.y` to_  
-'clicking' the item will display the installation button; select choice `"1.0.1"` from the list(last known version as of the date of issue of this document)  
-_(after installation, the item is labeled as `"INSTALLED"` and can then be used for target board selection)_  
+**b.** Setup Arduino to use Prusa Rambo board definition
 
-   c. modify platform.txt to enable float printf support:  
-add "-Wl,-u,vfprintf -lprintf_flt -lm" to "compiler.c.elf.flags=" before existing flag "-Wl,--gc-sections"  
-example:  
-`"compiler.c.elf.flags=-w -Os -Wl,-u,vfprintf -lprintf_flt -lm -Wl,--gc-sections"`
-The file can be found in Arduino instalation directory, or after Arduino has been updated at:  
-"C:\Users\(user)\AppData\Local\Arduino15\packages\arduino\hardware\avr\(version)"
-If you can locate the file in both places, file from user profile is probably used.
+* Open Arduino and navigate to File -> Preferences -> Settings
+* To the text field `"Additional Boards Manager URLSs"` add `https://raw.githubusercontent.com/prusa3d/Arduino_Boards/master/IDE_Board_Manager/package_prusa3d_index.json`
+* Open Board manager (`Tools->Board->Board manager`), and install `Prusa Research AVR MK3 RAMBo EINSy board`
+
+**c.** Modify compiler flags in `platform.txt` file
+     
+* The platform.txt file can be found in Arduino instalation directory, or after Arduino has been updated at: `"C:\Users\(user)\AppData\Local\Arduino15\packages\arduino\hardware\avr\(version)"` If you can locate the file in both places, file from user profile is probably used.
+       
+* Add `"-Wl,-u,vfprintf -lprintf_flt -lm"` to `"compiler.c.elf.flags="` before existing flag "-Wl,--gc-sections"  
+
+    For example:  `"compiler.c.elf.flags=-w -Os -Wl,-u,vfprintf -lprintf_flt -lm -Wl,--gc-sections"`
+   
+_Notes:_
+
+
+_In the case of persistent compilation problems, check the version of the currently used C/C++ compiler (GCC) - should be at leas `4.8.1`; 
+If you are not sure where the file is placed (depends on how `"Arduino Software IDE"` was installed), you can use the search feature within the file system_
+
+_Name collision for `"LiquidCrystal"` library known from previous versions is now obsolete (so there is no need to delete or rename original file/-s)_
 
 #### 2. Source code compilation
 
-a. place the source codes corresponding to your printer model obtained from the repository into the selected directory on your disk  
-`https://github.com/prusa3d/Prusa-Firmware/`  
+**a.** Clone this repository`https://github.com/prusa3d/Prusa-Firmware/` to your local drive.
 
-b.<a name="2b"></a> In the subdirectory `"Firmware/variants/"` select the configuration file (`.h`) corresponding to your printer model, make copy named `"Configuration_prusa.h"` (or make simple renaming) and copy it into `"Firmware/"` directory.  
+**b.**<a name="2b"></a> In the subdirectory `"Firmware/variants/"` select the configuration file (`.h`) corresponding to your printer model, make copy named `"Configuration_prusa.h"` (or make simple renaming) and copy it into `"Firmware/"` directory.  
 
-c.<a name="2c"></a> In file `"Firmware/config.h"` set LANG_MODE to 0.
+**c.**<a name="2c"></a> In file `"Firmware/config.h"` set LANG_MODE to 0.
 
-run `"Arduino IDE"`; select the file `"Firmware.ino"` from the subdirectory `"Firmware/"` at the location, where you placed the source code  
-`File->Open`  
-make the desired code customizations; **all changes are on your own risk!**  
+**d.** Run `"Arduino IDE"`; select the file `"Firmware.ino"` from the subdirectory `"Firmware/"` at the location, where you placed the source code `File->Open` Make the desired code customizations; **all changes are on your own risk!**  
 
-select the target board `"RAMBo"`  
-`Tools->Board->RAMBo`  
-_note: it is not possible to use any of the variants `"Arduino Mega …"`, even though it is the same MCU_  
+**e.** Select the target board `"Tools->Board->PrusaResearch Einsy RAMBo"`  
 
-run the compilation  
-`Sketch->Verify/Compile`  
+**f.** Run the compilation `Sketch->Verify/Compile`  
 
-upload the result code into the connected printer  
-`Sketch->Upload`  
+**g.** Upload the result code into the connected printer `Sketch->Upload`  
 
-or you can also save the output code to the file (in so called `HEX`-format) `"Firmware.ino.rambo.hex"`:  
-`Sketch->ExportCompiledBinary`  
-and then upload it to the printer using the program `"FirmwareUpdater"`  
+* or you can also save the output code to the file (in so called `HEX`-format) `"Firmware.ino.rambo.hex"`:  `Sketch->ExportCompiledBinary` and then upload it to the printer using the program `"FirmwareUpdater"`  
 _note: this file is created in the directory `"Firmware/"`_  
 
 ### Using Linux subsystem under Windows 10 64-bit
@@ -463,11 +502,9 @@ _notes: Script and instructions contributed by 3d-gussner. Use at your own risk.
 
 # 3. Automated tests
 ## Prerequisites
-c++11 compiler e.g. g++ 6.3.1
-
-cmake
-
-build system - ninja or gnu make
+* c++11 compiler e.g. g++ 6.3.1
+* cmake
+* build system - ninja or gnu make
 
 ## Building
 Create a folder where you want to build tests.
@@ -518,3 +555,4 @@ A:Our production builds are 99.9% equivalent to https://github.com/prusa3d/Prusa
 Q:Why are build instructions for Arduino mess.
 
 Y:We are too lazy to ship proper board definition for Arduino. We plan to swich to cmake + ninja to be inherently multiplatform, easily integrate build tools, suport more IDEs, get 10 times shorter build times and be able to update compiler whenewer we want.
+
