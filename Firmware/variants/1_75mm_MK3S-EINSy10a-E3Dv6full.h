@@ -163,7 +163,7 @@
 #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)//kuo BMG height
   #define Z_MAX_POS 205
 #elif defined(E3D_VOLCANO)//kuo Volcano height
-  #define Z_MAX_POS 
+  #define Z_MAX_POS 202
 #else
   #define Z_MAX_POS 210 //default height
 #endif
