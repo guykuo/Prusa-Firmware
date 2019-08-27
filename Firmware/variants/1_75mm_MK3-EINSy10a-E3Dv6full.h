@@ -92,6 +92,8 @@
 //#define EXTRUDER_GEARRATIO_3375 //Kuo Uncomment for extruder with gear ratio 3.375 like 54:16 BNBSX.
 //#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like 56:16 Bunny and Bear Short Ears or Skelestruder.
 
+//====== Kuo E3D Volcano Support
+//#define E3D_VOLCANO //uncomment to adjust Z_MAX_POS to accomodate 8.5 mm greater Volcano extruder height
 //====== Kuo Slice Support
 //#define SLICETHERMISTOR //uncomment for Slice Thermistor
 //#define SLICEMAGNUM //uncomment to adjust MMU2S filament laod/unload distances for Slice Magnum
@@ -158,6 +160,8 @@
   #define Z_MAX_POS 205
 #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)//kuo BMG height
   #define Z_MAX_POS 205
+#elif defined(E3D_VOLCANO)//kuo Volcano height
+  #define Z_MAX_POS 202
 #else
   #define Z_MAX_POS 210 //default height
 #endif
