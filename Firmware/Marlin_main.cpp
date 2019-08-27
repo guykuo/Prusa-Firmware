@@ -3145,13 +3145,22 @@ void gcode_M701()
 #endif //FSENSOR_QUALITY
 
 		lcd_setstatuspgm(_T(MSG_LOADING_FILAMENT));
-		current_position[E_AXIS] += 40;
-		plan_buffer_line_curposXYZE(400 / 60, active_extruder); //fast sequence
+		//current_position[E_AXIS] += 40;
+		//plan_buffer_line_curposXYZE(400 / 60, active_extruder); //fast sequence
+		//st_synchronize();
+		//
+		//marlin_rise_z();
+		//current_position[E_AXIS] += 30;
+		//plan_buffer_line_curposXYZE(400 / 60, active_extruder); //fast sequence
+		//Kuo load filament using variants settings
+		current_position[E_AXIS] += LOAD_FILAMENT_DIST_1;
+	   	plan_buffer_line_curposXYZE(LOAD_FILAMENT_RATE_1 / 60, active_extruder); //fast sequence
 		st_synchronize();
 
 		marlin_rise_z();
-		current_position[E_AXIS] += 30;
-		plan_buffer_line_curposXYZE(400 / 60, active_extruder); //fast sequence
+		current_position[E_AXIS] += LOAD_FILAMENT_DIST_2;
+	 	plan_buffer_line_curposXYZE(LOAD_FILAMENT_RATE_2 / 60, active_extruder); //fast sequence
+		//=== Kuo
 		
 		load_filament_final_feed(); //slow sequence
 		st_synchronize();
