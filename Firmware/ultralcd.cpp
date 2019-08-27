@@ -6220,10 +6220,13 @@ void unload_filament()
 	//plan_buffer_line_curposXYZE(1000 / 60, active_extruder);
 	//st_synchronize();
 
-	//Kuo unload filament using settings from variant. Also slightly extrude before unloading.
-	current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_0;
+	//Kuo unload filament using settings from variant.
+
+ 	#ifdef EXTRUDE_BEFORE_UNLOAD
+	current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_0; //Kuo first extrude small amount to reduce tip size
 	plan_buffer_line_curposXYZE(UNLOAD_FILAMENT_RATE_0 / 60, active_extruder);
 	st_synchronize();
+	#endif
   
 	current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_1;
 	plan_buffer_line_curposXYZE(UNLOAD_FILAMENT_RATE_1 / 60, active_extruder);
