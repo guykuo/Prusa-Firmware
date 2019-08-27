@@ -613,7 +613,7 @@
 // Unload filament distances and rates
 #ifdef BONDTECH_PRUSA_UPGRADE_MK3
   #define UNLOAD_FILAMENT_DIST_0 2  //Kuo extrude slightly first to form finer tip
-  #define UNLOAD_FILAMENT_RATE_0 100
+  #define UNLOAD_FILAMENT_RATE_0 50
   #define UNLOAD_FILAMENT_DIST_1 -45  //Kuo BMG unload
   #define UNLOAD_FILAMENT_RATE_1 5200
   #define UNLOAD_FILAMENT_DIST_2 -15
@@ -622,7 +622,7 @@
   #define UNLOAD_FILAMENT_RATE_3 1000
 #else
   #define UNLOAD_FILAMENT_DIST_0 2  //Kuo extrude slightly first to form finer tip
-  #define UNLOAD_FILAMENT_RATE_0 100
+  #define UNLOAD_FILAMENT_RATE_0 50
   #define UNLOAD_FILAMENT_DIST_1 -45  //Kuo Prusa default unload
   #define UNLOAD_FILAMENT_RATE_1 5200
   #define UNLOAD_FILAMENT_DIST_2 -15
