@@ -96,9 +96,13 @@
 
 //====== Kuo E3D Volcano Support
 //#define E3D_VOLCANO //uncomment to adjust Z_MAX_POS to accomodate 8.5 mm greater Volcano extruder height
+
 //====== Kuo Slice Support
 //#define SLICETHERMISTOR //uncomment for Slice Thermistor
 //#define SLICEMAGNUM //uncomment to adjust MMU2S filament laod/unload distances for Slice Magnum
+
+//====== Kuo extrude before unload filament
+#define EXTRUDE_BEFORE_UNLOAD //uncomment to always extrude filament a short distance before unloading. Forms smaller tip.
 
 //====== Kuo End of defines one normally needs to change ======
 
