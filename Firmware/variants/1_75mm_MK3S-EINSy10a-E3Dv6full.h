@@ -592,26 +592,43 @@
 /*------------------------------------
  LOAD/UNLOAD FILAMENT SETTINGS
  *------------------------------------*/
-
-
-// Load filament commands
-#define LOAD_FILAMENT_0 "M83"
-#define LOAD_FILAMENT_1 "G1 E70 F400"
+// Load filament distances and rates
 #ifdef BONDTECH_PRUSA_UPGRADE_MK3
-  #define LOAD_FILAMENT_2 "G1 E50 F100"  //Kuo BMG load
+  #define LOAD_FILAMENT_DIST_1 40  //Kuo BMG load
+  #define LOAD_FILAMENT_RATE_1 400
+  #define LOAD_FILAMENT_DIST_2 40 //10 mm farther
+  #define LOAD_FILAMENT_RATE_2 300
 #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-  #define LOAD_FILAMENT_2 "G1 E50 F100"  //Kuo BMG load
+  #define LOAD_FILAMENT_DIST_1 40  //Kuo BMG load
+  #define LOAD_FILAMENT_RATE_1 400
+  #define LOAD_FILAMENT_DIST_2 40 //10 mm farther
+  #define LOAD_FILAMENT_RATE_2 300
 #else
-  #define LOAD_FILAMENT_2 "G1 E40 F100" //Kuo Prusa default load
+  #define LOAD_FILAMENT_DIST_1 40  //Kuo Prusa default load
+  #define LOAD_FILAMENT_RATE_1 400
+  #define LOAD_FILAMENT_DIST_2 30 
+  #define LOAD_FILAMENT_RATE_2 300
 #endif
-// Unload filament commands
-#define UNLOAD_FILAMENT_0 "M83"
+
+// Unload filament distances and rates
 #ifdef BONDTECH_PRUSA_UPGRADE_MK3
-  #define UNLOAD_FILAMENT_1 "G1 E-100 F7000" //Kuo BMG unload
-#elif defined(BONDTECH_PRUSA_UPGRADE_MK3S) 
-  #define UNLOAD_FILAMENT_1 "G1 E-100 F7000" //Kuo BMG load
+  #define UNLOAD_FILAMENT_DIST_0 2  //Kuo extrude slightly first to form finer tip
+  #define UNLOAD_FILAMENT_RATE_0 100
+  #define UNLOAD_FILAMENT_DIST_1 -45  //Kuo BMG unload
+  #define UNLOAD_FILAMENT_RATE_1 5200
+  #define UNLOAD_FILAMENT_DIST_2 -15
+  #define UNLOAD_FILAMENT_RATE_2 1000
+  #define UNLOAD_FILAMENT_DIST_3 -40 //20 mm farther
+  #define UNLOAD_FILAMENT_RATE_3 1000
 #else
-  #define UNLOAD_FILAMENT_1 "G1 E-80 F7000"  //Kuo Prusa default load
+  #define UNLOAD_FILAMENT_DIST_0 2  //Kuo extrude slightly first to form finer tip
+  #define UNLOAD_FILAMENT_RATE_0 100
+  #define UNLOAD_FILAMENT_DIST_1 -45  //Kuo Prusa default unload
+  #define UNLOAD_FILAMENT_RATE_1 5200
+  #define UNLOAD_FILAMENT_DIST_2 -15
+  #define UNLOAD_FILAMENT_RATE_2 1000
+  #define UNLOAD_FILAMENT_DIST_3 -20
+  #define UNLOAD_FILAMENT_RATE_3 1000
 #endif
 
 /*------------------------------------
