@@ -6221,20 +6221,21 @@ void unload_filament()
 	//st_synchronize();
 
 	//Kuo unload filament using settings from variant. Also slightly extrude before unloading.
-        current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_0;
-        plan_buffer_line_curposXYZE(UNLOAD_FILAMENT_RATE_0 / 60, active_extruder);
-        st_synchronize();
+	current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_0;
+	plan_buffer_line_curposXYZE(UNLOAD_FILAMENT_RATE_0 / 60, active_extruder);
+	st_synchronize();
   
 	current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_1;
 	plan_buffer_line_curposXYZE(UNLOAD_FILAMENT_RATE_1 / 60, active_extruder);
 	st_synchronize();
 	current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_2;
-	plan_buffer_line_curposXYZE(UNLOAD_FILAMENT_RATE_2 / 60, active_extruder);
-	st_synchronize();
-	current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_3;
+ 	plan_buffer_line_curposXYZE(UNLOAD_FILAMENT_RATE_2 / 60, active_extruder);
+  	st_synchronize();
+  	current_position[E_AXIS] += UNLOAD_FILAMENT_DIST_3;
 	plan_buffer_line_curposXYZE(UNLOAD_FILAMENT_RATE_3 / 60, active_extruder);
 	st_synchronize();
-        //=== Kuo
+  	//=== Kuo
+	
 	lcd_display_message_fullscreen_P(_T(MSG_PULL_OUT_FILAMENT));
 
 	//disable extruder steppers so filament can be removed
