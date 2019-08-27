@@ -56,7 +56,7 @@ As downloaded, the Arduino IDE does not know about the EINSY RAMBO board. You mu
 
 Additional Boards Manager URLs textfield enter...
 ```
-https://raw.githubusercontent.com/DRracer/Arduino_Boards/master/IDE_Board_Manager/package_prusa3d_index.json
+https://raw.githubusercontent.com/prusa3d/Arduino_Boards/master/IDE_Board_Manager/package_prusa3d_index.json
 ```
 
 3. Accept (OK) new preference setting
