@@ -252,7 +252,7 @@ Moon's are best at reducing VFA's with linearity correction OFF. They do not tun
 
 OMC's are baseline slightly worse than Moons, but can be tuned to achieve better than Moons with linearity correction (1.130 - 1.140). However, forget to set linearity correction and the OMCs are worse than Moons. 
 
-NB: Prusa firmware does not store linearity correction settings to EEPROM unless you let the menu time out by itself.
+NB: Prusa firmware older than 3.8.0 does not store linearity correction settings to EEPROM unless you let the menu time out by itself.
 
 OMC's are a little bit louder during printing, but not by much. 
 
