@@ -1469,7 +1469,7 @@ static bool can_load()
     #elif defined(SKELESTRUDER)
       current_position[E_AXIS] += 50;
     #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-      current_position[E_AXIS] += 64;
+      current_position[E_AXIS] += 66;
     #else
       current_position[E_AXIS] += 60;
     #endif //Kuo ===
