@@ -312,18 +312,16 @@ Wiring is as in pictures. Pay attention to wire order and pin positions at both 
 NB: if using retrograde motor extruder like BNBSX Short Ears, plug EINSY end in 180 degrees rotated
 NB2: LDO's use different pinout not detailed here.
 
-[DIY Stepper Cables: RGB LED Strjp Cables](https://www.amazon.com/gp/product/B01DC0KKJU/) 	$9
-BTF-LIGHTING 10 Pairs 4pin SM JST 15cm Cable Female/Male connectors for Led Strip RGB 5050 3528 WS2801 APA02
-
-If you want pre-assembled connector and wire assemblies, while not specifically intended for stepper motors, these RGB LED strip connectors are a great alternative.  They have color-coded wires that match the standard stepper motor wire colors, they are meant to handle a couple of amps or more.  These are great for steppers that have wires already attached.
-
-
 ![EINSY end of cable](https://github.com/guykuo/Prusa-Firmware/blob/0.9-Degree-Stepper-Support/einsy-end-of-cable.jpg)
 
 ![Moons motor connector wire order detail](https://github.com/guykuo/Prusa-Firmware/blob/0.9-Degree-Stepper-Support/moons-end-of-cable.jpg)
 
 ![OMC cable connector](https://github.com/guykuo/Prusa-Firmware/blob/0.9-Degree-Stepper-Support/OMC%20stepper%20online%20wiring%20adapt.JPG)
 
+If you want pre-assembled connector and wire assemblies, while not specifically intended for stepper motors, these RGB LED strip connectors are a great alternative.  They have color-coded wires that match the standard stepper motor wire colors, they are meant to handle a couple of amps or more.  These are great for steppers that have wires already attached.
+
+[DIY Stepper Cables: RGB LED Strjp Cables](https://www.amazon.com/gp/product/B01DC0KKJU/) 	$9
+BTF-LIGHTING 10 Pairs 4pin SM JST 15cm Cable Female/Male connectors for Led Strip RGB 5050 3528 WS2801 APA02
 
 
 ### Drive Pulleys (optional but recommended)
