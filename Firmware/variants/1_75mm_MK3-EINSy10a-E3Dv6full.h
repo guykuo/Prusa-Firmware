@@ -104,6 +104,14 @@
 
 //---------------------------- Kuo End of defines one normally needs to change ----------------------------
 
+#ifdef X_AXIS_MOTOR_09 //Kuo adjust min acceptable homing count for 0.9 motors
+  #define kHOMING_CNT_MIN 10 //0.9 motors often home at much lower count
+#elif defined(Y_AXIS_MOTOR_09)
+  #define kHOMING_CNT_MIN 10
+#else
+  #define kHOMING_CNT_MIN 63 //original was 63 for 1.8 motors
+#endif //---Kuo
+
 // Steps per unit {X,Y,Z,E}
 
 #ifdef SKELESTRUDER
