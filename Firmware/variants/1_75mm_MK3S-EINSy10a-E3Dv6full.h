@@ -104,7 +104,19 @@
 //====== Kuo extrude before unload filament
 #define EXTRUDE_BEFORE_UNLOAD //uncomment to always extrude filament a short distance before unloading. Forms smaller tip.
 
-//====== Kuo End of defines one normally needs to change ======
+//---------------------------- Kuo End of defines one normally needs to change ----------------------------
+
+#ifdef X_AXIS_MOTOR_09 
+  #define kHOME_STEPS_X 96 //Kuo 0.9 degree X motor
+#else
+  #define kHOME_STEPS_X 48 //Prussa 1.8 degree X motor
+#endif
+
+#ifdef Y_AXIS_MOTOR_09 
+  #define kHOME_STEPS_Y 96 //Kuo 0.9 degree Y motor
+#else
+  #define kHOME_STEPS_Y 48 //Prussa 1.8 degree Y motor
+#endif
 
 // Steps per unit {X,Y,Z,E}
 
