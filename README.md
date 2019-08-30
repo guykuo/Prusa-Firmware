@@ -241,14 +241,7 @@ If you see a warning about a missing bootloader, you probably have an older, RAM
 Sketch -> Upload
 The firmware will compile and upload to printer. Do NOT interrupt the update!!!! Let it complete.
 
-7. Going to 0.9 degree motors also changes the steps at which printer is at homing position. Your old home position may be outside of the new legal dimensions. The effect of that is x-axis test will immediately fail if the first thing you do is self-test or run setup wizard, but your print head is still outside the expected legal positions. That can happen if your head is at home when you first switch to 0.9 firmware.
-
-Solution is easy and only needs to be done only ONCE. You won't have to do this again after printer passes self-test and stores its new homing position.
-
-Manually push the x-axis about an inch to right of home or do a calibration/home BEFORE executing calibration/self-test. That puts the head into a position that allows self-test to succeed.
-
-Definitely do a self-test after installing firmware with this homing steps fix. The self-test lets printer store its new home position under the new step constants.
-
+Do a full factory reset with data erase. Run setup wizard.
 
 ## Hardware
 ### Motors
