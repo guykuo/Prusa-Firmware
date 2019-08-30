@@ -1564,15 +1564,15 @@ void setup()
 	tmc2130_home_bsteps[X_AXIS] = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_HOME_X_BSTEPS);
 	tmc2130_home_fsteps[X_AXIS] = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_HOME_X_FSTEPS);
 	if (tmc2130_home_origin[X_AXIS] == 0xff) tmc2130_home_origin[X_AXIS] = 0;
-	if (tmc2130_home_bsteps[X_AXIS] == 0xff) tmc2130_home_bsteps[X_AXIS] = kHOME_STEPS_X; //Kuo adjustable for 0.9 motors
-	if (tmc2130_home_fsteps[X_AXIS] == 0xff) tmc2130_home_fsteps[X_AXIS] = kHOME_STEPS_X;
+	if (tmc2130_home_bsteps[X_AXIS] == 0xff) tmc2130_home_bsteps[X_AXIS] = 48;
+	if (tmc2130_home_fsteps[X_AXIS] == 0xff) tmc2130_home_fsteps[X_AXIS] = 48;
 
 	tmc2130_home_origin[Y_AXIS] = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_HOME_Y_ORIGIN);
 	tmc2130_home_bsteps[Y_AXIS] = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_HOME_Y_BSTEPS);
 	tmc2130_home_fsteps[Y_AXIS] = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_HOME_Y_FSTEPS);
 	if (tmc2130_home_origin[Y_AXIS] == 0xff) tmc2130_home_origin[Y_AXIS] = 0;
-	if (tmc2130_home_bsteps[Y_AXIS] == 0xff) tmc2130_home_bsteps[Y_AXIS] = kHOME_STEPS_Y; //Kuo adjustable for 0.9 motors
-	if (tmc2130_home_fsteps[Y_AXIS] == 0xff) tmc2130_home_fsteps[Y_AXIS] = kHOME_STEPS_Y;
+	if (tmc2130_home_bsteps[Y_AXIS] == 0xff) tmc2130_home_bsteps[Y_AXIS] = 48;
+	if (tmc2130_home_fsteps[Y_AXIS] == 0xff) tmc2130_home_fsteps[Y_AXIS] = 48;
 
 	tmc2130_home_enabled = eeprom_read_byte((uint8_t*)EEPROM_TMC2130_HOME_ENABLED);
 	if (tmc2130_home_enabled == 0xff) tmc2130_home_enabled = 0;
