@@ -59,8 +59,8 @@ uint32_t tmc2130_sg_meassure_val = 0;
 
 uint8_t tmc2130_home_enabled = 0;
 uint8_t tmc2130_home_origin[2] = {0, 0};
-uint8_t tmc2130_home_bsteps[2] = {48, 48};
-uint8_t tmc2130_home_fsteps[2] = {48, 48};
+uint8_t tmc2130_home_bsteps[2] = {kHOME_STEPS_X, kHOME_STEPS_Y}; //Kuo adjustable for 0.9 motors
+uint8_t tmc2130_home_fsteps[2] = {kHOME_STEPS_X, kHOME_STEPS_Y};
 
 uint8_t tmc2130_wave_fac[4] = {0, 0, 0, 0};
 
