@@ -7583,7 +7583,7 @@ static bool lcd_selfcheck_axis_sg(unsigned char axis) {
 
 		printf_P(_N("Axis length difference:%.3f\n"), abs(measured_axis_length[0] - measured_axis_length[1]));
 	
-		if (abs(measured_axis_length[0] - measured_axis_length[1]) > 2) { //Kuo loosen check if difference between first and second measurement is low
+		if (abs(measured_axis_length[0] - measured_axis_length[1]) > 5) { //Kuo loosen check if difference between first and second measurement is low
 			//loose pulleys
 			const char *_error_1;
 
