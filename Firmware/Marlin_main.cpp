@@ -3000,7 +3000,7 @@ static T gcode_M600_filament_change_z_shift()
 #endif
 }	
 
-static void gcode_M600(bool automatic, float x_position, float y_position, float z_shift, float e_shift, float /*e_shift_late*/)
+static void gcode_M600(bool automatic, float x_position, float y_position, float z_shift, float e_shift, float e_shift_late, bool suppressInitialMessage)
 {
     st_synchronize();
     float lastpos[4];
@@ -3037,7 +3037,7 @@ static void gcode_M600(bool automatic, float x_position, float y_position, float
     st_synchronize();
 
     //Beep, manage nozzle heater and wait for user to start unload filament
-    if(!mmu_enabled) M600_wait_for_user(HotendTempBckp);
+    if(!mmu_enabled) M600_wait_for_user(HotendTempBckp, suppressInitialMessage);
 
     lcd_change_fil_state = 0;
 
@@ -7178,10 +7178,15 @@ Sigma_Exit:
           #endif
         }
 
-		if (mmu_enabled && code_seen("AUTO"))
-			automatic = true;
+		if(code_seen('Q'))
+        	{
+          	suppressInitialMessage = true;
+        	}
 
-		gcode_M600(automatic, x_position, y_position, z_shift, e_shift_init, e_shift_late);
+		if (mmu_enabled && code_seen("AUTO"))
+		automatic = true;
+
+		gcode_M600(automatic, x_position, y_position, z_shift, e_shift_init, e_shift_late, suppressInitialMessage);
 	
 	}
     break;
@@ -10324,14 +10329,14 @@ void M600_check_state(float nozzle_temp)
 //! If times out, active extruder temperature is set to 0.
 //!
 //! @param HotendTempBckp Temperature to be restored for active extruder, after user resolves MMU problem.
-void M600_wait_for_user(float HotendTempBckp) {
+void M600_wait_for_user(float HotendTempBckp, bool suppressInitialMessage) {
 
 		KEEPALIVE_STATE(PAUSED_FOR_USER);
 
 		int counterBeep = 0;
 		unsigned long waiting_start_time = _millis();
 		uint8_t wait_for_user_state = 0;
-		lcd_display_message_fullscreen_P(_T(MSG_PRESS_TO_UNLOAD));
+		if (!suppressInitialMessage) lcd_display_message_fullscreen_P(_T(MSG_PRESS_TO_UNLOAD));
 		bool bFirst=true;
 
 		while (!(wait_for_user_state == 0 && lcd_clicked())){
