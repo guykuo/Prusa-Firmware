@@ -241,7 +241,24 @@ If you see a warning about a missing bootloader, you probably have an older, RAM
 Sketch -> Upload
 The firmware will compile and upload to printer. Do NOT interrupt the update!!!! Let it complete.
 
-Do a full factory reset with data erase. Run setup wizard.
+Do a full factory reset with data erase. 
+
+Run setup wizard, but do NOT let do the Live-Z. Do Live-Z later after setting e-steps, micro-stepping.
+
+#Microstepping and e-steps
+If you are using a geared extruder, you must also set e-steps and micro-stepping. Although my branch firmware includes settings for those items, they are not always accepted by the printer.
+
+Use a terminal to make the setting and verify they have been accepted. For instance on a BNBSX extruder you would issue
+
+M350 E16 //set extruder microstepping
+M92 E473 //set e-steps
+M500 //store the settings
+
+M503 //read current settings so you can verify the extruder motor microsteps and e-steps are 16 and 473
+
+NB: M350 must be BEFORE M92. Otherwise, M350 may alter existing the e-steps value
+
+Once you have verified e-steps and microstepping are correct, you can proceed with Live-Z calibration.
 
 ## Hardware
 ### Motors
