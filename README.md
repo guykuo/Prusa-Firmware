@@ -1,5 +1,3 @@
-# DO NOT USE THIS BRANCH IF YOU ARE LOOKING FOR 0.9 DEGREE MOTOR OR UPGRADED EXTRUDERS AND HOT ENDS SUPPORT
-
 <!--ts-->
    * [Linux build](#linux)
    * Windows build
