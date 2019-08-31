@@ -7122,6 +7122,7 @@ Sigma_Exit:
 		float e_shift_init = 0;
 		float e_shift_late = 0;
 		bool automatic = false;
+		bool suppressInitialMessage = false;
 		
         //Retract extruder
         if(code_seen('E'))
