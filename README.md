@@ -1,3 +1,5 @@
+# Table of contents
+
 <!--ts-->
    * [Linux build](#linux)
    * Windows build
