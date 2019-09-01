@@ -19,7 +19,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "MK3S 09 Motors" //Kuo
+#define CUSTOM_MENDEL_NAME "0.9 Stepper, LA 1.5" //Kuo
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
@@ -81,7 +81,7 @@
 #define X_AXIS_MOTOR_09 //kuo exper X axis
 #define Y_AXIS_MOTOR_09 //kuo exper Y axis
 //#define Z_AXIS_MOTOR_09 //kuo exper Z axis
-//#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
+#define E_AXIS_MOTOR_09 //kuo exper EXTRUDER
 
 //====== Kuo Uncomment ONLY ONE or NONE of below for geared extruders
 //Don't forget to also send gcode to set e-steps as detailed earlier
@@ -154,7 +154,7 @@
 #define INVERT_X_DIR 1    // for Mendel set to 0, for Orca set to 1
 #define INVERT_Y_DIR 0    // for Mendel set to 1, for Orca set to 0
 #define INVERT_Z_DIR 1     // for Mendel set to 0, for Orca set to 1
-#define INVERT_E0_DIR 0   // for direct drive extruder v9 set to 1, for geared extruder set to 0
+#define INVERT_E0_DIR 1   // for direct drive extruder v9 set to 1, for geared extruder set to 0
 #define INVERT_E1_DIR 0    // for direct drive extruder v9 set to 1, for geared extruder set to 0
 #define INVERT_E2_DIR 0   // for direct drive extruder v9 set to 1, for geared extruder set to 0
 
@@ -803,9 +803,9 @@
 #define ASA_PREHEAT_HPB_TEMP 105
 #define ASA_PREHEAT_FAN_SPEED 0
 
-#define ABS_PREHEAT_HOTEND_TEMP 255
-#define ABS_PREHEAT_HPB_TEMP 100
-#define ABS_PREHEAT_FAN_SPEED 0
+#define PC_PREHEAT_HOTEND_TEMP 260
+#define PC_PREHEAT_HPB_TEMP 90
+#define PC_PREHEAT_FAN_SPEED 0
 
 #define HIPS_PREHEAT_HOTEND_TEMP 220
 #define HIPS_PREHEAT_HPB_TEMP 100

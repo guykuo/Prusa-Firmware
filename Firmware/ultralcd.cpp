@@ -1699,11 +1699,11 @@ static void lcd_preheat_asa()
   if (wizard_active) lcd_wizard(WizState::Unload);
 }
 
-static void lcd_preheat_abs()
+static void lcd_preheat_pc()
 {
-  setTargetHotend0(ABS_PREHEAT_HOTEND_TEMP);
-  if (!wizard_active) setTargetBed(ABS_PREHEAT_HPB_TEMP);
-  fanSpeed = ABS_PREHEAT_FAN_SPEED;
+  setTargetHotend0(PC_PREHEAT_HOTEND_TEMP);
+  if (!wizard_active) setTargetBed(PC_PREHEAT_HPB_TEMP);
+  fanSpeed = PC_PREHEAT_FAN_SPEED;
   lcd_return_to_status();
   setWatch(); // heater sanity check timer
   if (wizard_active) lcd_wizard(WizState::Unload);
@@ -2033,7 +2033,7 @@ static void lcd_preheat_menu()
 	  MENU_ITEM_FUNCTION_P(PSTR("PLA  -  " STRINGIFY(PLA_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PLA_PREHEAT_HPB_TEMP)), lcd_preheat_pla);
 	  MENU_ITEM_FUNCTION_P(PSTR("PET  -  " STRINGIFY(PET_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PET_PREHEAT_HPB_TEMP)), lcd_preheat_pet);
 	  MENU_ITEM_FUNCTION_P(PSTR("ASA  -  " STRINGIFY(ASA_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(ASA_PREHEAT_HPB_TEMP)), lcd_preheat_asa);
-	  MENU_ITEM_FUNCTION_P(PSTR("ABS  -  " STRINGIFY(ABS_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(ABS_PREHEAT_HPB_TEMP)), lcd_preheat_abs);
+	  MENU_ITEM_FUNCTION_P(PSTR("PC   -  " STRINGIFY(PC_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PC_PREHEAT_HPB_TEMP)), lcd_preheat_pc);
 	  MENU_ITEM_FUNCTION_P(PSTR("HIPS -  " STRINGIFY(HIPS_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(HIPS_PREHEAT_HPB_TEMP)), lcd_preheat_hips);
 	  MENU_ITEM_FUNCTION_P(PSTR("PP   -  " STRINGIFY(PP_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PP_PREHEAT_HPB_TEMP)), lcd_preheat_pp);
 	  MENU_ITEM_FUNCTION_P(PSTR("FLEX -  " STRINGIFY(FLEX_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(FLEX_PREHEAT_HPB_TEMP)), lcd_preheat_flex);
@@ -2488,10 +2488,10 @@ static void mFilamentItem_ASA()
     mFilamentItem(ASA_PREHEAT_HOTEND_TEMP,ASA_PREHEAT_HPB_TEMP);
 }
 
-static void mFilamentItem_ABS()
+static void mFilamentItem_PC()
 {
 bFilamentPreheatState=false;
-mFilamentItem(ABS_PREHEAT_HOTEND_TEMP,ABS_PREHEAT_HPB_TEMP);
+mFilamentItem(PC_PREHEAT_HOTEND_TEMP,PC_PREHEAT_HPB_TEMP);
 }
 
 static void mFilamentItem_HIPS()
@@ -2527,7 +2527,7 @@ void mFilamentMenu()
     MENU_ITEM_SUBMENU_P(PSTR("PLA  -  " STRINGIFY(PLA_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PLA_PREHEAT_HPB_TEMP)),mFilamentItem_PLA);
     MENU_ITEM_SUBMENU_P(PSTR("PET  -  " STRINGIFY(PET_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PET_PREHEAT_HPB_TEMP)),mFilamentItem_PET);
     MENU_ITEM_SUBMENU_P(PSTR("ASA  -  " STRINGIFY(ASA_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(ASA_PREHEAT_HPB_TEMP)),mFilamentItem_ASA);
-    MENU_ITEM_SUBMENU_P(PSTR("ABS  -  " STRINGIFY(ABS_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(ABS_PREHEAT_HPB_TEMP)),mFilamentItem_ABS);
+    MENU_ITEM_SUBMENU_P(PSTR("PC   -  " STRINGIFY(PC_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PC_PREHEAT_HPB_TEMP)),mFilamentItem_PC);
     MENU_ITEM_SUBMENU_P(PSTR("HIPS -  " STRINGIFY(HIPS_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(HIPS_PREHEAT_HPB_TEMP)),mFilamentItem_HIPS);
     MENU_ITEM_SUBMENU_P(PSTR("PP   -  " STRINGIFY(PP_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(PP_PREHEAT_HPB_TEMP)),mFilamentItem_PP);
     MENU_ITEM_SUBMENU_P(PSTR("FLEX -  " STRINGIFY(FLEX_PREHEAT_HOTEND_TEMP) "/" STRINGIFY(FLEX_PREHEAT_HPB_TEMP)),mFilamentItem_FLEX);
@@ -3453,7 +3453,7 @@ bool lcd_calibrate_z_end_stop_manual(bool only_z)
 calibrated:
     // Let the machine think the Z axis is a bit higher than it is, so it will not home into the bed
     // during the search for the induction points.
-	if ((PRINTER_TYPE == PRINTER_MK25) || (PRINTER_TYPE == PRINTER_MK2) || (PRINTER_TYPE == PRINTER_MK2_SNMM)) {
+	if ((PRINTER_TYPE == PRINTER_MK3S) || (PRINTER_TYPE == PRINTER_MK25) || (PRINTER_TYPE == PRINTER_MK2) || (PRINTER_TYPE == PRINTER_MK2_SNMM)) {
 		current_position[Z_AXIS] = Z_MAX_POS-3.f;
 	}
 	else {
@@ -8021,7 +8021,7 @@ static bool selftest_irsensor()
     uint8_t progress;
     {
         TempBackup tempBackup;
-        setTargetHotend(ABS_PREHEAT_HOTEND_TEMP,active_extruder);
+        setTargetHotend(PC_PREHEAT_HOTEND_TEMP,active_extruder);
         mmu_wait_for_heater_blocking();
         progress = lcd_selftest_screen(TestScreen::Fsensor, 0, 1, true, 0);
         mmu_filament_ramming();
