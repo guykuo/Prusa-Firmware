@@ -1477,14 +1477,14 @@ static bool can_load()
  
 
     #ifdef SLICEMAGNUM //Kuo
-      current_position[E_AXIS] -= 44;
+      current_position[E_AXIS] -= 48; //was 44 for constant 8 below Bondtech
     #elif defined(SKELESTRUDER)
-      current_position[E_AXIS] -= 47;
+      current_position[E_AXIS] -= 51; //was 47 for constant 8 below Bondtech
     #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-      current_position[E_AXIS] -= 64;
+      current_position[E_AXIS] -= 52; //was 64 for constant 8 below Bondtech
     #else
       current_position[E_AXIS] -= 52;
-    #endif //Kuo ===		
+    #endif //Kuo ===			
     plan_buffer_line_curposXYZE(MMU_LOAD_FEEDRATE, active_extruder);
     st_synchronize();
 
