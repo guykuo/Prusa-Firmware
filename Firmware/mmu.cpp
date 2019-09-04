@@ -1465,11 +1465,11 @@ bFilamentAction=false;                            // NOT in "mmu_fil_eject_menu(
 static bool can_load()
 {
     #ifdef SLICEMAGNUM //Kuo
-      current_position[E_AXIS] += 67;
+      current_position[E_AXIS] += 52;
     #elif defined(SKELESTRUDER)
-      current_position[E_AXIS] += 50;
+      current_position[E_AXIS] += 55;
     #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-      current_position[E_AXIS] += 66;
+      current_position[E_AXIS] += 72;
     #else
       current_position[E_AXIS] += 60;
     #endif //Kuo ===
@@ -1477,14 +1477,14 @@ static bool can_load()
  
 
     #ifdef SLICEMAGNUM //Kuo
-      current_position[E_AXIS] -= 59;
+      current_position[E_AXIS] -= 44;
     #elif defined(SKELESTRUDER)
-      current_position[E_AXIS] -= 42;
+      current_position[E_AXIS] -= 47;
     #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-      current_position[E_AXIS] -= 58;
+      current_position[E_AXIS] -= 64;
     #else
       current_position[E_AXIS] -= 52;
-    #endif //Kuo ===	
+    #endif //Kuo ===		
     plan_buffer_line_curposXYZE(MMU_LOAD_FEEDRATE, active_extruder);
     st_synchronize();
 
