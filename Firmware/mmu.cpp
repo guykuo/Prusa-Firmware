@@ -1480,29 +1480,29 @@ bFilamentAction=false;                            // NOT in "mmu_fil_eject_menu(
 static bool can_load()
 {
     #ifdef SLICEMAGNUM //Kuo decreased load distances so we stop above melt zone
-      current_position[E_AXIS] += 50; //Mosquito Magnum is 5 mm shorter than MK3S
+      current_position[E_AXIS] += 56; //Mosquito Magnum melt is 4 mm sooner than MK3S
     #elif defined(SKELESTRUDER)
-      current_position[E_AXIS] += 50; //Skelestruder is 5 mm shorter than MK3S
+      current_position[E_AXIS] += 55; //Skelestruder is 5 mm shorter than MK3S
     #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-      current_position[E_AXIS] += 66; //Bondtech is 11 mm longer than MK3S
+      current_position[E_AXIS] += 71; //Bondtech is 11 mm longer than MK3S
     #else
-      current_position[E_AXIS] += 55; //was 60, but that is into melt zone
+      current_position[E_AXIS] += 60; //jam into melt zone which is tightest path point in E3D
     #endif //Kuo ===
     plan_buffer_line_curposXYZE(MMU_LOAD_FEEDRATE, active_extruder);
  
-    //Kuo. Pull back to place tip 8 mm below Bondtech
+    //Kuo. Pull back to place tip 8 mm below Bondtech for final pull back test 
     #ifdef SLICEMAGNUM 
-      current_position[E_AXIS] -= 42;
+      current_position[E_AXIS] -= 48;
     #elif defined(SKELESTRUDER)
-      current_position[E_AXIS] -= 42;
-    #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-      current_position[E_AXIS] -= 58;
-    #else
       current_position[E_AXIS] -= 47;
+    #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
+      current_position[E_AXIS] -= 63;
+    #else
+      current_position[E_AXIS] -= 52;
     #endif //Kuo ===	
     plan_buffer_line_curposXYZE(MMU_LOAD_FEEDRATE, active_extruder);
     st_synchronize();
-
+	
     uint_least8_t filament_detected_count = 0;
     const float e_increment = 0.2;
     const uint_least8_t steps = 6.0 / e_increment;
