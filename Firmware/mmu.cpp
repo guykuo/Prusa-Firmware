@@ -1479,27 +1479,27 @@ bFilamentAction=false;                            // NOT in "mmu_fil_eject_menu(
 //! @retval false Doesn't fit
 static bool can_load()
 {
-    #ifdef SLICEMAGNUM //Kuo
-      current_position[E_AXIS] += 52;
+    #ifdef SLICEMAGNUM //Kuo decreased load distances so we stop above melt zone
+      current_position[E_AXIS] += 50; /Mosquito Magnum is 5 mm shorter than MK3S
     #elif defined(SKELESTRUDER)
-      current_position[E_AXIS] += 55;
+      current_position[E_AXIS] += 50; /Skelestruder is 5 mm shorter than MK3S
     #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-      current_position[E_AXIS] += 72;
+      current_position[E_AXIS] += 66; /Bondtech is 11 mm longer than MK3S
     #else
-      current_position[E_AXIS] += 60;
+      current_position[E_AXIS] += 55; /was 60, but that is into melt zone
     #endif //Kuo ===
     plan_buffer_line_curposXYZE(MMU_LOAD_FEEDRATE, active_extruder);
  
-
-    #ifdef SLICEMAGNUM //Kuo
-      current_position[E_AXIS] -= 48; //was 44 for constant 8 below Bondtech
+    //Kuo. Pull back to place tip 8 mm below Bondtech
+    #ifdef SLICEMAGNUM 
+      current_position[E_AXIS] -= 42;
     #elif defined(SKELESTRUDER)
-      current_position[E_AXIS] -= 51; //was 47 for constant 8 below Bondtech
+      current_position[E_AXIS] -= 42;
     #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-      current_position[E_AXIS] -= 52; //was 64 for constant 8 below Bondtech
+      current_position[E_AXIS] -= 58;
     #else
-      current_position[E_AXIS] -= 52;
-    #endif //Kuo ===			
+      current_position[E_AXIS] -= 47;
+    #endif //Kuo ===	
     plan_buffer_line_curposXYZE(MMU_LOAD_FEEDRATE, active_extruder);
     st_synchronize();
 
