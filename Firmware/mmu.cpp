@@ -803,21 +803,36 @@ void mmu_load_to_nozzle()
 	{
 		current_position[E_AXIS] += 7.2f;
 	}
-    float feedrate = 562;
+	float feedrate = 562;
 	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], feedrate / 60, active_extruder);
-    st_synchronize();
-	current_position[E_AXIS] += 14.4f;
+	st_synchronize();
+
+	#ifdef SLICEMAGNUM //Kuo adjust 2nd stage move so we stop above melt zone at next fast move
+		current_position[E_AXIS] += 9.4f; //5 mm less because melt zone is further up
+	#elif defined(SKELESTRUDER)
+		current_position[E_AXIS] += 9.4f; //5 mm less because Skelestruder is shorter than MK3S
+	#elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
+		current_position[E_AXIS] += 25.4f; //11 mm further Bondtech is taller than MK3S
+	#else
+		current_position[E_AXIS] += 14.4f; //default MK3S initial down PTFE
+	#endif
 	feedrate = 871;
 	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], feedrate / 60, active_extruder);
-    st_synchronize();
+	st_synchronize(); //---Kuo
+    
 	current_position[E_AXIS] += 36.0f;
 	feedrate = 1393;
 	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], feedrate / 60, active_extruder);
-    st_synchronize();
-	current_position[E_AXIS] += 14.4f;
-	feedrate = 871;
+	st_synchronize();
+    
+	#ifdef SLICEMAGNUM //Kuo adjust for distance into and through melt zone to start of nozzle
+		current_position[E_AXIS] += 19.4f; //5mm further through Slice Magnum melt zone
+	#else
+		current_position[E_AXIS] += 14.4f; //default through to nozzle start
+	#endif //--Kuo
+  	feedrate = 871;
 	plan_buffer_line(current_position[X_AXIS], current_position[Y_AXIS], current_position[Z_AXIS], current_position[E_AXIS], feedrate / 60, active_extruder);
-    st_synchronize();
+ 	st_synchronize();
 	if (!saved_e_relative_mode) axis_relative_modes[E_AXIS] = false;
 }
 
