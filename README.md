@@ -95,14 +95,14 @@ Save your changes to platform.txt
 #### Obtain firmware files.
 
 0.9 degree motors require my firmware branch that contains 0.9 degree stepper support (which is this page)
-https://github.com/guykuo/Prusa-Firmware/edit/MK3-3.8.0-with-0.9-motors-LA15-Slice-Skelestruder-BMG/README.md
-Verify you are in my MK3-3.8.0-with-0.9-motors-LA15-Slice-Skelestruder-BMG branch
+https://github.com/guykuo/Prusa-Firmware/tree/0.9-Degree-Stepper-Support
+Verify you are in my 0.9-Degree-Stepper-Support branch
 
 Click on "Clone or Download" and DOWNLOAD ZIP to your computer
 
-Unzip the newly downloaded Prusa-Firmware-MK3-3.8.0-with-0.9-motors-LA15-Slice-Skelestruder-BMG.zip
+Unzip the newly downloaded Prusa-Firmware-0.9-Degree-Stepper-Support.zip
 
-Inside the unzipped folder "Prusa-Firmware-MK3-3.8.0-with-0.9-motors-LA15-Slice-Skelestruder-BMG" you will find a folder named "Firmware"
+Inside the unzipped folder "Prusa-Firmware-0.9-Degree-Stepper-Support" you will find a folder named "Firmware"
 That folder contains the firmware files you need. Place the firmware folder where you wish to keep it on your drive.
 
 #### Set Printer Variant
@@ -243,7 +243,7 @@ The firmware will compile and upload to printer. Do NOT interrupt the update!!!!
 
 Do a full factory reset with data erase. 
 
-Run setup wizard, but do NOT let do the Live-Z. Do Live-Z later after setting e-steps, micro-stepping.
+Don't let setup wizard run 1st time. You should set e-steps and microstepping first.
 
 #Microstepping and e-steps
 If you are using a geared extruder, you must also set e-steps and micro-stepping. Although my branch firmware includes settings for those items, they are not always accepted by the printer.
@@ -258,7 +258,7 @@ M503 //read current settings so you can verify the extruder motor microsteps and
 
 NB: M350 must be BEFORE M92. Otherwise, M350 may alter existing the e-steps value
 
-Once you have verified e-steps and microstepping are correct, you can proceed with Live-Z calibration.
+Once you have verified e-steps and microstepping are correct, you can proceed with setup wizard.
 
 ## Hardware
 ### Motors
