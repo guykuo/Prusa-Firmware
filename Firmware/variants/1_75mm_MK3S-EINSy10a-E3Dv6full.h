@@ -19,7 +19,7 @@
 #define DEVELOPER
 
 // Printer name
-#define CUSTOM_MENDEL_NAME "MK3S 09 Motors" //Kuo
+#define CUSTOM_MENDEL_NAME "MK3S 09 Motors" //Kuo can put your own printer name here
 
 // Electronics
 #define MOTHERBOARD BOARD_EINSY_1_0a
