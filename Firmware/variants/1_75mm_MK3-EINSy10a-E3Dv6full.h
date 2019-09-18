@@ -794,9 +794,8 @@
 #define PLA_PREHEAT_HOTEND_TEMP 215
 #define PLA_PREHEAT_HPB_TEMP 60
 
-#define PC_PREHEAT_HOTEND_TEMP 285 //Kuo add polycarb
-#define PC_PREHEAT_HPB_TEMP 100
-#define PC_PREHEAT_FAN_SPEED 0 //--Kuo
+#define PC_PREHEAT_HOTEND_TEMP 285 //kuo add polycarbonate preheat
+#define PC_PREHEAT_HPB_TEMP 100 //---kuo
 
 #define ASA_PREHEAT_HOTEND_TEMP 260
 #define ASA_PREHEAT_HPB_TEMP 105
