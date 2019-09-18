@@ -19,7 +19,7 @@ Linear Advance 1.5
 
 Filament load/unload and z dimension changes for Slice magnum, Bondtech Prusa Upgrade MK3 & MK3S extruders, Skelestruder
 
-Mini ramming during unload to reduce filament tip size (does not require MMU2S for this feature.
+Mini ramming during unload to reduce unloaded filament tip size. Does not require MMU2S for this feature.
 
 Polycarbonate in preheat menu
 
