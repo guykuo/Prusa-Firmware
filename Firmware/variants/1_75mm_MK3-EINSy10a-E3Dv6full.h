@@ -651,15 +651,19 @@
 #define FILAMENTCHANGE_YPOS 0
 #define FILAMENTCHANGE_ZADD 2
 #define FILAMENTCHANGE_FIRSTRETRACT -2
-#define FILAMENTCHANGE_FINALRETRACT -80
 
-#define FILAMENTCHANGE_FIRSTFEED 70 //E distance in mm for fast filament loading sequence used used in filament change (M600)
 #ifdef BONDTECH_PRUSA_UPGRADE_MK3 
-  #define FILAMENTCHANGE_FINALFEED 35  //Kuo BMG FILAMENTCHANGE_FINALFEED
+ #define FILAMENTCHANGE_FIRSTFEED 80 //E distance in mm for fast filament loading sequence used used in filament change (M600)
+ #define FILAMENTCHANGE_FINALFEED 25  //Kuo BMG FILAMENTCHANGE_FINALFEED
+ #define FILAMENTCHANGE_FINALRETRACT -95
 #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
-  #define FILAMENTCHANGE_FINALFEED 35  //Kuo BMG FILAMENTCHANGE_FINALFEED
+ #define FILAMENTCHANGE_FIRSTFEED 80 //E distance in mm for fast filament loading sequence used used in filament change (M600)
+ #define FILAMENTCHANGE_FINALFEED 25  //Kuo BMG FILAMENTCHANGE_FINALFEED
+ #define FILAMENTCHANGE_FINALRETRACT -95
 #else
-  #define FILAMENTCHANGE_FINALFEED 25 //default E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
+ #define FILAMENTCHANGE_FIRSTFEED 70 //E distance in mm for fast filament loading sequence used used in filament change (M600)
+ #define FILAMENTCHANGE_FINALFEED 25 //default E distance in mm for slow filament loading sequence used used in filament change (M600) and filament load (M701) 
+ #define FILAMENTCHANGE_FINALRETRACT -80
 #endif
 #define FILAMENTCHANGE_RECFEED 5
 
