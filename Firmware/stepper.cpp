@@ -1469,10 +1469,6 @@ void st_current_init() //Initialize Digipot Motor Current
 {
 #ifdef MOTOR_CURRENT_PWM_XY_PIN
   uint8_t SilentMode = eeprom_read_byte((uint8_t*)EEPROM_SILENT);
-  if (SilentMode == 0xff){ //set power to High Power (MK2.5) or Normal Power (MK3, unused)
-    SilentMode = SILENT_MODE_POWER;
-    eeprom_update_byte((uint8_t*)EEPROM_SILENT, SilentMode);
-  }
   SilentModeMenu = SilentMode;
     pinMode(MOTOR_CURRENT_PWM_XY_PIN, OUTPUT);
     pinMode(MOTOR_CURRENT_PWM_Z_PIN, OUTPUT);
