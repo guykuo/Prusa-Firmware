@@ -3172,7 +3172,7 @@ void gcode_M701()
 	   	plan_buffer_line_curposXYZE(LOAD_FILAMENT_RATE_1 / 60, active_extruder); //fast sequence
 		st_synchronize();
 
-		marlin_rise_z();
+		raise_z_above(MIN_Z_FOR_LOAD, false);
 		current_position[E_AXIS] += LOAD_FILAMENT_DIST_2;
 	 	plan_buffer_line_curposXYZE(LOAD_FILAMENT_RATE_2 / 60, active_extruder); //fast sequence
 		//=== Kuo
