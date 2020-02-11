@@ -85,12 +85,12 @@
 //Don't forget to also send gcode to set e-steps as detailed earlier
 //Reversion back from geared extruder requires sending M92 E280 & M500 to printer
 //
-//#define SKELESTRUDER // Uncomment if you have a skelestruder. Applies the patches for load distances and Z height.
+//#define SKELESTRUDER // Uncomment if you have a 3.5 ratio Skelestruder. Applies the patches for load distances and Z height.
 //#define BONDTECH_PRUSA_UPGRADE_MK3 //Kuo Uncomment for Bondtech MK3 extruder upgrade. 3:1 extruder. This also sets Z_MAX_POS 205.
 //#define BONDTECH_PRUSA_UPGRADE_MK3S //Kuo Uncomment for Bondtech MK3S extruder upgrade. (Note the S!!!!) 3:1 extruder. This also sets Z_MAX_POS 205.
 //#define EXTRUDER_GEARRATIO_30 //Kuo Uncomment for extruder with gear ratio 3.0. 
 //#define EXTRUDER_GEARRATIO_3375 //Kuo Uncomment for extruder with gear ratio 3.375 like 54:16 BNBSX.
-//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like 56:16 Bunny and Bear Short Ears or Skelestruder.
+//#define EXTRUDER_GEARRATIO_35 //Kuo Uncomment for extruder with gear ratio 3.5 like 56:16 Bunny and Bear Short Ears.
 
 //====== Kuo E3D Volcano Support
 //#define E3D_VOLCANO //uncomment to adjust Z_MAX_POS to accomodate 8.5 mm greater Volcano extruder height
@@ -115,7 +115,7 @@
 // Steps per unit {X,Y,Z,E}
 
 #ifdef SKELESTRUDER
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,420} //Skelestruder 3.0 geared extruder 
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,490} //Skelestruder 3.5 geared extruder 
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current than stock for M600
   
 #elif defined(BONDTECH_PRUSA_UPGRADE_MK3)
