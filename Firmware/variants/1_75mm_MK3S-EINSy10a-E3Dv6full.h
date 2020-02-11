@@ -119,26 +119,32 @@
 #ifdef SKELESTRUDER
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,490} //Skelestruder 3.5 geared extruder 
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current than stock for M600
+  #define EXTRUDER_GEARED
   
 #elif defined(BONDTECH_PRUSA_UPGRADE_MK3)
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,415} //Bondtech upgrade MK3 approx 3:1 geared extruder
   #define TMC2130_UNLOAD_CURRENT_R 20 //BMG unload current for M600
+  #define EXTRUDER_GEARED
   
 #elif defined(BONDTECH_PRUSA_UPGRADE_MK3S)
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,415} //Bondtech upgrade MK3S (Note the S!!!!) approx 3:1 geared extruder
   #define TMC2130_UNLOAD_CURRENT_R 20 //BMG unload current for M600
+  #define EXTRUDER_GEARED
   
 #elif defined(EXTRUDER_GEARRATIO_30)
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,420} //3.0 geared extruder 
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current than stock for M600
+  #define EXTRUDER_GEARED
 
 #elif defined(EXTRUDER_GEARRATIO_3375)
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,473} //3.375 geared extruder like 54:16 BNBSX
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600 
+  #define EXTRUDER_GEARED
 
 #elif defined(EXTRUDER_GEARRATIO_35)
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,490} //3.5 geared extruder like 56:16 BNBSX
   #define TMC2130_UNLOAD_CURRENT_R 20  //higher unload current thans stock for M600 
+  #define EXTRUDER_GEARED
 
 #else
   #define DEFAULT_AXIS_STEPS_PER_UNIT   {100,100,3200/8,280} //default steps/unit e-axis
